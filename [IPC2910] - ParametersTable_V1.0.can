@@ -1,0 +1,1202 @@
+/*@!Encoding:1252*/
+//Changelog
+
+
+includes
+{
+ //#include "VBAIResults.can"
+}
+
+//The value is on ms
+variables
+{
+	const	T_Animation_Time =	3;
+	const	T_ARC_FLASH_PERIOD =	600;
+	
+	const	DT1_IPC =	50;
+	const	DTreq_IPC =	50;
+	const	HeatStrokeFilter =	120000;
+	const	LightON_Time =	62000;
+	const	Speed_Delay =	1000;
+	const	Start_Cycle_Timeout =	6000;
+	const	StartupPointersDelay =	2500;
+	const	T_check_display =	5000;
+	const	T_check_spia =	4000;
+  //const	T_Adjusting =	"t1 < 2 2 < t2 < 4 t3 > 4" ??
+	const	T_BCM_COMMAND_Missing_Msg =	300;
+	const	t_BLINK =	7000;
+	const	T_BODY2_Missing_Msg =	250;
+	const	T_Debounce =	50;
+	const	T_Diagnosis =	5000;
+	const	T_ENGINE1_Missing_Msg =	300;
+	const	T_Feedback =	5000;
+	const	T_FL =	3000;
+	const	T_Full_Bargraph =	3000;
+	const	T_HighPriorityWarning =	5000;
+	const	T_Informative =	5000;
+	const	T_Lampcheck =	4000;
+	const	T_LogoDoorAtKeyOff =	6000;
+	const	T_LowPriorityWarning =	5000;
+	const	T_Menu_Timeout =	60000;
+	const	T_Mid_Bargraph =	1500;
+	const	T_mode =	2000;
+	const	T_Odometer_Reset =	5000;
+	const	t_ORC_ACK =	250;
+	const	T_PreIgnition =	150;
+	const	T_PreIgnitionStart =	80;
+	const	T_Reactivation =	50;
+	const	T_RPM_Full_Scale =	2000;
+	const	T_Service =	3000;
+	const	T_ShiftTimeout =	64000;
+	const	T_SNA_filtering =	50;
+	const	T_Start1 =	10000;
+	const	T_Start1NHTSA =	18000;
+	const	T_Start2 =	50000;
+  const	Safe1_Time =	35000;
+  const	Safe2_Time =	65000;
+  const	Unsafe_Time =	65000;
+  const	First_WC_Time_Rear =	65000;
+  const	Maximum_First_WC_Time_Rear =	66000;
+  const	Maximum_WC_Time_Rear =	36000;
+  const	WC_Time_Rear =	35000;
+  const	Speed_Th_Act =	20;
+  const	Speed_Th_Deact =	8;
+	//const	T_Trip_Page =	< 1
+	//const	T_Trip_Reset =	³ 2
+	//const	T_update 1 =	10 s ± 0.1
+	//const	T_update 2 =	10 s ± 0.1
+	const	T_update_3 =	1000;
+	const	T_update_4 =	30000;
+	const	T_updateIPC =	400;
+	const	T_Warning_Cycle = 	105000;
+	const	T1_IPC =	500;
+	const	Ta1 =	5000;
+	const	Tavviam_gas =	4000;
+	const	Tavviam =	4000;
+	const	TBODY2_Absence =	2500;
+	const	TBRAKE1_Absence =	2500;
+	const	Tdebounce_81_93_94 =	2500;
+	const	time_IPC_MissMess_Long =	2500;
+	const	TN =	3000;
+	const	Tpush_IPC =	2000;
+	const	T_rec =	2500;
+	const	Treq_IPC =	500;
+	const	Trip_Timeout =	5000;
+	const	Ttimeout_90_92 = 2500;
+	const	Ttimeout_1 =	2500;
+	const	T_Pop_up_CallEnded =	5000;
+	const	T_Pop_up_Nav =	5000;
+	const	T_push_IPC =	2000;
+	const	T_S_S =	1000;
+	const	T_Screen_Timeout =	5000;
+	const	T2_S_S =	0;
+	const	Tab =	15000;
+	const	Tdis =	100;
+	const	T_OdoDoorAtKeyOff =	10000;
+	const	T1	=	2000;
+	const	T4 =	0;
+	const	T_missing_STATUS_BH_BCM1 =	2500;
+	const	T_Rear =	60000;
+	const	T_Rear_Max =	65000;
+  const T_Rear_Chime_Counter = 35000;  
+	const	T_Step =	10;
+	const	Tref =	4000;
+	const	ARC_FLASH_PERIOD =	600;
+	const	T_SHOW_OFF_IPC =	5000;
+	const	T_Diagnosis_PB =	8000;
+	const	T2 =	1000;
+	const	T3 =	500;
+	const	T_SMS =	5000;
+	const	Tpush2_IPC =	5000;
+	const	T_WMPIL1 =	250;
+	const	T_WMPIL2 =	1000;
+	const	T_WMPIL3 =	250;
+	const	T_WMPIL4 =	1000;
+	const	T_WMP1 =	250;
+	const	T_WMP2 =	1000;
+	const	T_WMP3 =	500;
+	const	T_WMP4 =	1000;
+	const	T_WMB1 =	250;
+	const	T_WMB2 =	1000;
+	const	T_WMB3 =	500;
+	const	T_WMB4 =	1000;
+	const	TFIL_BAT =	15000;
+	const	T_Min_Visual =	2000;
+	const	T_Roll_Cycle =	5000;
+	const	T_Fadein2 =	1000;
+	const	T_Speedometer_Refresh =	12500;
+	const	T_DigitalSpeedUpdate =	400;
+	const	Teps =	2500;
+	const	Tavviam_flex =	4;
+	const	T_Ind =	5000;
+
+	const	T_WMPOff =	1000;
+	const	T_WMBOff =	1000;
+	const	T_WMPILOff =	1000;
+	const	T_WMBIL1 =	250;
+	const	T_WMBIL2 =	1000;
+	const	T_WMBIL3 =	250;
+	const	T_WMBIL4 =	1000;
+	const	T_WMBILOff =	1000;
+	const	T_WMD1 =	0;
+	const	T_WMD2 =	0;
+	const	T_WMDOff =	1000;
+	const	T_WMF =	2500;
+	const	T_Scroll =	200;
+	const	T_CountVehOn =	30000;
+	const	TA =	3000;
+	const	T_S_S_menu =	2000;
+	const	Tbsm =	2500;
+	const	Tsdm =	2500;
+	const CMRIF_01 = 13;
+	const CMRIF_02 = 14;
+	const CMRIF_03 = 12;
+	const CMRIF_04 = 11;
+	const CMRIF_05 = 10;
+	const CMRIF_06 = 5;
+	const CMRIF_07 = 8;
+	const CMRIF_08 = 7;
+	const CMRIF_09 = 9;
+  
+  const time_indication_ko = 10;
+  
+  
+  // These timers are used for Automatic functions.
+  
+	const T_RunInspection = 1500;
+	const T_RunInspectionRec = 500;
+  
+}
+
+
+//Test Functions 
+
+//******************************************Time parameters*********************************************
+
+export testfunction DT1_IPC ()
+{
+  testModuleTitle("DT1_IPC");
+	//write("DT1_IPC");
+	testWaitForTimeout (DT1_IPC);
+   
+}
+
+export testfunction time_indication_ko ()
+{
+  testModuleTitle("time_indication_ko");
+	//write("time_indication_ko");
+	testWaitForTimeout (time_indication_ko);
+   
+}
+
+export testfunction DTreq_IPC ()
+{
+  testModuleTitle("DTreq_IPC");
+	//write("DTreq_IPC");
+	testWaitForTimeout (DTreq_IPC);
+   
+}
+
+export testfunction HeatStrokeFilter ()
+{
+  testModuleTitle("HeatStrokeFilter");
+	//write("HeatStrokeFilter");
+	testWaitForTimeout (HeatStrokeFilter);
+   
+}
+
+export testfunction LightON_Time ()
+{
+  testModuleTitle("LightON_Time");
+	//write("LightON_Time");
+	testWaitForTimeout (LightON_Time);
+   
+}
+
+export testfunction Speed_Delay ()
+{
+  testModuleTitle("Speed_Delay");
+	//write("Speed_Delay");
+	testWaitForTimeout (Speed_Delay);
+   
+}
+
+export testfunction Start_Cycle_Timeout ()
+{
+  testModuleTitle("Start_Cycle_Timeout");
+	//write("Start_Cycle_Timeout");
+	testWaitForTimeout (Start_Cycle_Timeout);
+   
+}
+
+export testfunction StartupPointersDelay ()
+{
+  testModuleTitle("StartupPointersDelay");
+	//write("StartupPointersDelay");
+	testWaitForTimeout (StartupPointersDelay);
+   
+}
+
+export testfunction T_check_display ()
+{
+  testModuleTitle("T_check_display");
+	//write("T_check_display");
+	testWaitForTimeout (T_check_display);
+   
+}
+
+export testfunction T_check_spia ()
+{
+  testModuleTitle("T_check_spia");
+	//write("T_check_spia");
+	testWaitForTimeout (T_check_spia);
+   
+}
+
+export testfunction T_BCM_COMMAND_Missing_Msg ()
+{
+  testModuleTitle("T_BCM_COMMAND_Missing_Msg");
+	//write("T_BCM_COMMAND_Missing_Msg");
+	testWaitForTimeout (T_BCM_COMMAND_Missing_Msg);
+   
+}
+
+export testfunction t_BLINK ()
+{
+  testModuleTitle("t_BLINK");
+	//write("t_BLINK");
+	testWaitForTimeout (t_BLINK);
+   
+}
+
+export testfunction T_BODY2_Missing_Msg ()
+{
+  testModuleTitle("T_BODY2_Missing_Msg");
+	//write("T_BODY2_Missing_Msg");
+	testWaitForTimeout (T_BODY2_Missing_Msg);
+   
+}
+
+export testfunction T_Debounce ()
+{
+  testModuleTitle("T_Debounce");
+	//write("T_Debounce");
+	testWaitForTimeout (T_Debounce);
+   
+}
+
+export testfunction T_Diagnosis ()
+{
+  testModuleTitle("T_Diagnosis");
+	//write("T_Diagnosis");
+	testWaitForTimeout (T_Diagnosis);
+   
+}
+
+export testfunction T_ENGINE1_Missing_Msg ()
+{
+  testModuleTitle("T_ENGINE1_Missing_Msg");
+	//write("T_ENGINE1_Missing_Msg");
+	testWaitForTimeout (T_ENGINE1_Missing_Msg);
+   
+}
+
+export testfunction T_Feedback ()
+{
+  testModuleTitle("T_Feedback");
+	//write("T_Feedback");
+	testWaitForTimeout (T_Feedback);
+   
+}
+
+export testfunction T_FL ()
+{
+  testModuleTitle("T_FL");
+	//write("T_FL");
+	testWaitForTimeout (T_FL);
+   
+}
+
+export testfunction T_Full_Bargraph ()
+{
+  testModuleTitle("T_Full_Bargraph");
+	//write("T_Full_Bargraph");
+	testWaitForTimeout (T_Full_Bargraph);
+   
+}
+
+export testfunction T_HighPriorityWarning ()
+{
+  testModuleTitle("T_HighPriorityWarning");
+	//write("T_HighPriorityWarning");
+	testWaitForTimeout (T_HighPriorityWarning);
+   
+}
+
+export testfunction T_Informative ()
+{
+  testModuleTitle("T_Informative");
+	//write("T_Informative");
+	testWaitForTimeout (T_Informative);
+   
+}
+
+export testfunction T_Lampcheck ()
+{
+  testModuleTitle("T_Lampcheck");
+	//write("T_Lampcheck");
+	testWaitForTimeout (T_Lampcheck);
+   
+}
+
+export testfunction T_LogoDoorAtKeyOff ()
+{
+  testModuleTitle("T_LogoDoorAtKeyOff");
+	//write("T_LogoDoorAtKeyOff");
+	testWaitForTimeout (T_LogoDoorAtKeyOff);
+   
+}
+
+export testfunction T_LowPriorityWarning ()
+{
+  testModuleTitle("T_LowPriorityWarning");
+	//write("T_LowPriorityWarning");
+	testWaitForTimeout (T_LowPriorityWarning);
+   
+}
+
+export testfunction T_Menu_Timeout ()
+{
+  testModuleTitle("T_Menu_Timeout");
+	//write("T_Menu_Timeout");
+	testWaitForTimeout (T_Menu_Timeout);
+   
+}
+
+export testfunction T_Mid_Bargraph ()
+{
+  testModuleTitle("T_Mid_Bargraph");
+	//write("T_Mid_Bargraph");
+	testWaitForTimeout (T_Mid_Bargraph);
+   
+}
+
+export testfunction T_mode ()
+{
+  testModuleTitle("T_mode");
+	//write("T_mode");
+	testWaitForTimeout (T_mode);
+   
+}
+
+export testfunction T_Odometer_Reset ()
+{
+  testModuleTitle("T_Odometer_Reset");
+	//write("T_Odometer_Reset");
+	testWaitForTimeout (T_Odometer_Reset);
+   
+}
+
+export testfunction t_ORC_ACK ()
+{
+  testModuleTitle("t_ORC_ACK");
+	//write("t_ORC_ACK");
+	testWaitForTimeout (t_ORC_ACK);
+   
+}
+
+export testfunction T_PreIgnition ()
+{
+  testModuleTitle("T_PreIgnition");
+	//write("T_PreIgnition");
+	testWaitForTimeout (T_PreIgnition);
+   
+}
+
+export testfunction T_PreIgnitionStart ()
+{
+  testModuleTitle("T_PreIgnitionStart");
+	//write("T_PreIgnitionStart");
+	testWaitForTimeout (T_PreIgnitionStart);
+   
+}
+
+export testfunction T_Reactivation ()
+{
+  testModuleTitle("T_Reactivation");
+	//write("T_Reactivation");
+	testWaitForTimeout (T_Reactivation);
+   
+}
+
+export testfunction T_RPM_Full_Scale ()
+{
+  testModuleTitle("T_RPM_Full_Scale");
+	//write("T_RPM_Full_Scale");
+	testWaitForTimeout (T_RPM_Full_Scale);
+   
+}
+
+export testfunction T_Service ()
+{
+  testModuleTitle("T_Service");
+	//write("T_Service");
+	testWaitForTimeout (T_Service);
+   
+}
+
+export testfunction T_ShiftTimeout ()
+{
+  testModuleTitle("T_ShiftTimeout");
+	//write("T_ShiftTimeout");
+	testWaitForTimeout (T_ShiftTimeout);
+   
+}
+
+export testfunction T_SNA_filtering ()
+{
+  testModuleTitle("T_SNA_filtering");
+	//write("T_SNA_filtering");
+	testWaitForTimeout (T_SNA_filtering);
+   
+}
+
+export testfunction T_Start1 ()
+{
+  testModuleTitle("T_Start1");
+	//write("T_Start1");
+	testWaitForTimeout (T_Start1);
+   
+}
+
+export testfunction T_Start1NHTSA ()
+{
+  testModuleTitle("T_Start1NHTSA");
+	//write("T_Start1NHTSA");
+	testWaitForTimeout (T_Start1NHTSA);
+   
+}
+
+export testfunction T_Start2 ()
+{
+  testModuleTitle("T_Start2");
+	//write("T_Start2");
+	testWaitForTimeout (T_Start2);
+   
+}
+
+export testfunction T_update_3 ()
+{
+  testModuleTitle("T_update_3");
+	//write("T_update_3");
+	testWaitForTimeout (T_update_3);
+   
+}
+
+export testfunction T_update_4 ()
+{
+  testModuleTitle("T_update_4");
+	//write("T_update_4");
+	testWaitForTimeout (T_update_4);
+   
+}
+
+export testfunction T_updateIPC ()
+{
+  testModuleTitle("T_updateIPC");
+	//write("T_updateIPC");
+	testWaitForTimeout (T_updateIPC);
+   
+}
+
+export testfunction T_Warning_Cycle ()
+{
+  testModuleTitle("T_Warning_Cycle");
+	//write("T_Warning_Cycle");
+	testWaitForTimeout (T_Warning_Cycle);
+   
+}
+
+export testfunction T1_IPC ()
+{
+  testModuleTitle("T1_IPC");
+	//write("T1_IPC");
+	testWaitForTimeout (T1_IPC);
+   
+}
+
+export testfunction Ta1 ()
+{
+  testModuleTitle("Ta1");
+	//write("Ta1");
+	testWaitForTimeout (Ta1);
+   
+}
+
+export testfunction Tavviam_gas ()
+{
+  testModuleTitle("Tavviam_gas");
+	//write("Tavviam_gas");
+	testWaitForTimeout (Tavviam_gas);
+   
+}
+
+export testfunction Tavviam ()
+{
+  testModuleTitle("Tavviam");
+	//write("Tavviam");
+	testWaitForTimeout (Tavviam);
+   
+}
+
+export testfunction TBODY2_Absence ()
+{
+  testModuleTitle("TBODY2_Absence");
+	//write("TBODY2_Absence");
+	testWaitForTimeout (TBODY2_Absence);
+   
+}
+
+export testfunction TBRAKE1_Absence ()
+{
+  testModuleTitle("TBRAKE1_Absence");
+	//write("TBRAKE1_Absence");
+	testWaitForTimeout (TBRAKE1_Absence);
+   
+}
+
+export testfunction time_IPC_MissMess_Long ()
+{
+  testModuleTitle("time_IPC_MissMess_Long");
+	//write("time_IPC_MissMess_Long");
+	testWaitForTimeout (time_IPC_MissMess_Long);
+   
+}
+
+export testfunction TN ()
+{
+  testModuleTitle("TN");
+	//write("TN");
+	testWaitForTimeout (TN);
+   
+}
+
+export testfunction Tpush_IPC ()
+{
+  testModuleTitle("Tpush_IPC");
+	//write("Tpush_IPC");
+	testWaitForTimeout (Tpush_IPC);
+   
+}
+
+export testfunction T_rec ()
+{
+  testModuleTitle("T_rec");
+	//write("T_rec");
+	testWaitForTimeout (T_rec);
+   
+}
+
+export testfunction Treq_IPC ()
+{
+  testModuleTitle("Treq_IPC");
+	//write("Treq_IPC");
+	testWaitForTimeout (Treq_IPC);
+   
+}export testfunction Trip_Timeout ()
+{
+  testModuleTitle("Trip_Timeout");
+	//write("Trip_Timeout");
+	testWaitForTimeout (Trip_Timeout);
+   
+}
+
+export testfunction Ttimeout_90_92 ()
+{
+  testModuleTitle("Ttimeout_90_92");
+	//write("Ttimeout_90_92");
+	testWaitForTimeout (Ttimeout_90_92);
+   
+}
+
+export testfunction Ttimeout_1 ()
+{
+  testModuleTitle("Ttimeout_1");
+	//write("Ttimeout_1");
+	testWaitForTimeout (Ttimeout_1);
+   
+}
+
+export testfunction T_Pop_up_CallEnded ()
+{
+  testModuleTitle("T_Pop_up_CallEnded");
+	//write("T_Pop_up_CallEnded");
+	testWaitForTimeout (T_Pop_up_CallEnded);
+   
+}
+
+export testfunction T_Pop_up_Nav ()
+{
+  testModuleTitle("T_Pop_up_Nav");
+	//write("T_Pop_up_Nav");
+	testWaitForTimeout (T_Pop_up_Nav);
+   
+}
+
+export testfunction T_push_IPC ()
+{
+  testModuleTitle("T_push_IPC");
+	//write("T_push_IPC");
+	testWaitForTimeout (T_push_IPC);
+   
+}
+
+export testfunction T_S_S ()
+{
+  testModuleTitle("T_S_S");
+	//write("T_S_S");
+	testWaitForTimeout (T_S_S);
+   
+}
+
+export testfunction T_Screen_Timeout ()
+{
+  testModuleTitle("T_Screen_Timeout");
+	//write("T_Screen_Timeout");
+	testWaitForTimeout (T_Screen_Timeout);
+   
+}
+
+export testfunction T2_S_S ()
+{
+  testModuleTitle("T2_S_S");
+	//write("T2_S_S");
+	testWaitForTimeout (T2_S_S);
+   
+}
+
+export testfunction Tab ()
+{
+  testModuleTitle("Tab");
+	//write("Tab");
+	testWaitForTimeout (Tab);
+   
+}
+
+export testfunction Tdis ()
+{
+  testModuleTitle("Tdis");
+	//write("Tdis");
+	testWaitForTimeout (Tdis);
+   
+}
+
+export testfunction T_OdoDoorAtKeyOff ()
+{
+  testModuleTitle("T_OdoDoorAtKeyOff");
+	//write("T_OdoDoorAtKeyOff");
+	testWaitForTimeout (T_OdoDoorAtKeyOff);
+   
+}
+
+export testfunction T4 ()
+{
+  testModuleTitle("T4");
+	//write("T4");
+	testWaitForTimeout (T4);
+   
+}
+
+export testfunction T_missing_STATUS_BH_BCM1 ()
+{
+  testModuleTitle("T_missing_STATUS_BH_BCM1");
+	//write("T_missing_STATUS_BH_BCM1");
+	testWaitForTimeout (T_missing_STATUS_BH_BCM1);
+   
+}
+
+export testfunction T_Rear ()
+{
+  testModuleTitle("T_Rear");
+	//write("T_Rear");
+	testWaitForTimeout (T_Rear);
+   
+}
+
+export testfunction T_Rear_Max ()
+{
+  testModuleTitle("T_Rear_Max");
+	//write("T_Rear_Max");
+	testWaitForTimeout (T_Rear_Max);
+   
+}
+
+export testfunction T_Rear_Chime_Counter ()
+{
+  testModuleTitle("T_Rear_Chime_Counter");
+	//write("T_Rear_Chime_Counter");
+	testWaitForTimeout (T_Rear_Chime_Counter);
+   
+}
+
+export testfunction Safe1_Time ()
+{
+  testModuleTitle("Safe1_Time");
+	//write("Safe1_Time");
+	testWaitForTimeout (Safe1_Time);
+   
+}
+
+export testfunction Safe2_Time ()
+{
+  testModuleTitle("Safe2_Time");
+  //write("Safe2_Time");
+  testWaitForTimeout (Safe2_Time);
+}
+
+export testfunction Unsafe_Time ()
+{
+  testModuleTitle("Unsafe_Time");
+	//write("Unsafe_Time");
+	testWaitForTimeout (Unsafe_Time);   
+}
+
+export testfunction First_WC_Time_Rear ()
+{
+  testModuleTitle("First_WC_Time_Rear");
+	//write("First_WC_Time_Rear");
+	testWaitForTimeout (First_WC_Time_Rear);
+   
+}
+
+export testfunction Maximum_First_WC_Time_Rear ()
+{
+  testModuleTitle("Maximum_First_WC_Time_Rear");
+	//write("Maximum_First_WC_Time_Rear");
+	testWaitForTimeout (Maximum_First_WC_Time_Rear);
+}
+
+export testfunction Maximum_WC_Time_Rear ()
+{
+  testModuleTitle("Maximum_WC_Time_Rear");
+	//write("Maximum_WC_Time_Rear");
+	testWaitForTimeout (Maximum_WC_Time_Rear);
+}
+
+export testfunction WC_Time_Rear ()
+{
+  testModuleTitle("WC_Time_Rear");
+	//write("WC_Time_Rear");
+	testWaitForTimeout (WC_Time_Rear);
+
+}
+
+void Speedometer_Tolerance0()
+{
+  //testModuleTitle("Speedometer_Tolerance_0");
+  //write("Speedometer_Tolerance_0");
+  
+    sysSetVariableInt(sysvar::SysVar_PROXI::DIAG_ProxiLesen,1);
+    testWaitForTimeout (200);
+    sysSetVariableInt(sysvar::SysVar_PROXI::DIAG_ProxiLesen,0);
+    testWaitForTimeout (200);
+	  sysSetVariableInt(sysvar::SysVar_PROXI::pByte73,0);		
+	  sysSetVariableInt(sysvar::SysVar_PROXI::DIAG_eLoadAll,1);
+    testWaitForTimeout (200);
+    sysSetVariableInt(sysvar::SysVar_PROXI::DIAG_eLoadAll,0);
+    testWaitForTimeout (1000);
+	  sysSetVariableInt(sysvar::SysVar_PROXI::DIAG_eSendProxi,1);
+    testWaitForTimeout (200);
+    sysSetVariableInt(sysvar::SysVar_PROXI::DIAG_eSendProxi,0);
+    testWaitForTimeout (200);
+				
+}
+
+export testfunction Speed_Th_Act ()
+{
+  testModuleTitle("Speed_Th_Act");
+	Speedometer_Tolerance0();
+  sysSetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig,Speed_Th_Act);
+	testWaitForTimeout (2000);
+}
+
+
+export testfunction Speed_Th_Deact ()
+{
+  testModuleTitle("Speed_Th_Deact");
+	Speedometer_Tolerance0();
+  sysSetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig,Speed_Th_Deact);
+	testWaitForTimeout (2000);
+}
+
+export testfunction T_Step ()
+{
+  testModuleTitle("T_Step");
+	//write("T_Step");
+	testWaitForTimeout (T_Step);
+   
+}
+
+export testfunction Tref ()
+{
+  testModuleTitle("Tref");
+	//write("Tref");
+	testWaitForTimeout (Tref);
+   
+}
+
+export testfunction ARC_FLASH_PERIOD ()
+{
+  testModuleTitle("ARC_FLASH_PERIOD");
+	//write("ARC_FLASH_PERIOD");
+	testWaitForTimeout (ARC_FLASH_PERIOD);
+   
+}
+
+export testfunction T_SMS ()
+{
+  testModuleTitle("T_SMS");
+	//write("T_SMS");
+	testWaitForTimeout (T_SMS);
+   
+}
+
+export testfunction Tpush2_IPC ()
+{
+  testModuleTitle("Tpush2_IPC");
+	//write("Tpush2_IPC");
+	testWaitForTimeout (Tpush2_IPC);
+   
+}
+
+export testfunction T_WMPIL1 ()
+{
+  testModuleTitle("T_WMPIL1");
+	//write("T_WMPIL1");
+	testWaitForTimeout (T_WMPIL1);
+   
+}
+
+export testfunction T_WMPIL2 ()
+{
+  testModuleTitle("T_WMPIL2");
+	//write("T_WMPIL2");
+	testWaitForTimeout (T_WMPIL2);
+   
+}
+
+export testfunction T_WMPIL3 ()
+{
+  testModuleTitle("T_WMPIL3");
+	//write("T_WMPIL3");
+	testWaitForTimeout (T_WMPIL3);
+   
+}
+
+export testfunction T_WMPIL4 ()
+{
+  testModuleTitle("T_WMPIL4");
+	//write("T_WMPIL4");
+	testWaitForTimeout (T_WMPIL4);
+   
+}
+
+export testfunction T_WMP1 ()
+{
+  testModuleTitle("T_WMP1");
+	//write("T_WMP1");
+	testWaitForTimeout (T_WMP1);
+   
+}
+
+export testfunction T_WMP2 ()
+{
+  testModuleTitle("T_WMP2");
+	//write("T_WMP2");
+	testWaitForTimeout (T_WMP2);
+   
+}
+
+export testfunction T_WMP3 ()
+{
+  testModuleTitle("T_WMP3");
+	//write("T_WMP3");
+	testWaitForTimeout (T_WMP3);
+   
+}
+
+export testfunction T_WMP4 ()
+{
+  testModuleTitle("T_WMP4");
+	//write("T_WMP4");
+	testWaitForTimeout (T_WMP4);
+   
+}
+
+export testfunction T_WMB1 ()
+{
+  testModuleTitle("T_WMB1");
+	//write("T_WMB1");
+	testWaitForTimeout (T_WMB1);
+   
+}
+
+export testfunction T_WMB2 ()
+{
+  testModuleTitle("T_WMB2");
+	//write("T_WMB2");
+	testWaitForTimeout (T_WMB2);
+   
+}
+
+export testfunction T_WMB3 ()
+{
+  testModuleTitle("T_WMB3");
+	//write("T_WMB3");
+	testWaitForTimeout (T_WMB3);
+   
+}
+
+export testfunction T_WMB4 ()
+{
+  testModuleTitle("T_WMB4");
+	//write("T_WMB4");
+	testWaitForTimeout (T_WMB4);
+   
+}
+
+export testfunction TFIL_BAT ()
+{
+  testModuleTitle("TFIL_BAT");
+	//write("TFIL_BAT");
+	testWaitForTimeout (TFIL_BAT);
+   
+}
+
+export testfunction T_Min_Visual ()
+{
+  testModuleTitle("T_Min_Visual");
+	//write("T_Min_Visual");
+	testWaitForTimeout (T_Min_Visual);
+   
+}
+
+export testfunction T_Roll_Cycle ()
+{
+  testModuleTitle("T_Roll_Cycle");
+	//write("T_Roll_Cycle");
+	testWaitForTimeout (T_Roll_Cycle);
+   
+}
+
+export testfunction T_Fadein2 ()
+{
+  testModuleTitle("T_Fadein2");
+	//write("T_Fadein2");
+	testWaitForTimeout (T_Fadein2);
+   
+}
+
+export testfunction T_Speedometer_Refresh ()
+{
+  testModuleTitle("T_Speedometer_Refresh");
+	//write("T_Speedometer_Refresh");
+	testWaitForTimeout (T_Speedometer_Refresh);
+   
+}
+
+export testfunction T_DigitalSpeedUpdate ()
+{
+  testModuleTitle("T_DigitalSpeedUpdate");
+	//write("T_DigitalSpeedUpdate");
+	testWaitForTimeout (T_DigitalSpeedUpdate);
+   
+}
+
+export testfunction Teps ()
+{
+  testModuleTitle("Teps");
+	//write("Teps");
+	testWaitForTimeout (Teps);
+   
+}
+
+export testfunction Tavviam_flex ()
+{
+  testModuleTitle("Tavviam_flex");
+	//write("Tavviam_flex");
+	testWaitForTimeout (Tavviam_flex);
+   
+}
+
+export testfunction Animation_Time ()
+{
+  testModuleTitle("Animation_Time");
+	//write("Animation_Time");
+	testWaitForTimeout (T_Animation_Time);
+   
+}
+
+export testfunction T_WMPOff ()
+{
+  testModuleTitle("T_WMPOff");
+	//write("T_WMPOff");
+	testWaitForTimeout (T_WMPOff);
+   
+}
+
+export testfunction T_WMPILOff ()
+{
+  testModuleTitle("T_WMPILOff");
+	//write("T_WMPILOff");
+	testWaitForTimeout (T_WMPILOff);
+   
+}
+
+export testfunction T_WMBIL1 ()
+{
+  testModuleTitle("T_WMBIL1");
+	//write("T_WMBIL1");
+	testWaitForTimeout (T_WMBIL1);
+   
+}
+
+export testfunction T_WMBIL2 ()
+{
+  testModuleTitle("T_WMBIL2");
+	//write("T_WMBIL2");
+	testWaitForTimeout (T_WMBIL2);
+   
+}
+
+export testfunction T_WMBIL3 ()
+{
+  testModuleTitle("T_WMBIL3");
+	//write("T_WMBIL3");
+	testWaitForTimeout (T_WMBIL3);
+   
+}
+
+export testfunction T_WMBIL4 ()
+{
+  testModuleTitle("T_WMBIL4");
+	//write("T_WMBIL4");
+	testWaitForTimeout (T_WMBIL4);
+   
+}
+
+export testfunction T_WMBILOff ()
+{
+  testModuleTitle("T_WMBILOff");
+	//write("T_WMBILOff");
+	testWaitForTimeout (T_WMBILOff);
+   
+}
+
+export testfunction T_WMD1 ()
+{
+  testModuleTitle("T_WMD1");
+	//write("T_WMD1");
+	testWaitForTimeout (T_WMD1);
+   
+}
+
+export testfunction T_WMD2 ()
+{
+  testModuleTitle("T_WMD2");
+	//write("T_WMD2");
+	testWaitForTimeout (T_WMD2);
+   
+}
+
+export testfunction T_WMDOff ()
+{
+  testModuleTitle("T_WMDOff");
+	//write("T_WMDOff");
+	testWaitForTimeout (T_WMDOff);
+   
+}
+
+export testfunction T_WMF ()
+{
+  testModuleTitle("T_WMF");
+	//write("T_WMF");
+	testWaitForTimeout (T_WMF);
+   
+}
+
+export testfunction T_Scroll ()
+{
+  testModuleTitle("T_Scroll");
+	//write("T_Scroll");
+	testWaitForTimeout (T_Scroll);
+   
+}
+
+export testfunction T_CountVehOn ()
+{
+  testModuleTitle("T_CountVehOn");
+	//write("T_CountVehOn");
+	testWaitForTimeout (T_CountVehOn);
+   
+}
+
+export testfunction TA ()
+{
+  testModuleTitle("TA");
+	//write("TA");
+	testWaitForTimeout (TA);
+   
+}
+
+export testfunction T_S_S_menu ()
+{
+  testModuleTitle("T_S_S_menu");
+	//write("T_S_S_menu");
+	testWaitForTimeout (T_S_S_menu);
+   
+}
+
+export testfunction Tbsm ()
+{
+  testModuleTitle("Tbsm");
+	//write("Tbsm");
+	testWaitForTimeout (Tbsm);
+   
+}
+
+export testfunction Tsdm ()
+{
+  testModuleTitle("Tsdm");
+	//write("Tsdm");
+	testWaitForTimeout (Tsdm);
+   
+}
+
+export testfunction T_Ind ()
+{
+  testModuleTitle("T_Ind");
+	//write("T_Ind");
+	testWaitForTimeout (T_Ind);
+   
+}
+
+
+//************************* these timers parameters are used only by Automatic Tests ****************************
+
+export testfunction T_RunInspection ()
+{
+  testModuleTitle("T_RunInspection");
+	//write("T_RunInspection");
+	testWaitForTimeout (T_RunInspection);
+   
+}
+
+export testfunction T_RunInspectionRec ()
+{
+  testModuleTitle("T_RunInspectionRec");
+	//write("T_RunInspectionRec");
+	testWaitForTimeout (T_RunInspectionRec);
+   
+}
+

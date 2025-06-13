@@ -1,0 +1,212 @@
+/*@!Encoding:1252*/
+//6.3.2012 -Parameter sStepResults added to function GetStepResultText, 2 new functions GetOCRStepResult and GetOCRStepResult 
+//12.3.2013 - function GetStepsByState added
+//16.08.2021 - upgraded imgPath left and right on sysvar iCommand changes - (E.Baptistucci)
+
+includes
+{
+
+}
+
+variables
+{
+  //char sStepNames[10000], sOCR[10000], sImgPath[500];
+  char sStepNames[10000], sOCR[10000], sImgPath[500], sImgPathLeft[500], sImgPathRight[500];//test by Eric Baptistucci
+  float time;
+}
+
+//StepName - name of required Inspection step, can be 'State.StepName', when no State specified, the result can be taken from any State containing StepName 
+//returns measured value of that Inspection step   
+double GetStepResult( char StepName[])
+{ 
+   int i;
+   long pos;
+   int index;
+   char StepNameWPipes[1000];
+
+   //if StepName is without State than (any alphanumeric string, space and '-' also possible) is added for search RegExp in sStepNames
+   //pipes are added to avoid that StepName is substring of found String
+   pos = strstr(StepName,".");
+   if (pos == -1)
+     snprintf(StepNameWPipes, 1000, "\\|[\\w\\s-]*\\.%s\\|", StepName);
+   else
+     snprintf(StepNameWPipes, 1000, "\\|%s\\|", StepName);
+
+   index = 0; 
+   SysGetVariableString(sysvar::Test::sStepNames, sStepNames, 10000 );
+   pos = strstr_regex(sStepNames, StepNameWPipes);       
+      
+   if (pos == -1)  //string not found
+   {
+      return 9e+99;  //errorcode
+   }
+   
+   for (i=0; i<pos; i++)
+   {
+      if (sStepNames[i] == '|' )        
+        index++;        
+   }      
+   return @sysvar::Test::arResults[index];
+}
+
+//str - string with pipe delimeters at start and end e.g: "|abc|dde|fgg|hi|"
+//item - string returned by this function
+//index - required index, e.g.: 2 returns fgg in string item
+void GetStrIndexValue(char str[], char item[], int index)
+{
+   int i, len;
+   long pos;
+
+   //find starting position of StepResultStr  in sOCR
+   i=0;
+   for ( pos=1; (i< index && pos< strlen(str)); pos++)  
+   {
+      if (str[pos]=='|') i++;        
+   } 
+
+   //find StepResultStr length
+   len=0;
+   for ( len=0; ( str[pos+len]!='|' && pos+len<strlen(str)); len++);
+   
+   //copy to StepResultStr
+   substr_cpy(item, str, pos, len, 10000); 
+}
+
+//retrieves result for StepName from sysvar::Test::sOCRResults
+//StepName - input parameter
+//StepResultStr -output parameter, result is stored to it
+void GetOCRStepResult( char StepName[], char StepResultStr[])
+{
+  SysGetVariableString(sysvar::Test::sOCRResults, sOCR, 10000 );
+  GetStepResultText( StepName, sOCR, StepResultStr);
+  str_replace(StepResultStr," ",""); //spaces are removed
+  
+}
+
+//retrieves result for StepName from sysvar::Test::sStrResults
+//StepName - input parameter
+//StepResultStr -output parameter, result is stored to it
+void GetStringStepResult( char StepName[], char StepResultStr[])
+{
+  char sStrResults[5000];
+  SysGetVariableString(sysvar::Test::sStrResults, sStrResults, 5000 );
+  GetStepResultText( StepName, sStrResults, StepResultStr);
+  str_replace(sStrResults," ",""); //spaces are removed
+  str_replace(StepResultStr," ",""); //spaces are removed
+}
+
+//StepName - name of required Inspection step, can be 'State.StepName', when no State specified, the result can be taken from any State containing StepName 
+//sStepResults - step results with delimeters, can be OCR or other strings; eg. |abc|dde|fgg|hi|  
+//StepResultStr - output string; returns step (OCR) result to it   
+void GetStepResultText( char StepName[], char sStepResults[], char StepResultStr[])
+{ 
+   int i, len;
+   long pos;
+   int index;   
+   char StepNameWPipes[200]; 
+   
+   //if StepName is without State than (any alphanumeric string, space and '-' also possible) is added for search RegExp in sStepNames
+   //pipes are added to avoid that StepName is substring of found String
+   pos = strstr(StepName,".");
+   if (pos == -1)
+     snprintf(StepNameWPipes, 200, "\\|[\\w\\s-]*\\.%s\\|", StepName);
+   else
+     snprintf(StepNameWPipes, 200, "\\|%s\\|", StepName);
+
+   //find index in sStepNames  
+   index = 0;
+   SysGetVariableString(sysvar::Test::sStepNames, sStepNames, 10000 );
+   pos = strstr_regex(sStepNames, StepNameWPipes);    
+   if (pos<0) 
+   {                                     //string not found in sStepNames
+      strncpy (StepResultStr, "Wrong StepName", 100);
+      return;   
+   }
+   
+   for (i=0; i<pos; i++)
+   {
+      if (sStepNames[i] == '|' )        
+        index++;        
+   }   
+   
+   //stores searched value to output variable StepResultStr
+   str_replace(StepResultStr," ",""); //spaces are removed
+   GetStrIndexValue (sStepResults, StepResultStr, index); 
+}
+
+//returns number of steps in string sItems
+//sItems has delimeters on start and end eg.: |aa|bb|ccc|
+int GetItemsNo(char sItems[])
+{
+   int i,x;
+   x=0;
+   for (i=1; i<strlen(sItems); i++)
+   {
+      if (sItems[i] == '|' )        
+        x++;       
+   }   
+   return x;  
+}
+
+//returns all StepNames in given State
+//State - input parameter
+//StepNamesByState - output parameter, all StepNames without State found in given State are returned here e.g: |Tell1|Tell2|Tell3|
+void GetStepsByState(char State[], char StepNamesByState[])
+{
+  int i, n;
+  char StepName [200];
+  char regexp[100];
+  
+  strncpy(StepNamesByState, "|", 10000);
+  SysGetVariableString(sysvar::Test::sStepNames, sStepNames, 10000 );     
+  n = GetItemsNo(sStepNames);  
+  
+  for (i=0; i< n; i++ )
+  {
+    GetStrIndexValue(sStepNames, StepName, i);
+    snprintf(regexp, 100, "^%s\\..+", State);
+
+    if (str_match_regex(StepName, regexp ))
+    {
+      str_replace_regex(StepName, ".*\\.", ""); //removes State from StepName
+      strncat(StepNamesByState, StepName,10000);          
+      strncat(StepNamesByState, "|",10000);                
+    }
+  }
+}
+
+
+//entered when measurements are ready; CANoeToVBAI sends iCommand=10
+//writes results for all Inspection steps and then sets iCommand=11 
+on sysvar sysvar::Test::iCommand
+{ 
+  int i, iStepNo; 
+  char StepName[1000];
+  char OCRStepResult[1000];
+  
+  if ( @sysvar::Test::iCommand == 10 )
+  {     
+    @sysvar::Test::iCommand = 11;
+    SysGetVariableString(sysvar::Test::sStepNames, sStepNames, 10000 );     
+    SysGetVariableString(sysvar::Test::sOCRResults, sOCR, 10000 );   
+    SysGetVariableString(sysvar::Test::sImgPath, sImgPath, 500 );   
+    SysGetVariableString(sysvar::Test::sImgPathLeft, sImgPathLeft, 500 );//ADD by Eric Baptistucci
+    SysGetVariableString(sysvar::Test::sImgPathRight, sImgPathRight, 500 );//ADD by Eric Baptistucci
+    
+    iStepNo=GetItemsNo(sStepNames);
+    for (i=0; i< iStepNo; i++)
+    {
+      GetStrIndexValue(sStepNames, StepName, i);
+      GetStrIndexValue(sOCR, OCRStepResult, i);            
+      write ("%s=%f %s", StepName, @sysvar::Test::arResults[i], OCRStepResult);      
+    }
+    
+    if (strlen(sImgPath)>0) write("sImgPath: %s", sImgPath);        
+    if (strlen(sImgPathLeft)>0) write("sImgPathLeft: %s", sImgPathLeft);//ADD by Eric Baptistucci
+    if (strlen(sImgPathRight)>0) write("sImgPathRight: %s", sImgPathRight);//ADD by Eric Baptistucci
+  }    
+}
+
+
+  
+ 

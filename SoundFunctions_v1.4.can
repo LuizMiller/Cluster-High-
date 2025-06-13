@@ -1,0 +1,139 @@
+/*@!Encoding:1252*/
+
+//release notes:
+// v1.0 - initial release - E.Baptistucci (11/01/22)
+// v1.1 - switched control variable from 'iCommand' to 'iCommandPython' - E.Baptistucci (09-02-22)
+// v1.2 - added waiting loop in ActivateSoundRecord() - E.Baptistucci (09-02-22)
+// v1.3 - Updated the time "testWaitForTimeout" of function ActivateSoundRecord when iCommandPython = 137 from "1000" to "2000".
+// v1.4 - Updated ActivateSoundRecord() with exectution holding in case a previous instance is still running.
+
+includes
+{
+  
+}
+
+variables
+{
+}
+
+void ActivateSoundRecord()//start python script
+{ 
+  int timeout=0;
+  int result=1;
+  const int maxTimeout = 5;
+  
+  while (timeout != maxTimeout)
+  {
+    while ( @sysvar::Test::iCommandPython == 137 && result != 0) // wait for an instance already running
+    {
+      result = TestWaitForSysVar(sysvar::Test::iCommandPython, 15000);
+    }
+    if (@sysvar::Test::iCommandPython != 137)
+    {
+      testWaitForTimeout(1000);
+      timeout = maxTimeout;
+    }
+    else
+    {
+      timeout=timeout+1;
+    }
+    testWaitForTimeout(1000);
+  }
+  sysSetVariableString(sysvar::Test::sSoundDetected,"None");//Python will write in this variable what kind of chime was detected
+  @sysvar::Test::iCommandPython = 137; //start Python script
+  write("Started sound recording");
+  testWaitForTimeout(2000);
+  timeout=0;
+  result=1;
+  
+}
+
+export testfunction ActivateSoundDetection()//function called inside test cases, before indication is activated
+{
+	ActivateSoundRecord();
+  
+}
+
+export testfunction CheckSoundDetected(char sound[])// 'sound' is the chime type expected, ex: 'A', '1A'... etc
+{
+  CheckSound(sound);
+}
+  
+void CheckSound(char sound[])
+{
+	int timeout = 0;
+  int result = 1;
+	char sSound[100]; // string copy of detected chime
+  const int maxTimeout = 5;
+  
+  while (timeout != maxTimeout)
+  {
+    while ( @sysvar::Test::iCommandPython != 138 && result != 0) 
+    {
+      result = TestWaitForSysVar(sysvar::Test::iCommandPython, 15000);
+    }
+    if (@sysvar::Test::iCommandPython == 138)
+    {
+      timeout = maxTimeout;
+    }
+    else
+    {
+      timeout=timeout+1;
+    }
+    testWaitForTimeout(1000);
+  }
+  
+	if ( @sysvar::Test::iCommandPython == 138)
+	{
+		write("Successfully returned from Python Audio Processor");
+		SysGetVariableString(sysvar::Test::sSoundDetected, sSound, 100 ); // get data received from Python
+		//if ( strncmp(sound, sSound, 100) == 0) // MATCH!
+    if( CompareStringsWithTolerance(sSound,sound))
+		{
+			TestStep("Audio", "Expected chime matches detected chime: '%s'", sSound); 
+			testStepPass();
+		}
+		else
+		{
+			TestStep("Audio", "Detected chime = '%s' | Expected = '%s'", sSound, sound); 
+			testStepFail();	
+		}
+	}
+	else // when iCommandPython returned is not 138 or timeout ocurred
+	{
+		write("Timeout or error returning from python process!");
+		TestStep("Python Audio", "Timeout or error returning from python process!"); 
+		testStepFail();
+	}	
+  timeout=0;
+}	
+
+int CompareStringsWithTolerance(char Result[], char ExpVal[])
+//compares 2 strings
+//ExpVal can be substring from Result as only characters to strlen(ExpVal) are checked
+//if the only difference are LowerCase, Uppercase or characters difficult to recognise like 'l', '0' etc, returns 1
+//if there are other differences as well, returns 0 
+
+{
+     int i; 
+     for (i=0; i< strlen(ExpVal); i++)    
+     {
+        str_replace(ExpVal," ",""); //spaces are removed from "ExpVal"
+        str_replace(Result," ",""); //spaces are removed from "Result"     
+        if ( Result[i] != ExpVal[i] )
+        {
+          
+           if (toLower(Result[i]) ==  toLower(ExpVal[i]))
+            
+             continue; 
+           else if (( Result[i] == 'i' ||  Result[i]== 'l' ||  Result[i]== 'I' ||  Result[i]== '\'' || Result[i]== '0' ||  Result[i]== 'o' ||  Result[i]== 'O' || Result[i]== '.' || Result[i]== '-'|| Result[i]== '_')
+            && ( ExpVal[i] =='i'  ||  ExpVal[i]== 'l' ||  ExpVal[i]== 'I' ||  ExpVal[i]== '\'' || ExpVal[i]== '0' ||  ExpVal[i]== 'o' ||  ExpVal[i]== 'O' || ExpVal[i]== '.' || ExpVal[i]== '-' || ExpVal[i]== '_' )) 
+             continue;
+           else
+           {
+              return 0;
+           }          
+        }        
+     }
+     return 1;
+}
