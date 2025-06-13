@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="Automation">
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl4" Children="Controls" ControlName="Static Text 2">
+      <Property Name="Name">StaticTextControl4</Property>
+      <Property Name="Size">102, 13</Property>
+      <Property Name="Location">180, 34</Property>
+      <Property Name="Text">SearchMenuRegion</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl3" Children="Controls" ControlName="Static Text">
+      <Property Name="Name">StaticTextControl3</Property>
+      <Property Name="Size">88, 13</Property>
+      <Property Name="Location">377, 8</Property>
+      <Property Name="Text">iCommandMENU</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl4" Children="Controls" ControlName="Numeric Up/Down 2">
+      <Property Name="Name">NumericUpDownControl4</Property>
+      <Property Name="Size">83, 20</Property>
+      <Property Name="Location">471, 6</Property>
+      <Property Name="Maximum">500</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;iCommandMENU;1;;;-1;;;</Property>
+      <Property Name="TabIndex">3</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl2" Children="Controls" ControlName="Static Text">
+      <Property Name="Name">StaticTextControl2</Property>
+      <Property Name="Size">89, 13</Property>
+      <Property Name="Location">193, 8</Property>
+      <Property Name="Text">iCommandPython</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text">
+      <Property Name="Name">StaticTextControl1</Property>
+      <Property Name="Size">56, 13</Property>
+      <Property Name="Location">30, 8</Property>
+      <Property Name="Text">iCommand</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl3" Children="Controls" ControlName="Numeric Up/Down 3">
+      <Property Name="Name">NumericUpDownControl3</Property>
+      <Property Name="Size">82, 20</Property>
+      <Property Name="Location">92, 5</Property>
+      <Property Name="Maximum">500</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;iCommand;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl2" Children="Controls" ControlName="Numeric Up/Down 2">
+      <Property Name="Name">NumericUpDownControl2</Property>
+      <Property Name="Size">83, 20</Property>
+      <Property Name="Location">288, 5</Property>
+      <Property Name="Maximum">500</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;iCommandPython;1;;;-1;;;</Property>
+      <Property Name="TabIndex">2</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl1" Children="Controls" ControlName="Numeric Up/Down">
+      <Property Name="Name">NumericUpDownControl1</Property>
+      <Property Name="Size">83, 20</Property>
+      <Property Name="Location">288, 31</Property>
+      <Property Name="Maximum">500</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;sSearchMenuRegion;1;;;-1;;;</Property>
+      <Property Name="TabIndex">5</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl9" Children="Controls" ControlName="Input/Output Box">
+      <Property Name="Name">TextBoxControl9</Property>
+      <Property Name="Size">517, 20</Property>
+      <Property Name="Location">37, 135</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;2;0;500</Property>
+      <Property Name="DisplayLabel">Left</Property>
+      <Property Name="DescriptionText">sImgPath:</Property>
+      <Property Name="DescriptionSize">55, 20</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;sImgPath;4;;;-1;;;</Property>
+      <Property Name="TabIndex">10</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl7" Children="Controls" ControlName="Input/Output Box">
+      <Property Name="Name">TextBoxControl7</Property>
+      <Property Name="Size">159, 20</Property>
+      <Property Name="Location">15, 31</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;2;0;500</Property>
+      <Property Name="DisplayLabel">Left</Property>
+      <Property Name="DescriptionText">sSearchMenu:</Property>
+      <Property Name="DescriptionSize">77, 20</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;sSearchMenu;4;;;-1;;;</Property>
+      <Property Name="TabIndex">4</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl6" Children="Controls" ControlName="Input/Output Box">
+      <Property Name="Name">TextBoxControl6</Property>
+      <Property Name="Size">538, 20</Property>
+      <Property Name="Location">16, 109</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;2;0;500</Property>
+      <Property Name="DisplayLabel">Left</Property>
+      <Property Name="DescriptionText">sOCRResults:</Property>
+      <Property Name="DescriptionSize">76, 20</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;sOCRResults;4;;;-1;;;</Property>
+      <Property Name="TabIndex">9</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl5" Children="Controls" ControlName="Input/Output Box">
+      <Property Name="Name">TextBoxControl5</Property>
+      <Property Name="Size">547, 20</Property>
+      <Property Name="Location">7, 83</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;2;0;500</Property>
+      <Property Name="DisplayLabel">Left</Property>
+      <Property Name="DescriptionText">sOCRExpected:</Property>
+      <Property Name="DescriptionSize">85, 20</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;sOCRExpected;4;;;-1;;;</Property>
+      <Property Name="TabIndex">7</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl4" Children="Controls" ControlName="Input/Output Box">
+      <Property Name="Name">TextBoxControl4</Property>
+      <Property Name="Size">161, 20</Property>
+      <Property Name="Location">13, 57</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;2;0;500</Property>
+      <Property Name="DisplayLabel">Left</Property>
+      <Property Name="DescriptionText">languageOCR:</Property>
+      <Property Name="DescriptionSize">79, 20</Property>
+      <Property Name="SymbolConfiguration">5;16;Test;;;languageOCR;4;;;-1;;;</Property>
+      <Property Name="TabIndex">6</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">564, 222</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

@@ -1,0 +1,476 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="BSM">
+    <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl1" Children="Controls" ControlName="Check Box">
+      <Property Name="Name">CheckBoxControl1</Property>
+      <Property Name="Size">48, 17</Property>
+      <Property Name="Location">232, 35</Property>
+      <Property Name="TextAlign">MiddleCenter</Property>
+      <Property Name="CheckAlign">MiddleRight</Property>
+      <Property Name="Text">SNA</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;TravelDistanceSNA;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1058</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl2" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl2</Property>
+      <Property Name="Size">130, 28</Property>
+      <Property Name="Location">286, 270</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="ShowValues">Decimal</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">EPBSts:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EPBSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1034</Property>
+      <Property Name="UsedValueTable">PhysicalValue</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl21" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl21</Property>
+      <Property Name="Size">116, 21</Property>
+      <Property Name="Location">419, 270</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">STATUS_EPB.EPBSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl17" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl17</Property>
+      <Property Name="Size">188, 30</Property>
+      <Property Name="Location">30, 403</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">STATUS_EPB.EPBMaintenanceSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl7" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl7</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">7, 402</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EPBMaintenanceSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1030</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl19" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl19</Property>
+      <Property Name="Size">189, 30</Property>
+      <Property Name="Location">30, 367</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">STATUS_RPB.EPBFailureLampReq</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl10" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl10</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">7, 366</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EPBFailureLampReq;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1029</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl20" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl20</Property>
+      <Property Name="Size">167, 30</Property>
+      <Property Name="Location">30, 331</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">STATUS_EPB.EPBAutoAppSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl12" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl12</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">7, 330</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EPBAutoAppSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1028</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl1" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl1</Property>
+      <Property Name="Size">130, 28</Property>
+      <Property Name="Location">286, 243</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">EPB_HMI_Management:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EPB_HMI_Management;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1026</Property>
+      <Property Name="UsedValueTable">PhysicalValue</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl16" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl16</Property>
+      <Property Name="Size">195, 21</Property>
+      <Property Name="Location">419, 243</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">STATUS_EPB.EPB_HMI_Management</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl15" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl15</Property>
+      <Property Name="Size">204, 20</Property>
+      <Property Name="Location">342, 136</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BSM_YRS_DATA.MessageCounter_BYD</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl5" Children="Controls" ControlName="Numeric Up/Down 3">
+      <Property Name="Name">NumericUpDownControl5</Property>
+      <Property Name="Size">50, 26</Property>
+      <Property Name="Location">286, 136</Property>
+      <Property Name="Maximum">15</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;MessageCounter_BYD;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1024</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl8" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl8</Property>
+      <Property Name="Size">146, 20</Property>
+      <Property Name="Location">342, 58</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BSM_YRS_DATA.CRC_BYD</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl4" Children="Controls" ControlName="Numeric Up/Down 3">
+      <Property Name="Name">NumericUpDownControl4</Property>
+      <Property Name="Size">50, 26</Property>
+      <Property Name="Location">286, 58</Property>
+      <Property Name="Maximum">255</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;CRC_BYD;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1022</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl7" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl7</Property>
+      <Property Name="Size">130, 28</Property>
+      <Property Name="Location">286, 216</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">AVHTextDispaly:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;AVHTextDispaly;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1002</Property>
+      <Property Name="UsedValueTable">PhysicalValue</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl24" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl24</Property>
+      <Property Name="Size">135, 21</Property>
+      <Property Name="Location">419, 216</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE13.AVHTextDispaly</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl6" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl6</Property>
+      <Property Name="Size">130, 28</Property>
+      <Property Name="Location">286, 189</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">AutoVehHoldSts:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;AutoVehHoldSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">977</Property>
+      <Property Name="UsedValueTable">PhysicalValue</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl23" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl23</Property>
+      <Property Name="Size">136, 21</Property>
+      <Property Name="Location">419, 189</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE13.AutoVehHoldSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl1" Children="Controls" ControlName="Numeric Up/Down 2">
+      <Property Name="Name">NumericUpDownControl1</Property>
+      <Property Name="Size">50, 26</Property>
+      <Property Name="Location">286, 84</Property>
+      <Property Name="DecimalPlaces">2</Property>
+      <Property Name="Maximum">40.94</Property>
+      <Property Name="Minimum">-40.96</Property>
+      <Property Name="Increment">0.02</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;LatAcceleration_BSM;2;;;-1;;;</Property>
+      <Property Name="TabIndex">930</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl13" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl13</Property>
+      <Property Name="Size">199, 20</Property>
+      <Property Name="Location">342, 84</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BSM_YRS_DATA.LatAcceleration_BSM</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl14" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl14</Property>
+      <Property Name="Size">208, 20</Property>
+      <Property Name="Location">342, 110</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BSM_YRS_DATA.LongAcceleration_BSM</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl2" Children="Controls" ControlName="Numeric Up/Down 3">
+      <Property Name="Name">NumericUpDownControl2</Property>
+      <Property Name="Size">50, 26</Property>
+      <Property Name="Location">286, 110</Property>
+      <Property Name="DecimalPlaces">2</Property>
+      <Property Name="Maximum">40.94</Property>
+      <Property Name="Minimum">-40.96</Property>
+      <Property Name="Increment">0.02</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;LongAcceleration_BSM;2;;;-1;;;</Property>
+      <Property Name="TabIndex">929</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl10" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl10</Property>
+      <Property Name="Size">249, 30</Property>
+      <Property Name="Location">29, 295</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BSM_YRS_DATA.LongAccelerationFailSts_BSM</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl2" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl2</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 294</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;LongAccelerationFailSts_BSM;1;;;-1;;;</Property>
+      <Property Name="TabIndex">926</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl11" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl11</Property>
+      <Property Name="Size">240, 30</Property>
+      <Property Name="Location">29, 259</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BSM_YRS_DATA.LatAccelerationFailSts_BSM</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl9" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl9</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 258</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;LatAccelerationFailSts_BSM;1;;;-1;;;</Property>
+      <Property Name="TabIndex">925</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl8" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl8</Property>
+      <Property Name="Size">130, 28</Property>
+      <Property Name="Location">286, 162</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">VehicleStandStillSts:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;VehicleStandStillSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">901</Property>
+      <Property Name="UsedValueTable">PhysicalValue</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl12" Children="Controls" ControlName="Numeric Up/Down 2">
+      <Property Name="Name">NumericUpDownControl12</Property>
+      <Property Name="Size">50, 26</Property>
+      <Property Name="Location">286, 6</Property>
+      <Property Name="Maximum">511</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;VehicleSpeedVSOSig;1;;;-1;;;</Property>
+      <Property Name="TabIndex">850</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl9" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl9</Property>
+      <Property Name="Size">138, 30</Property>
+      <Property Name="Location">29, 223</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE8.HillHolderFailSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl8" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl8</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 222</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;HillHolderFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">759</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl12" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl12</Property>
+      <Property Name="Size">139, 30</Property>
+      <Property Name="Location">29, 188</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE8.ESCIntervention</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl11" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl11</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 186</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;ESCIntervention;1;;;-1;;;</Property>
+      <Property Name="TabIndex">753</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl7" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl7</Property>
+      <Property Name="Size">114, 30</Property>
+      <Property Name="Location">29, 151</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE8.ESCFailSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl6" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl6</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 150</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;ESCFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">751</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl2" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl2</Property>
+      <Property Name="Size">155, 20</Property>
+      <Property Name="Location">342, 6</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE1.VehicleSpeedVSOSig</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl6" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl6</Property>
+      <Property Name="Size">115, 30</Property>
+      <Property Name="Location">29, 115</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE8.EBDFailSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl5" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl5</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 114</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EBDFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">749</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl1</Property>
+      <Property Name="Size">146, 21</Property>
+      <Property Name="Location">419, 162</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE4.VehicleStandStillSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl5" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl5</Property>
+      <Property Name="Size">115, 30</Property>
+      <Property Name="Location">29, 78</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE8.DSTFailSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl4" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl4</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 78</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;DSTFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">747</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl4" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl4</Property>
+      <Property Name="Size">114, 30</Property>
+      <Property Name="Location">29, 42</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE8.ABSFailSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl3" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl3</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 42</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;ABSFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">745</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl18" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl18</Property>
+      <Property Name="Size">124, 20</Property>
+      <Property Name="Location">342, 32</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE7.TravelDistance</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl3" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl3</Property>
+      <Property Name="Size">196, 30</Property>
+      <Property Name="Location">29, 6</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">BRAKE1.VehicleSpeedVSOSigFailSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl3" Children="Controls" ControlName="Numeric Up/Down 3">
+      <Property Name="Name">NumericUpDownControl3</Property>
+      <Property Name="Size">50, 26</Property>
+      <Property Name="Location">286, 32</Property>
+      <Property Name="Maximum">255</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;TravelDistance;1;;;-1;;;</Property>
+      <Property Name="TabIndex">773</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl1" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl1</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 6</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;VehicleSpeedVSOSigFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">738</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">622, 444</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

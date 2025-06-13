@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="SWS">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl2" ControlName="Switch/Indicator 6">
+        <Property Name="Name">SwitchControl2</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">6, 19</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SwitchValuesRx">1;2;0;1</Property>
+        <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;EnterKeyStuckCCAN;1;;;-1;;;</Property>
+        <Property Name="TabIndex">555</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl7" Children="Controls" ControlName="Button">
+        <Property Name="Name">ButtonControl7</Property>
+        <Property Name="Size">150, 24</Property>
+        <Property Name="Location">35, 22</Property>
+        <Property Name="Text">Command_15Sts</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;C_Command_15Sts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">556</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">191, 60</Property>
+      <Property Name="Location">3, 209</Property>
+      <Property Name="Text">SDW_C</Property>
+      <Property Name="TabIndex">557</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl1" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl1</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 6</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;HomeKeyStuck;1;;;-1;;;</Property>
+      <Property Name="TabIndex">553</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl1" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl1</Property>
+      <Property Name="Size">150, 24</Property>
+      <Property Name="Location">35, 43</Property>
+      <Property Name="Text">Command_11Sts</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Command_11Sts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">548</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl4" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl4</Property>
+      <Property Name="Size">150, 24</Property>
+      <Property Name="Location">35, 9</Property>
+      <Property Name="Text">Command_10Sts</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Command_10Sts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">554</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl5" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl5</Property>
+      <Property Name="Size">150, 24</Property>
+      <Property Name="Location">35, 145</Property>
+      <Property Name="Text">Command_14Sts</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Command_14Sts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">551</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl42" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl42</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 74</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;DownKeyStuck;1;;;-1;;;</Property>
+      <Property Name="TabIndex">543</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl6" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl6</Property>
+      <Property Name="Size">150, 24</Property>
+      <Property Name="Location">35, 179</Property>
+      <Property Name="Text">Command_15Sts</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Command_15Sts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">552</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl75" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl75</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 108</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;RightKeyStuck;1;;;-1;;;</Property>
+      <Property Name="TabIndex">547</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl3" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl3</Property>
+      <Property Name="Size">150, 24</Property>
+      <Property Name="Location">35, 111</Property>
+      <Property Name="Text">Command_13Sts</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Command_13Sts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">550</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl44" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl44</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 40</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;LeftKeyStuck;1;;;-1;;;</Property>
+      <Property Name="TabIndex">544</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl59" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl59</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 142</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;UPKeyStuck;1;;;-1;;;</Property>
+      <Property Name="TabIndex">545</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl60" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl60</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">6, 176</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;EnterKeyStuck;1;;;-1;;;</Property>
+      <Property Name="TabIndex">546</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.81.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl2" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl2</Property>
+      <Property Name="Size">150, 24</Property>
+      <Property Name="Location">35, 77</Property>
+      <Property Name="Text">Command_12Sts</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Command_12Sts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">549</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">197, 271</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

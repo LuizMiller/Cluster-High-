@@ -1,0 +1,449 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="ORC">
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl1" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl1</Property>
+      <Property Name="Size">167, 28</Property>
+      <Property Name="Location">12, 32</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">PsngrBagChargeSts:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;PsngrBagChargeSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">902</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl8" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl8</Property>
+      <Property Name="Size">167, 28</Property>
+      <Property Name="Location">12, 5</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">AirBagFailSts:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;AirBagFailSts;1;;;-1;;;</Property>
+      <Property Name="TabIndex">901</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl6" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl19" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl19</Property>
+        <Property Name="Size">113, 28</Property>
+        <Property Name="Location">14, 51</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR2RowRightSeatSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR2RowRightSeatSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">911</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl18" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl18</Property>
+        <Property Name="Size">113, 28</Property>
+        <Property Name="Location">14, 24</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR2RowRightSeatConfigSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR2RowRightSeatConfigSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">910</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl18" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl18</Property>
+        <Property Name="Size">209, 20</Property>
+        <Property Name="Location">137, 24</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR2RowRightSeatConfigSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl19" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl19</Property>
+        <Property Name="Size">173, 20</Property>
+        <Property Name="Location">137, 52</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR2RowRightSeatSts</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl6</Property>
+      <Property Name="Size">366, 82</Property>
+      <Property Name="Location">746, 214</Property>
+      <Property Name="Text">Row 2 - Right Seat</Property>
+      <Property Name="TabIndex">53</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl4" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl16" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl16</Property>
+        <Property Name="Size">124, 28</Property>
+        <Property Name="Location">12, 49</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR2RowCentralSeatSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR2RowCentralSeatSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">909</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl14" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl14</Property>
+        <Property Name="Size">219, 20</Property>
+        <Property Name="Location">142, 23</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR2RowCentralSeatConfigSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl17" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl17</Property>
+        <Property Name="Size">124, 28</Property>
+        <Property Name="Location">12, 22</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR2RowCentralSeatConfigSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR2RowCentralSeatConfigSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">908</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl15" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl15</Property>
+        <Property Name="Size">180, 20</Property>
+        <Property Name="Location">142, 50</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR2RowCentralSeatSts</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl4</Property>
+      <Property Name="Size">381, 82</Property>
+      <Property Name="Location">359, 214</Property>
+      <Property Name="Text">Row 2 - Central Seat</Property>
+      <Property Name="TabIndex">54</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl5" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl15" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl15</Property>
+        <Property Name="Size">120, 28</Property>
+        <Property Name="Location">15, 47</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR2RowLeftSeatSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR2RowLeftSeatSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">907</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl14" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl14</Property>
+        <Property Name="Size">120, 28</Property>
+        <Property Name="Location">15, 20</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR2RowLeftSeatConfigSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR2RowLeftSeatConfigSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">906</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl16" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl16</Property>
+        <Property Name="Size">196, 20</Property>
+        <Property Name="Location">141, 21</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR2RowLeftSeatConfigSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl17" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl17</Property>
+        <Property Name="Size">167, 20</Property>
+        <Property Name="Location">141, 46</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR2RowLeftSeatSts</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl5</Property>
+      <Property Name="Size">350, 82</Property>
+      <Property Name="Location">3, 214</Property>
+      <Property Name="Text">Row 2 - Left Seat</Property>
+      <Property Name="TabIndex">53</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl3" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl13" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl13</Property>
+        <Property Name="Size">113, 28</Property>
+        <Property Name="Location">14, 101</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowPsngrSeatSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowPsngrSeatSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">913</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl12" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl12</Property>
+        <Property Name="Size">113, 28</Property>
+        <Property Name="Location">14, 75</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowPsngrSeatPPDFailSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowPsngrSeatPPDFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">912</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl11" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl11</Property>
+        <Property Name="Size">113, 28</Property>
+        <Property Name="Location">14, 49</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowPsngrSeatConfigSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowPsngrSeatConfigSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">911</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl10" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl10</Property>
+        <Property Name="Size">113, 28</Property>
+        <Property Name="Location">14, 23</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowPsngrSeatBuckleFailSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowPsngrSeatBuckleFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">910</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl10" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl10</Property>
+        <Property Name="Size">225, 20</Property>
+        <Property Name="Location">137, 24</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowPsngrSeatBuckleFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl12" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl12</Property>
+        <Property Name="Size">213, 20</Property>
+        <Property Name="Location">137, 75</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowPsngrSeatPPDFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl11" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl11</Property>
+        <Property Name="Size">213, 20</Property>
+        <Property Name="Location">137, 49</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowPsngrSeatConfigSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl13" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl13</Property>
+        <Property Name="Size">213, 20</Property>
+        <Property Name="Location">137, 101</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowPsngrSeatSts</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl3</Property>
+      <Property Name="Size">366, 140</Property>
+      <Property Name="Location">746, 68</Property>
+      <Property Name="Text">Row 1 - Passenger Seat</Property>
+      <Property Name="TabIndex">51</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl2" Children="Controls" ControlName="Row 1 - Driver Seat">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl4" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl4</Property>
+        <Property Name="Size">120, 28</Property>
+        <Property Name="Location">15, 74</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowDriverSeatSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowDriverSeatSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">905</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl3" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl3</Property>
+        <Property Name="Size">120, 28</Property>
+        <Property Name="Location">15, 47</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowDriverSeatFailSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowDriverSeatFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">904</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl2" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl2</Property>
+        <Property Name="Size">120, 28</Property>
+        <Property Name="Location">15, 20</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowDriverSeatConfigSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowDriverSeatConfigSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">903</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl7" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl7</Property>
+        <Property Name="Size">205, 20</Property>
+        <Property Name="Location">141, 21</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowDriverSeatConfigSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl8" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl8</Property>
+        <Property Name="Size">191, 22</Property>
+        <Property Name="Location">141, 46</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowDriverSeatFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl9" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl9</Property>
+        <Property Name="Size">173, 20</Property>
+        <Property Name="Location">141, 75</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowDriverSeatSts</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl2</Property>
+      <Property Name="Size">350, 140</Property>
+      <Property Name="Location">3, 68</Property>
+      <Property Name="Text">Row 1 - Driver Seat</Property>
+      <Property Name="TabIndex">51</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl9" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl9</Property>
+        <Property Name="Size">124, 28</Property>
+        <Property Name="Location">12, 103</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowCentralSeatSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowCentralSeatSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">909</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl7" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl7</Property>
+        <Property Name="Size">124, 28</Property>
+        <Property Name="Location">12, 76</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowCentralSeatPPDFailSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowCentralSeatPPDFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">908</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl6" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl6</Property>
+        <Property Name="Size">124, 28</Property>
+        <Property Name="Location">12, 49</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowCentralSeatConfigSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowCentralSeatConfigSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">907</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl5" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl5</Property>
+        <Property Name="Size">124, 28</Property>
+        <Property Name="Location">12, 22</Property>
+        <Property Name="DropDownWidth">129</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">WhiteSmoke</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">SBR1RowCentralSeatBuckleFailSts:</Property>
+        <Property Name="DescriptionSize">0, 0</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;SBR1RowCentralSeatBuckleFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">906</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl2" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl2</Property>
+        <Property Name="Size">235, 20</Property>
+        <Property Name="Location">142, 24</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowCentralSeatBuckleFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl3" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl3</Property>
+        <Property Name="Size">225, 22</Property>
+        <Property Name="Location">142, 50</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowCentralSeatConfigSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl4" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl4</Property>
+        <Property Name="Size">225, 20</Property>
+        <Property Name="Location">142, 78</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowCentralSeatPPDFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl5" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl5</Property>
+        <Property Name="Size">225, 20</Property>
+        <Property Name="Location">142, 104</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">AIRBAG1.SBR1RowCentralSeatSts</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">381, 140</Property>
+      <Property Name="Location">359, 68</Property>
+      <Property Name="Text">Row 1 - Central Seat</Property>
+      <Property Name="TabIndex">50</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text">
+      <Property Name="Name">StaticTextControl1</Property>
+      <Property Name="Size">250, 20</Property>
+      <Property Name="Location">186, 32</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">AIRBAG1.PsngrBagChargeSts</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl6" Children="Controls" ControlName="Static Text">
+      <Property Name="Name">StaticTextControl6</Property>
+      <Property Name="Size">250, 22</Property>
+      <Property Name="Location">186, 5</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">AIRBAG1.AirBagFailSts</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">1115, 308</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

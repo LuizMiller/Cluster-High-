@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="DMM">
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl8" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl8</Property>
+      <Property Name="Size">136, 13</Property>
+      <Property Name="Location">26, 11</Property>
+      <Property Name="BackColor">White</Property>
+      <Property Name="TextAlign">MiddleLeft</Property>
+      <Property Name="Text">STATUS_DMM.Memorized</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl6" ControlName="Switch/Indicator 2">
+      <Property Name="Name">SwitchControl6</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">3, 3</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Memorized;1;;;-1;;;</Property>
+      <Property Name="TabIndex">629</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">280, 35</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="SETUP">
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl61" ControlName="Switch/Indicator 6">
+      <Property Name="Name">SwitchControl61</Property>
+      <Property Name="Size">23, 30</Property>
+      <Property Name="Location">3, 172</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="Activation">Left</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;CalibrationMode;1;;;-1;;;</Property>
+      <Property Name="TabIndex">237</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl96" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl96</Property>
+      <Property Name="Size">86, 13</Property>
+      <Property Name="Location">32, 180</Property>
+      <Property Name="BackColor">WhiteSmoke</Property>
+      <Property Name="TextAlign">MiddleCenter</Property>
+      <Property Name="Text">Calibration Mode</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl4" Children="Controls" ControlName="Combo Box 2">
+      <Property Name="Name">ComboBoxControl4</Property>
+      <Property Name="Size">114, 21</Property>
+      <Property Name="Location">4, 208</Property>
+      <Property Name="DropDownWidth">129</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="ForeColor">WindowText</Property>
+      <Property Name="TextBackColor">WhiteSmoke</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">PatternSelection:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;PatternSelection;1;;;-1;;;</Property>
+      <Property Name="TabIndex">238</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl2" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl2</Property>
+      <Property Name="Size">212, 23</Property>
+      <Property Name="Location">3, 91</Property>
+      <Property Name="Text">Pulse - TRIGGER</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;TriggerCamera;1;;;-1;;;</Property>
+      <Property Name="TabIndex">119</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl25" Children="Controls" ControlName="Numeric Up/Down">
+      <Property Name="Name">NumericUpDownControl25</Property>
+      <Property Name="Size">58, 20</Property>
+      <Property Name="Location">3, 120</Property>
+      <Property Name="DecimalPlaces">2</Property>
+      <Property Name="SymbolConfiguration">5;16;VTS::Stimulus_1_Ch3;;;Voltage;2;;;-1;;;</Property>
+      <Property Name="TabIndex">120</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl91" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl91</Property>
+      <Property Name="Size">70, 13</Property>
+      <Property Name="Location">67, 148</Property>
+      <Property Name="BackColor">WhiteSmoke</Property>
+      <Property Name="TextAlign">MiddleCenter</Property>
+      <Property Name="Text">Temp (mSeg)</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl27" Children="Controls" ControlName="Numeric Up/Down">
+      <Property Name="Name">NumericUpDownControl27</Property>
+      <Property Name="Size">59, 20</Property>
+      <Property Name="Location">2, 146</Property>
+      <Property Name="Maximum">100000</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;Trigger_Temp;1;;;-1;;;</Property>
+      <Property Name="TabIndex">121</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl85" Children="Controls" ControlName="Static Text 4">
+      <Property Name="Name">StaticTextControl85</Property>
+      <Property Name="Size">59, 13</Property>
+      <Property Name="Location">67, 122</Property>
+      <Property Name="BackColor">WhiteSmoke</Property>
+      <Property Name="TextAlign">MiddleCenter</Property>
+      <Property Name="Text">Voltage (V)</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl2" Children="Controls" ControlName="Static Text 2">
+      <Property Name="Name">StaticTextControl2</Property>
+      <Property Name="Size">212, 20</Property>
+      <Property Name="Location">3, 3</Property>
+      <Property Name="BackColor">Black</Property>
+      <Property Name="Font">Microsoft Sans Serif, 12pt, style=Bold</Property>
+      <Property Name="TextAlign">MiddleCenter</Property>
+      <Property Name="Text">SETUP</Property>
+      <Property Name="ForeColor">ButtonHighlight</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.PictureBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="PictureBoxControl1" ControlName="Picture Box">
+      <Property Name="Name">PictureBoxControl1</Property>
+      <Property Name="Size">94, 56</Property>
+      <Property Name="Location">3, 29</Property>
+      <Property Name="ImageFile">..\Bitmaps\Marelli.bmp</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.StartStopControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StartStopControl1" Children="Controls" ControlName="Start Stop Control">
+      <Property Name="Name">StartStopControl1</Property>
+      <Property Name="Size">112, 56</Property>
+      <Property Name="Location">103, 29</Property>
+      <Property Name="TabIndex">0</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">220, 238</Property>
+    <Property Name="BackColor">WhiteSmoke</Property>
+  </Object>
+</Panel>

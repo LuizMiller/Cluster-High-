@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="HUM">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl5" Children="Controls" ControlName="Group Box 2">
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl12" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl12</Property>
+        <Property Name="Size">87, 13</Property>
+        <Property Name="Location">52, 99</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">REL_HUMIDITY</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl9" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl9</Property>
+        <Property Name="Size">73, 13</Property>
+        <Property Name="Location">52, 73</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">DewpointTmp</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl8" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl8</Property>
+        <Property Name="Size">80, 13</Property>
+        <Property Name="Location">52, 47</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">HumidityAirTmp</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl7" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl7</Property>
+        <Property Name="Size">54, 13</Property>
+        <Property Name="Location">52, 21</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">GlassTmp</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl5" Children="Controls" ControlName="Numeric Up/Down 2">
+        <Property Name="Name">NumericUpDownControl5</Property>
+        <Property Name="Size">41, 26</Property>
+        <Property Name="Location">5, 97</Property>
+        <Property Name="Maximum">2047</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;REL_HUMIDITY_L;1;;;-1;;;</Property>
+        <Property Name="TabIndex">57</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl8" Children="Controls" ControlName="Numeric Up/Down 3">
+        <Property Name="Name">NumericUpDownControl8</Property>
+        <Property Name="Size">41, 26</Property>
+        <Property Name="Location">5, 71</Property>
+        <Property Name="Maximum">2047</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;DewpointTmp;1;;;-1;;;</Property>
+        <Property Name="TabIndex">56</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl7" Children="Controls" ControlName="Numeric Up/Down 3">
+        <Property Name="Name">NumericUpDownControl7</Property>
+        <Property Name="Size">40, 26</Property>
+        <Property Name="Location">6, 45</Property>
+        <Property Name="Maximum">2047</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;HumidityAirTmp;1;;;-1;;;</Property>
+        <Property Name="TabIndex">34</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl6" Children="Controls" ControlName="Numeric Up/Down 2">
+        <Property Name="Name">NumericUpDownControl6</Property>
+        <Property Name="Size">40, 26</Property>
+        <Property Name="Location">6, 19</Property>
+        <Property Name="Maximum">2047</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;GlassTmp;1;;;-1;;;</Property>
+        <Property Name="TabIndex">33</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl3" ControlName="Switch/Indicator 2">
+        <Property Name="Name">SwitchControl3</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">160, 53</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;Hum_Sns_Int_flt_L;1;;;-1;;;</Property>
+        <Property Name="TabIndex">552</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl5" Children="Controls" ControlName="Static Text 4">
+        <Property Name="Name">StaticTextControl5</Property>
+        <Property Name="Size">87, 30</Property>
+        <Property Name="Location">186, 53</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="TextAlign">MiddleCenter</Property>
+        <Property Name="Text">HumSns_Int_flt</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl6" Children="Controls" ControlName="Static Text 4">
+        <Property Name="Name">StaticTextControl6</Property>
+        <Property Name="Size">99, 30</Property>
+        <Property Name="Location">186, 19</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="TextAlign">MiddleCenter</Property>
+        <Property Name="Text">RsErr_HumSense</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl4" ControlName="Switch/Indicator 2">
+        <Property Name="Name">SwitchControl4</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">160, 19</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;RsErr_HumSense_L;1;;;-1;;;</Property>
+        <Property Name="TabIndex">550</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl5</Property>
+      <Property Name="Size">301, 135</Property>
+      <Property Name="Location">3, 132</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="Text">HUM_SENSE_L</Property>
+      <Property Name="TabIndex">555</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl4" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl11" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl11</Property>
+        <Property Name="Size">87, 13</Property>
+        <Property Name="Location">53, 99</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">REL_HUMIDITY</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl10" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl10</Property>
+        <Property Name="Size">79, 13</Property>
+        <Property Name="Location">52, 73</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">DewpointTemp</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl3" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl3</Property>
+        <Property Name="Size">86, 13</Property>
+        <Property Name="Location">52, 47</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">HumidityAirTemp</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl2" Children="Controls" ControlName="Static Text 2">
+        <Property Name="Name">StaticTextControl2</Property>
+        <Property Name="Size">78, 13</Property>
+        <Property Name="Location">53, 21</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="Text">GLASS_TEMP	</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl4" Children="Controls" ControlName="Numeric Up/Down 2">
+        <Property Name="Name">NumericUpDownControl4</Property>
+        <Property Name="Size">40, 26</Property>
+        <Property Name="Location">6, 97</Property>
+        <Property Name="Maximum">255</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;REL_HUMIDITY_1;1;;;-1;;;</Property>
+        <Property Name="TabIndex">57</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl1" Children="Controls" ControlName="Numeric Up/Down 3">
+        <Property Name="Name">NumericUpDownControl1</Property>
+        <Property Name="Size">40, 26</Property>
+        <Property Name="Location">6, 71</Property>
+        <Property Name="Maximum">255</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;DewpointTemp;1;;;-1;;;</Property>
+        <Property Name="TabIndex">56</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl3" Children="Controls" ControlName="Numeric Up/Down 3">
+        <Property Name="Name">NumericUpDownControl3</Property>
+        <Property Name="Size">40, 26</Property>
+        <Property Name="Location">6, 45</Property>
+        <Property Name="Maximum">255</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;HumidityAirTmp_1;1;;;-1;;;</Property>
+        <Property Name="TabIndex">34</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl2" Children="Controls" ControlName="Numeric Up/Down 2">
+        <Property Name="Name">NumericUpDownControl2</Property>
+        <Property Name="Size">41, 26</Property>
+        <Property Name="Location">6, 19</Property>
+        <Property Name="Maximum">255</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;GLASS_TEMP;1;;;-1;;;</Property>
+        <Property Name="TabIndex">33</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text 4">
+        <Property Name="Name">StaticTextControl1</Property>
+        <Property Name="Size">99, 30</Property>
+        <Property Name="Location">186, 9</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="TextAlign">MiddleCenter</Property>
+        <Property Name="Text">RsErr_HumSense</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl1" ControlName="Switch/Indicator 2">
+        <Property Name="Name">SwitchControl1</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">160, 9</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;RsErr_HumSense_1;1;;;-1;;;</Property>
+        <Property Name="TabIndex">529</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl4" Children="Controls" ControlName="Static Text 4">
+        <Property Name="Name">StaticTextControl4</Property>
+        <Property Name="Size">87, 30</Property>
+        <Property Name="Location">186, 42</Property>
+        <Property Name="BackColor">ButtonHighlight</Property>
+        <Property Name="TextAlign">MiddleCenter</Property>
+        <Property Name="Text">HumSns_Int_flt</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl2" ControlName="Switch/Indicator 2">
+        <Property Name="Name">SwitchControl2</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">160, 42</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;Hum_Sns_Int_flt_1;1;;;-1;;;</Property>
+        <Property Name="TabIndex">545</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl4</Property>
+      <Property Name="Size">301, 123</Property>
+      <Property Name="Location">3, 3</Property>
+      <Property Name="BackColor">Window</Property>
+      <Property Name="Text">HUM_SENSE_1</Property>
+      <Property Name="TabIndex">554</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">309, 267</Property>
+    <Property Name="BackColor">Window</Property>
+  </Object>
+</Panel>

@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="DTCM\AGSM">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl2" Children="Controls" ControlName="Group Box 2">
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl1" ControlName="Switch/Indicator">
+        <Property Name="Name">SwitchControl1</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">6, 19</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;CCMFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">12</Property>
+        <Property Name="SwitchValuesRx">1;2;0;1</Property>
+        <Property Name="SwitchValuesVT">1;2;0/Lower/0;1/Lower/1</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl1</Property>
+        <Property Name="Size">143, 30</Property>
+        <Property Name="Location">29, 19</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">DRIVETRAIN1.CCMFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl3" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl3</Property>
+        <Property Name="Size">264, 28</Property>
+        <Property Name="Location">6, 55</Property>
+        <Property Name="DropDownWidth">100</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Right</Property>
+        <Property Name="DescriptionText">DRIVETRAIN1.AWDSysStat</Property>
+        <Property Name="DescriptionSize">143, 18</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;AWDSysStat;1;;;-1;;;</Property>
+        <Property Name="TabIndex">457</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl1" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl1</Property>
+        <Property Name="Size">279, 28</Property>
+        <Property Name="Location">6, 82</Property>
+        <Property Name="DropDownWidth">100</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Right</Property>
+        <Property Name="DescriptionText">DRIVETRAIN2.DTCM_HMI_Rq</Property>
+        <Property Name="DescriptionSize">157, 18</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;DTCM_HMI_Rq;1;;;-1;;;</Property>
+        <Property Name="TabIndex">456</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl2</Property>
+      <Property Name="Size">297, 112</Property>
+      <Property Name="Location">3, 3</Property>
+      <Property Name="Text">Drive Train Control Module</Property>
+      <Property Name="TabIndex">462</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl5" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl5</Property>
+        <Property Name="Size">289, 28</Property>
+        <Property Name="Location">5, 24</Property>
+        <Property Name="DropDownWidth">100</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Right</Property>
+        <Property Name="DescriptionText">SC.GatedPark</Property>
+        <Property Name="DescriptionSize">75, 18</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;GatedPark;1;;;-1;;;</Property>
+        <Property Name="TabIndex">461</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl2" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl2</Property>
+        <Property Name="Size">346, 28</Property>
+        <Property Name="Location">6, 51</Property>
+        <Property Name="DropDownWidth">100</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="ShowValues">Decimal</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Right</Property>
+        <Property Name="DescriptionText">SC.ShiftLeverPositionReq</Property>
+        <Property Name="DescriptionSize">131, 18</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;ShiftLeverPositionReq;1;;;-1;;;</Property>
+        <Property Name="TabIndex">460</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl4" Children="Controls" ControlName="Combo Box 2">
+        <Property Name="Name">ComboBoxControl4</Property>
+        <Property Name="Size">329, 28</Property>
+        <Property Name="Location">6, 78</Property>
+        <Property Name="DropDownWidth">415</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="ShowValues">Decimal</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Right</Property>
+        <Property Name="DescriptionText">SC.WarningMessages</Property>
+        <Property Name="DescriptionSize">113, 18</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;WarningMessages;1;;;-1;;;</Property>
+        <Property Name="TabIndex">459</Property>
+        <Property Name="UsedValueTable">PhysicalValue</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">368, 112</Property>
+      <Property Name="Location">306, 3</Property>
+      <Property Name="Text">Automatic Gearbox Shifter Module</Property>
+      <Property Name="TabIndex">461</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">680, 119</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

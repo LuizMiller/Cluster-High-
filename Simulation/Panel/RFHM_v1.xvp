@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="RFHM">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl5" Children="Controls" ControlName="Group Box 2">
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl1" ControlName="Switch/Indicator">
+        <Property Name="Name">SwitchControl1</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">6, 19</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;TPMActivitySts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">16</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl4" Children="Controls" ControlName="Group Box">
+        <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl3" Children="Controls" ControlName="Combo Box 2">
+          <Property Name="Name">ComboBoxControl3</Property>
+          <Property Name="Size">179, 28</Property>
+          <Property Name="Location">6, 18</Property>
+          <Property Name="DropDownWidth">129</Property>
+          <Property Name="BackColor">Window</Property>
+          <Property Name="ForeColor">WindowText</Property>
+          <Property Name="TextBackColor">WhiteSmoke</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">InflationState_RHR_Tyre:</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;InflationState_RHR_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">902</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl13" Children="Controls" ControlName="Numeric Up/Down">
+          <Property Name="Name">NumericUpDownControl13</Property>
+          <Property Name="Size">50, 26</Property>
+          <Property Name="Location">6, 47</Property>
+          <Property Name="Maximum">7</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;PressureValue_RHR_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">48</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl10" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl10</Property>
+          <Property Name="Size">207, 13</Property>
+          <Property Name="Location">187, 19</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.InflationState_RHR_Tyre</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl14" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl14</Property>
+          <Property Name="Size">213, 13</Property>
+          <Property Name="Location">56, 50</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.PressureValue_RHR_Tyre</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl4</Property>
+        <Property Name="Size">400, 75</Property>
+        <Property Name="Location">412, 208</Property>
+        <Property Name="Text">RHR_tyre</Property>
+        <Property Name="TabIndex">51</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl16" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl16</Property>
+        <Property Name="Size">241, 13</Property>
+        <Property Name="Location">29, 64</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">STATUS_TPM1.TyrePressureSysProgrammedSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl3" Children="Controls" ControlName="Group Box">
+        <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl1" Children="Controls" ControlName="Combo Box 2">
+          <Property Name="Name">ComboBoxControl1</Property>
+          <Property Name="Size">179, 28</Property>
+          <Property Name="Location">6, 19</Property>
+          <Property Name="DropDownWidth">129</Property>
+          <Property Name="BackColor">Window</Property>
+          <Property Name="ForeColor">WindowText</Property>
+          <Property Name="TextBackColor">WhiteSmoke</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">InflationState_LHR_Tyre:</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;InflationState_LHR_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">902</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl7" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl7</Property>
+          <Property Name="Size">205, 13</Property>
+          <Property Name="Location">190, 22</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.InflationState_LHR_Tyre</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl7" Children="Controls" ControlName="Numeric Up/Down">
+          <Property Name="Name">NumericUpDownControl7</Property>
+          <Property Name="Size">50, 26</Property>
+          <Property Name="Location">6, 45</Property>
+          <Property Name="Maximum">7</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;PressureValue_LHR_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">44</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl12" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl12</Property>
+          <Property Name="Size">211, 13</Property>
+          <Property Name="Location">56, 48</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.PressureValue_LHR_Tyre</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl3</Property>
+        <Property Name="Size">400, 75</Property>
+        <Property Name="Location">6, 208</Property>
+        <Property Name="Text">LHR_Tyre</Property>
+        <Property Name="TabIndex">51</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl15" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl15</Property>
+        <Property Name="Size">160, 13</Property>
+        <Property Name="Location">29, 27</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">STATUS_TPM1.TPMActivitySts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl17" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl17</Property>
+        <Property Name="Size">215, 13</Property>
+        <Property Name="Location">29, 99</Property>
+        <Property Name="TextAlign">MiddleLeft</Property>
+        <Property Name="Text">STATUS_TPM1.TyrePressureSystemFailSts</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl2" Children="Controls" ControlName="Group Box">
+        <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl2" Children="Controls" ControlName="Combo Box 2">
+          <Property Name="Name">ComboBoxControl2</Property>
+          <Property Name="Size">179, 28</Property>
+          <Property Name="Location">6, 19</Property>
+          <Property Name="DropDownWidth">129</Property>
+          <Property Name="BackColor">Window</Property>
+          <Property Name="ForeColor">WindowText</Property>
+          <Property Name="TextBackColor">WhiteSmoke</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">InflationState_RHF_Tyre:</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;InflationState_RHF_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">902</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl14" Children="Controls" ControlName="Numeric Up/Down">
+          <Property Name="Name">NumericUpDownControl14</Property>
+          <Property Name="Size">50, 26</Property>
+          <Property Name="Location">6, 47</Property>
+          <Property Name="Maximum">7</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;PressureValue_RHF_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">46</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl9" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl9</Property>
+          <Property Name="Size">205, 13</Property>
+          <Property Name="Location">189, 23</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.InflationState_RHF_Tyre</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl13" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl13</Property>
+          <Property Name="Size">211, 13</Property>
+          <Property Name="Location">56, 50</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.PressureValue_RHF_Tyre</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl2</Property>
+        <Property Name="Size">400, 75</Property>
+        <Property Name="Location">412, 127</Property>
+        <Property Name="Text">RHF_tyre</Property>
+        <Property Name="TabIndex">50</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl3" ControlName="Switch/Indicator">
+        <Property Name="Name">SwitchControl3</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">6, 91</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;TyrePressureSystemFailSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">22</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl2" ControlName="Switch/Indicator">
+        <Property Name="Name">SwitchControl2</Property>
+        <Property Name="Size">23, 30</Property>
+        <Property Name="Location">6, 55</Property>
+        <Property Name="StateCnt">2</Property>
+        <Property Name="Activation">Left</Property>
+        <Property Name="SwitchValues">1;2;0;1</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;TyrePressureSysProgrammedSts;1;;;-1;;;</Property>
+        <Property Name="TabIndex">20</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+        <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl8" Children="Controls" ControlName="Combo Box 2">
+          <Property Name="Name">ComboBoxControl8</Property>
+          <Property Name="Size">179, 28</Property>
+          <Property Name="Location">6, 19</Property>
+          <Property Name="DropDownWidth">129</Property>
+          <Property Name="BackColor">Window</Property>
+          <Property Name="ForeColor">WindowText</Property>
+          <Property Name="TextBackColor">WhiteSmoke</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">InflationState_LHF_Tyre:</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;InflationState_LHF_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">901</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl4" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl4</Property>
+          <Property Name="Size">203, 13</Property>
+          <Property Name="Location">190, 23</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.InflationState_LHF_Tyre</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.NumericUpDownControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="NumericUpDownControl8" Children="Controls" ControlName="Numeric Up/Down">
+          <Property Name="Name">NumericUpDownControl8</Property>
+          <Property Name="Size">50, 26</Property>
+          <Property Name="Location">6, 45</Property>
+          <Property Name="Maximum">7</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;PressureValue_LHF_Tyre;1;;;-1;;;</Property>
+          <Property Name="TabIndex">42</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl11" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl11</Property>
+          <Property Name="Size">209, 13</Property>
+          <Property Name="Location">56, 48</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">STATUS_TPM1.PressureValue_LHF_Tyre</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl1</Property>
+        <Property Name="Size">400, 75</Property>
+        <Property Name="Location">6, 127</Property>
+        <Property Name="Text">LHF_Tyre</Property>
+        <Property Name="TabIndex">49</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl5</Property>
+      <Property Name="Size">820, 288</Property>
+      <Property Name="Location">3, 3</Property>
+      <Property Name="Text">Radio Frequency Hub Module - TPM Control</Property>
+      <Property Name="TabIndex">55</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">830, 296</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

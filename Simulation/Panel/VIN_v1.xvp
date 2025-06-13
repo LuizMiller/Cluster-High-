@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="VIN">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl7" Children="Controls" ControlName="Group Box 6">
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+        <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl4" Children="Controls" ControlName="Button">
+          <Property Name="Name">ButtonControl4</Property>
+          <Property Name="Size">75, 23</Property>
+          <Property Name="Location">244, 13</Property>
+          <Property Name="Text">Set invalid</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_LO_invalid;1;;;-1;;;</Property>
+          <Property Name="TabIndex">555</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl97" Children="Controls" ControlName="Static Text 2">
+          <Property Name="Name">StaticTextControl97</Property>
+          <Property Name="Size">93, 16</Property>
+          <Property Name="Location">7, 16</Property>
+          <Property Name="BackColor">ButtonHighlight</Property>
+          <Property Name="Font">Microsoft Sans Serif, 9.75pt</Property>
+          <Property Name="Text">VIN CODE LO:</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl2" Children="Controls" ControlName="Input/Output Box">
+          <Property Name="Name">TextBoxControl2</Property>
+          <Property Name="Size">67, 26</Property>
+          <Property Name="Location">131, 14</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="TextBorderStyle">Fixed3D</Property>
+          <Property Name="TextBackColor">Black</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;100</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">VINString_LO:</Property>
+          <Property Name="BoxBackColor">Yellow</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_LO;4;;;-1;;;</Property>
+          <Property Name="TabIndex">107</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl1</Property>
+        <Property Name="Size">326, 45</Property>
+        <Property Name="Location">6, 19</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="Text">
+        </Property>
+        <Property Name="TabIndex">556</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl2" Children="Controls" ControlName="Group Box 4">
+        <Object Type="Vector.CANalyzer.Panels.Design.PictureBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="PictureBoxControl1" ControlName="Picture Box">
+          <Property Name="Name">PictureBoxControl1</Property>
+          <Property Name="Size">315, 117</Property>
+          <Property Name="Location">6, 19</Property>
+          <Property Name="ImageFile">..\Bitmaps\VIN_example.jpg</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl2</Property>
+        <Property Name="Size">328, 147</Property>
+        <Property Name="Location">338, 70</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="Text">VIN CODE assemble example:</Property>
+        <Property Name="TabIndex">561</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl3" Children="Controls" ControlName="Group Box 5">
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text">
+          <Property Name="Name">StaticTextControl1</Property>
+          <Property Name="Size">141, 21</Property>
+          <Property Name="Location">136, 13</Property>
+          <Property Name="TextAlign">MiddleLeft</Property>
+          <Property Name="Text">VIN_MSG</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl2" Children="Controls" ControlName="Combo Box 2">
+          <Property Name="Name">ComboBoxControl2</Property>
+          <Property Name="Size">127, 28</Property>
+          <Property Name="Location">6, 13</Property>
+          <Property Name="DropDownWidth">129</Property>
+          <Property Name="BackColor">Window</Property>
+          <Property Name="ForeColor">WindowText</Property>
+          <Property Name="TextBackColor">WhiteSmoke</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">VIN_MSG:</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VIN_MSG;1;;;-1;;;</Property>
+          <Property Name="TabIndex">563</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl3</Property>
+        <Property Name="Size">328, 45</Property>
+        <Property Name="Location">338, 19</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="Text">
+        </Property>
+        <Property Name="TabIndex">562</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl8" Children="Controls" ControlName="Group Box 2">
+        <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl7" Children="Controls" ControlName="Set invalid">
+          <Property Name="Name">ButtonControl7</Property>
+          <Property Name="Size">75, 23</Property>
+          <Property Name="Location">244, 13</Property>
+          <Property Name="Text">Set invalid</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_MID_invalid;1;;;-1;;;</Property>
+          <Property Name="TabIndex">556</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl99" Children="Controls" ControlName="Static Text 2">
+          <Property Name="Name">StaticTextControl99</Property>
+          <Property Name="Size">100, 16</Property>
+          <Property Name="Location">7, 16</Property>
+          <Property Name="BackColor">ButtonHighlight</Property>
+          <Property Name="Font">Microsoft Sans Serif, 9.75pt</Property>
+          <Property Name="Text">VIN CODE MID:</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl3" Children="Controls" ControlName="Input/Output Box">
+          <Property Name="Name">TextBoxControl3</Property>
+          <Property Name="Size">67, 26</Property>
+          <Property Name="Location">131, 15</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="TextBorderStyle">Fixed3D</Property>
+          <Property Name="TextBackColor">Black</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;100</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">VINString_MID:</Property>
+          <Property Name="BoxBackColor">LimeGreen</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_MID;4;;;-1;;;</Property>
+          <Property Name="TabIndex">551</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl8</Property>
+        <Property Name="Size">326, 45</Property>
+        <Property Name="Location">6, 70</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="Text">
+        </Property>
+        <Property Name="TabIndex">557</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl9" Children="Controls" ControlName="Group Box 3">
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl4" Children="Controls" ControlName="Input/Output Box 2">
+          <Property Name="Name">TextBoxControl4</Property>
+          <Property Name="Size">193, 26</Property>
+          <Property Name="Location">5, 17</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="BoxTextAlign">Center</Property>
+          <Property Name="TextBackColor">Window</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;2;0;1</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">VINString_read_return:</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_read_return;4;;;-1;;;</Property>
+          <Property Name="TabIndex">563</Property>
+          <Property Name="ReadOnlyControl">True</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl8" Children="Controls" ControlName="Button 2">
+          <Property Name="Name">ButtonControl8</Property>
+          <Property Name="Size">75, 23</Property>
+          <Property Name="Location">244, 15</Property>
+          <Property Name="Text">Read VIN</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_read;1;;;-1;;;</Property>
+          <Property Name="TabIndex">562</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl9</Property>
+        <Property Name="Size">326, 45</Property>
+        <Property Name="Location">6, 172</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="Text">
+        </Property>
+        <Property Name="TabIndex">559</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl11" Children="Controls" ControlName="Group Box 3">
+        <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl9" Children="Controls" ControlName="Set invalid">
+          <Property Name="Name">ButtonControl9</Property>
+          <Property Name="Size">75, 23</Property>
+          <Property Name="Location">244, 15</Property>
+          <Property Name="Text">Set invalid</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_HI_invalid;1;;;-1;;;</Property>
+          <Property Name="TabIndex">557</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl101" Children="Controls" ControlName="Static Text 2">
+          <Property Name="Name">StaticTextControl101</Property>
+          <Property Name="Size">89, 16</Property>
+          <Property Name="Location">7, 18</Property>
+          <Property Name="BackColor">ButtonHighlight</Property>
+          <Property Name="Font">Microsoft Sans Serif, 9.75pt</Property>
+          <Property Name="Text">VIN CODE HI:</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl5" Children="Controls" ControlName="Input/Output Box">
+          <Property Name="Name">TextBoxControl5</Property>
+          <Property Name="Size">36, 26</Property>
+          <Property Name="Location">131, 15</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="TextBorderStyle">Fixed3D</Property>
+          <Property Name="TextBackColor">Black</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;100</Property>
+          <Property Name="DisplayLabel">Hide</Property>
+          <Property Name="DescriptionText">VINString_HI:</Property>
+          <Property Name="BoxBackColor">Highlight</Property>
+          <Property Name="DescriptionSize">0, 0</Property>
+          <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString_HI;4;;;-1;;;</Property>
+          <Property Name="TabIndex">553</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl11</Property>
+        <Property Name="Size">326, 45</Property>
+        <Property Name="Location">6, 121</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="Text">
+        </Property>
+        <Property Name="TabIndex">558</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl7</Property>
+      <Property Name="Size">671, 223</Property>
+      <Property Name="Location">3, 29</Property>
+      <Property Name="Text">VIN Test</Property>
+      <Property Name="TabIndex">566</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl1" Children="Controls" ControlName="Input/Output Box">
+      <Property Name="Name">TextBoxControl1</Property>
+      <Property Name="Size">188, 27</Property>
+      <Property Name="Location">6, 6</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="TextBorderStyle">Fixed3D</Property>
+      <Property Name="TextBackColor">LightGray</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;0;0;100</Property>
+      <Property Name="DisplayLabel">Left</Property>
+      <Property Name="DescriptionText"> VIN CODE:</Property>
+      <Property Name="DescriptionSize">64, 18</Property>
+      <Property Name="SymbolConfiguration">5;16;RoadMap;;;VINString;4;;;-1;;;</Property>
+      <Property Name="TabIndex">565</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">678, 255</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="PLGM_v1">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.127.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl1" Children="Controls" ControlName="Combo Box">
+        <Property Name="Name">ComboBoxControl1</Property>
+        <Property Name="Size">261, 28</Property>
+        <Property Name="Location">4, 16</Property>
+        <Property Name="DropDownWidth">170</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="ShowValues">Decimal</Property>
+        <Property Name="TextBackColor">White</Property>
+        <Property Name="DisplayLabel">Right</Property>
+        <Property Name="DescriptionText">POWER_LIFT.PLG_Stat</Property>
+        <Property Name="DescriptionSize">125, 18</Property>
+        <Property Name="SymbolConfiguration">5;16;RoadMap;;;PLG_Stat;1;;;-1;;;</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">337, 48</Property>
+      <Property Name="Location">9, 6</Property>
+      <Property Name="Text">Power Lift Gate Module</Property>
+      <Property Name="TabIndex">3</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">355, 63</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>
