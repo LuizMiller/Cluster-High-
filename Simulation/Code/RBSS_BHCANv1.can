@@ -1,0 +1,169 @@
+/*@!Encoding:1252*/
+variables
+{
+  message STATUS_RBSS STATUS_RBSS_msg;
+  msTimer STATUS_RBSS_Timer;
+  mstimer sleep;
+  const   STATUS_RBSS_Cycle = 500;
+}
+
+
+on timer STATUS_RBSS_Timer
+{
+  output(STATUS_RBSS_msg);
+  setTimer(STATUS_RBSS_Timer, STATUS_RBSS_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0; 
+       cancelTimer(STATUS_RBSS_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+    {
+      setTimer(STATUS_RBSS_Timer, STATUS_RBSS_Cycle);
+    }
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::RBSS_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RBSS_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE,0);
+  }	
+}
+
+//  STATUS_RBSS
+
+on sysvar sysvar::RoadMap::STATUS_RBSS_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE))
+  {
+    cancelTimer(STATUS_RBSS_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(STATUS_RBSS_Timer,STATUS_RBSS_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_RBSS_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_DLC) == 4)
+  {
+    STATUS_RBSS_msg.dlc = STATUS_RBSS.dlc;
+  }
+  else
+  {
+    STATUS_RBSS_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_DLC);
+  }
+}
+
+//  STATUS_RBSS_Signals
+
+on sysvar sysvar::RoadMap::BSS_RF_Chime_RQSts
+{
+  STATUS_RBSS_msg.BSS_RF_Chime_RQSts = sysGetVariableInt(sysvar::RoadMap::BSS_RF_Chime_RQSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSS_RR_Chime_RQSts
+{
+  STATUS_RBSS_msg.BSS_RR_Chime_RQSts = sysGetVariableInt(sysvar::RoadMap::BSS_RR_Chime_RQSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSS_RT_Blind_RQSts
+{
+  STATUS_RBSS_msg.BSS_RT_Blind_RQSts = sysGetVariableInt(sysvar::RoadMap::BSS_RT_Blind_RQSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSS_RT_CFG_STATSts
+{
+  STATUS_RBSS_msg.BSS_RT_CFG_STATSts = sysGetVariableInt(sysvar::RoadMap::BSS_RT_CFG_STATSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSS_RT_Chime_TypeSts
+{
+  STATUS_RBSS_msg.BSS_RT_Chime_TypeSts = sysGetVariableInt(sysvar::RoadMap::BSS_RT_Chime_TypeSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSS_RT_OPR_StatSts
+{
+  STATUS_RBSS_msg.BSS_RT_OPR_StatSts = sysGetVariableInt(sysvar::RoadMap::BSS_RT_OPR_StatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSS_RT_SRV_RQSts
+{
+  STATUS_RBSS_msg.BSS_RT_SRV_RQSts = sysGetVariableInt(sysvar::RoadMap::BSS_RT_SRV_RQSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_RBSS_ACTIVE) == 1)
+  {
+    output(STATUS_RBSS_msg);
+  }
+}

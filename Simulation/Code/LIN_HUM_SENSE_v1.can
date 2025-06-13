@@ -1,0 +1,89 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  linFrame HUM_SENSE_1 HUM_SENSE_1_msg;
+  linFrame HUM_SENSE_L HUM_SENSE_L_msg;
+}
+
+on sysvar sysvar::RoadMap::GLASS_TEMP
+{
+ HUM_SENSE_1_msg.GLASS_TEMP = sysGetVariableInt(sysvar::RoadMap::GLASS_TEMP);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::HumidityAirTemp
+{
+ HUM_SENSE_1_msg.HumidityAirTemp = sysGetVariableInt(sysvar::RoadMap::HumidityAirTemp);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::DewpointTemp
+{
+ HUM_SENSE_1_msg.DewpointTemp = sysGetVariableInt(sysvar::RoadMap::DewpointTemp);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::REL_HUMIDITY_1
+{
+ HUM_SENSE_1_msg.REL_HUMIDITY = sysGetVariableInt(sysvar::RoadMap::REL_HUMIDITY_1);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::RsErr_HumSense_1
+{
+ HUM_SENSE_1_msg.RsErr_HumSense = sysGetVariableInt(sysvar::RoadMap::RsErr_HumSense_1);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::Hum_Sns_Int_flt_1
+{
+ HUM_SENSE_1_msg.Hum_Sns_Int_flt = sysGetVariableInt(sysvar::RoadMap::Hum_Sns_Int_flt_1);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::GlassTmp
+{
+ HUM_SENSE_L_msg.GlassTmp = sysGetVariableInt(sysvar::RoadMap::GlassTmp);
+ output(HUM_SENSE_L_msg);
+}
+
+on sysvar sysvar::RoadMap::Hum_Sns_Int_flt_L
+{
+ HUM_SENSE_L_msg.Hum_Sns_Int_flt = sysGetVariableInt(sysvar::RoadMap::Hum_Sns_Int_flt_L);
+ output(HUM_SENSE_L_msg);
+}
+
+on sysvar sysvar::RoadMap::RsErr_HumSense_L
+{
+ HUM_SENSE_L_msg.RsErr_HumSense = sysGetVariableInt(sysvar::RoadMap::RsErr_HumSense_L);
+ output(HUM_SENSE_L_msg);
+}
+
+on sysvar sysvar::RoadMap::HumidityAirTmp
+{
+ HUM_SENSE_L_msg.HumidityAirTmp = sysGetVariableInt(sysvar::RoadMap::HumidityAirTmp);
+ output(HUM_SENSE_L_msg);
+}
+
+on sysvar sysvar::RoadMap::HumidityAirTmp_1
+{
+ HUM_SENSE_1_msg.HumidityAirTemp = sysGetVariableInt(sysvar::RoadMap::HumidityAirTmp_1);
+ output(HUM_SENSE_1_msg);
+}
+
+on sysvar sysvar::RoadMap::DewpointTmp
+{
+ HUM_SENSE_L_msg.DewpointTmp = sysGetVariableInt(sysvar::RoadMap::DewpointTmp);
+ output(HUM_SENSE_L_msg);
+}
+
+on sysvar sysvar::RoadMap::REL_HUMIDITY_L
+{
+ HUM_SENSE_L_msg.REL_HUMIDITY = sysGetVariableInt(sysvar::RoadMap::REL_HUMIDITY_L);
+ output(HUM_SENSE_L_msg);
+}

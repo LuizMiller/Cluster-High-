@@ -1,0 +1,355 @@
+/*@!Encoding:1252*/
+/**********************************************************/
+/* Versão 1.1                                             */
+/* By Danilo Scabello Peixoto                             */
+/* Data: 16/07/2015                                       */
+/**********************************************************/
+
+includes
+{
+
+}
+
+variables
+{
+  message CAN3.0x7e0 CAN3_Tas_Control;
+  message CAN2.0x7e0 CAN2_Tas_Control;
+  message 0x7e1 Tas_Response;
+  
+  long RelesCtrl[13];
+  int error;
+
+  int BytesToSendCAN[8];
+  
+  struct DataOfCtrlTas_type {
+    int  CanSelect;
+   long  IdOfTas;
+    int  ComandOfTas;
+   long  SwitchCtrl[13];
+   long  PWMCtrl[3];
+   long  DigitalOutput[8];
+   long  DigitalInput[9];
+   long  ADOutput[5];
+   long  MosfetCtrl[3];
+   char  ByteToSend[8];
+  float  ADInput[5];
+  };
+  
+  struct DataOfCtrlTas_type DataOfCtrlTas;
+  
+  mstimer AtualizaInputs;
+  int CountTX = 0;
+}
+
+on timer AtualizaInputs
+{
+  switch (CountTX) {
+    case 1 : MontMsgCan(0x01);
+            break;
+    case 2 : MontMsgCan(0x02);
+            break;
+    case 3 : CAN3_Tas_Control.byte(0) = (DataOfCtrlTas.IdOfTas << 4) + 0x8;
+             CAN2_Tas_Control.byte(0) = (DataOfCtrlTas.IdOfTas << 4) + 0x8;
+             if (DataOfCtrlTas.CanSelect != 2)
+                output(CAN3_Tas_Control);
+             else
+                output(CAN2_Tas_Control);
+            break;
+    case 4 : CAN3_Tas_Control.byte(0) = (DataOfCtrlTas.IdOfTas << 4) + 0x9;
+             CAN2_Tas_Control.byte(0) = (DataOfCtrlTas.IdOfTas << 4) + 0x9;
+             if (DataOfCtrlTas.CanSelect != 2)
+                output(CAN3_Tas_Control);
+             else
+                output(CAN2_Tas_Control);      
+            break;
+     default : CountTX =0;
+  }
+  CountTX++;
+  setTimer(AtualizaInputs,10);
+}
+
+on start
+{
+  CAN3_Tas_Control.dlc = 8;
+  CAN2_Tas_Control.dlc = 8;
+  setTimer(AtualizaInputs,5);
+  
+  DataOfCtrlTas.CanSelect = 1;
+}
+
+on sysvar_update sysvar::TAS_VAR::ID_TAS
+{
+  
+  //sysGetVariableInt(sysvar::TAS_VAR::ID_TAS,DataOfCtrlTas.IdOfTas); // Alterado para funcinar no canalyzer
+  DataOfCtrlTas.IdOfTas = sysGetVariableInt(sysvar::TAS_VAR::ID_TAS);
+
+}
+on sysvar_update sysvar::TAS_VAR::Reles
+{
+  error = SysGetVariableLongArray(sysvar::TAS_VAR::Reles,DataOfCtrlTas.SwitchCtrl,13);
+  MontMsgCan(0x01); 
+}
+
+on sysvar_update sysvar::TAS_VAR::DigitalOutput
+{
+  error = SysGetVariableLongArray(sysvar::TAS_VAR::DigitalOutput,DataOfCtrlTas.DigitalOutput,8);
+  MontMsgCan(0x01);   
+}
+
+on sysvar_update sysvar::TAS_VAR::MosfetCtrl
+{
+  error = SysGetVariableLongArray(sysvar::TAS_VAR::MosfetCtrl,DataOfCtrlTas.MosfetCtrl,3);
+  MontMsgCan(0x01);   
+}
+
+on sysvar_update sysvar::TAS_VAR::PwmCtrl
+{
+  error = SysGetVariableLongArray(sysvar::TAS_VAR::PwmCtrl,DataOfCtrlTas.PWMCtrl,3);
+  MontMsgCan(0x02);   
+}
+
+on sysvar_update sysvar::TAS_VAR::ADCtrl
+{
+  error = SysGetVariableLongArray(sysvar::TAS_VAR::ADCtrl,DataOfCtrlTas.ADOutput,5);
+  MontMsgCan(0x02);   
+}
+
+
+on message 0x7E1
+{
+  int AuxResponse;
+  int AuxDigitalInput;
+  int i;
+  int teste;
+  Tas_Response = this;
+  AuxResponse = Tas_Response.byte(0) & 0xf; 
+  switch (AuxResponse) {
+    case 0x8 :
+              AuxDigitalInput = Tas_Response.byte(1);
+              for(i = 0 ; i < 9 ; i++)           
+                if (AuxDigitalInput & (0x01<<i)) DataOfCtrlTas.DigitalInput[i] = 1;  else DataOfCtrlTas.DigitalInput[i] = 0;
+              SysSetVariableLongArray(sysvar::TAS_VAR::DigitalInput,DataOfCtrlTas.DigitalInput,9);
+
+              break;
+    case 0x9 :
+              DataOfCtrlTas.ADInput[0] = ((Tas_Response.byte(1) << 2)          + (Tas_Response.byte(2) >> 6));
+              DataOfCtrlTas.ADInput[1] = (((Tas_Response.byte(2) & 0x3f) << 4) + (Tas_Response.byte(3) >> 4));
+              DataOfCtrlTas.ADInput[2] = (((Tas_Response.byte(3) &  0xf) << 6) + (Tas_Response.byte(4) >> 2));
+              DataOfCtrlTas.ADInput[3] = (((Tas_Response.byte(4) &  0x3) << 8) + Tas_Response.byte(5));
+              DataOfCtrlTas.ADInput[4] = ((Tas_Response.byte(6) << 2)          + (Tas_Response.byte(7) >> 6));             
+              sysSetVariableFloatArray(sysvar::TAS_VAR::ADInput,DataOfCtrlTas.ADInput,5);
+              break;
+  }
+}
+
+void MontMsgCan(int CommandTas)
+{
+  int AuxSwitch;
+  int i;
+  
+  CommandTas = CommandTas & 0xf;
+  DataOfCtrlTas.ComandOfTas = CommandTas;
+  switch (CommandTas) {
+    case 0x0 : break;
+    case 0x1 : 
+              for ( i = 1 ; i < 13 ; i ++)
+              {
+                if (DataOfCtrlTas.SwitchCtrl[i] != 0)
+                  DataOfCtrlTas.SwitchCtrl[i] = 1;
+              }              
+              for ( i = 1 ; i < 8 ; i ++)
+              {
+                if (DataOfCtrlTas.DigitalOutput[i] != 0)
+                  DataOfCtrlTas.DigitalOutput[i] = 1;
+              } 
+             
+              AuxSwitch = 0;
+              AuxSwitch = DataOfCtrlTas.SwitchCtrl[1] << 7;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[2] << 6;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[3] << 5;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[4] << 4;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[5] << 3;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[6] << 2;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[7] << 1;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[8];                         
+              DataOfCtrlTas.ByteToSend[1] = AuxSwitch;
+              AuxSwitch = 0;
+              AuxSwitch = DataOfCtrlTas.SwitchCtrl[9]  << 7;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[10] << 6;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[11] << 5;
+              AuxSwitch += DataOfCtrlTas.SwitchCtrl[12] << 4;
+              AuxSwitch += DataOfCtrlTas.DigitalOutput[1] << 3;
+              AuxSwitch += DataOfCtrlTas.DigitalOutput[2] << 2;
+              AuxSwitch += DataOfCtrlTas.DigitalOutput[3] << 1;
+              AuxSwitch += DataOfCtrlTas.DigitalOutput[4];
+              DataOfCtrlTas.ByteToSend[2] = AuxSwitch;
+              AuxSwitch = 0;
+              AuxSwitch = DataOfCtrlTas.DigitalOutput[5] << 7;
+              AuxSwitch += DataOfCtrlTas.DigitalOutput[6] << 6;
+              AuxSwitch += DataOfCtrlTas.DigitalOutput[7] << 5;
+              DataOfCtrlTas.ByteToSend[3] = AuxSwitch;
+              DataOfCtrlTas.ByteToSend[4] = DataOfCtrlTas.MosfetCtrl[1];
+              DataOfCtrlTas.ByteToSend[5] = DataOfCtrlTas.MosfetCtrl[2];
+             break;
+    case 0x2 :
+              DataOfCtrlTas.ByteToSend[1] = DataOfCtrlTas.ADOutput[1];
+              DataOfCtrlTas.ByteToSend[2] = DataOfCtrlTas.ADOutput[2];
+              DataOfCtrlTas.ByteToSend[3] = DataOfCtrlTas.ADOutput[3];
+              DataOfCtrlTas.ByteToSend[4] = DataOfCtrlTas.ADOutput[4];
+              DataOfCtrlTas.ByteToSend[5] = DataOfCtrlTas.PWMCtrl[1] >> 2;
+              DataOfCtrlTas.ByteToSend[6] = (DataOfCtrlTas.PWMCtrl[1] << 6) + (DataOfCtrlTas.PWMCtrl[2] >> 4);
+              DataOfCtrlTas.ByteToSend[7] = DataOfCtrlTas.PWMCtrl[2] << 4;
+             break;
+  }
+  
+  DataOfCtrlTas.ByteToSend[0] = ((DataOfCtrlTas.IdOfTas & 0xF)<<4) + (DataOfCtrlTas.ComandOfTas & 0xF);
+  SendMsgCan();
+}
+
+void SendMsgCan()
+{
+  if (DataOfCtrlTas.CanSelect != 2)
+  {
+    CAN3_Tas_Control.id = 0x7e0;
+    CAN3_Tas_Control.dlc = 8;  
+    CAN3_Tas_Control.byte(0) = DataOfCtrlTas.ByteToSend[0];
+    CAN3_Tas_Control.byte(1) = DataOfCtrlTas.ByteToSend[1];
+    CAN3_Tas_Control.byte(2) = DataOfCtrlTas.ByteToSend[2];
+    CAN3_Tas_Control.byte(3) = DataOfCtrlTas.ByteToSend[3];
+    CAN3_Tas_Control.byte(4) = DataOfCtrlTas.ByteToSend[4];
+    CAN3_Tas_Control.byte(5) = DataOfCtrlTas.ByteToSend[5];
+    CAN3_Tas_Control.byte(6) = DataOfCtrlTas.ByteToSend[6];
+    CAN3_Tas_Control.byte(7) = DataOfCtrlTas.ByteToSend[7];
+    output(CAN3_Tas_Control);
+  }
+  else
+  {
+    CAN2_Tas_Control.id = 0x7e0;
+    CAN2_Tas_Control.dlc = 8;  
+    CAN2_Tas_Control.byte(0) = DataOfCtrlTas.ByteToSend[0];
+    CAN2_Tas_Control.byte(1) = DataOfCtrlTas.ByteToSend[1];
+    CAN2_Tas_Control.byte(2) = DataOfCtrlTas.ByteToSend[2];
+    CAN2_Tas_Control.byte(3) = DataOfCtrlTas.ByteToSend[3];
+    CAN2_Tas_Control.byte(4) = DataOfCtrlTas.ByteToSend[4];
+    CAN2_Tas_Control.byte(5) = DataOfCtrlTas.ByteToSend[5];
+    CAN2_Tas_Control.byte(6) = DataOfCtrlTas.ByteToSend[6];
+    CAN2_Tas_Control.byte(7) = DataOfCtrlTas.ByteToSend[7];
+    output(CAN2_Tas_Control);
+  }
+}
+
+/**********************************************************/
+/* Func: Tas_Can_Select                                     */
+/* Param CANSelect 1 or 2                                  */
+/**********************************************************/
+void Tas_Can_Select (int CANSelect)
+{
+  DataOfCtrlTas.CanSelect = CANSelect;
+}
+
+/**********************************************************/
+/* Func: TAS_DefineID                                     */
+/* Param IDofTas 0 to 15                                  */
+/**********************************************************/
+void TAS_DefineID(int IDofTas)
+{
+  DataOfCtrlTas.IdOfTas = IDofTas & 0xf;
+}
+
+/**********************************************************/
+/* Func: TAS_SwitchOutput                                 */
+/* Param Switch_CN 1 to 12, value = 0 or != 0             */
+/* Power on or power off switches                         */
+/**********************************************************/
+void TAS_SwitchOutput(int Switch_CN, int Value)
+{
+  if (Switch_CN < 13)
+  {
+    if (Value != 0)
+      DataOfCtrlTas.SwitchCtrl[Switch_CN] = 1;
+    else
+      DataOfCtrlTas.SwitchCtrl[Switch_CN] = 0;
+   // MontMsgCan(0x01);  
+  }
+}
+
+/**********************************************************/
+/* Func: TAS_DigitalOutput                                */
+/* Param Digital_CN 1 to 7, value = 0 or != 0             */
+/* Power on or power off Digital Output                   */
+/**********************************************************/
+void TAS_DigitalOutput(int Digital_CN, int Value)
+{
+  if (Digital_CN < 8)
+  {
+    if (Value != 0)
+      DataOfCtrlTas.DigitalOutput[Digital_CN] = 1;
+    else
+      DataOfCtrlTas.DigitalOutput[Digital_CN] = 0;
+ //   MontMsgCan(0x01);  
+  }
+}
+
+/**********************************************************/
+/* Func: TAS_MosfetOutput                                 */
+/* Param Mosfet_CN 1 to 2, value = 0 up to 255            */
+/**********************************************************/
+void TAS_MosfetOutput(int Mosfet_CN, int Value)
+{
+  if ((Mosfet_CN < 3) && (Value < 256))
+  {
+    DataOfCtrlTas.MosfetCtrl[Mosfet_CN] = Value;
+  //  MontMsgCan(0x01);  
+  }
+}
+
+/**********************************************************/
+/* Func: TAS_AnalogOutput                                 */
+/* Param AN_CN 1 to 4, value = 0 up to 1023               */
+/**********************************************************/
+void TAS_AnalogOutput(int AN_CN, int Value)
+{
+  if ((AN_CN < 5) && (Value < 1024))
+  {
+    DataOfCtrlTas.ADOutput[AN_CN] = Value;
+ //   MontMsgCan(0x02);  
+  }
+}
+
+/**********************************************************/
+/* Func: TAS_PwmOutput                                    */
+/* Param PWM_CN 1 to 2, value = 0 up to 1023              */
+/**********************************************************/
+void TAS_PWMOutput(int PWM_CN, int Value)
+{
+  if ((PWM_CN < 3) && (Value < 1024))
+  {
+    DataOfCtrlTas.PWMCtrl[PWM_CN] = Value;
+ //   MontMsgCan(0x02);  
+  }
+}
+
+/**********************************************************/
+/* Func: TAS_DigitalInput                                 */
+/* Param DigitalInput_CN 1 to 7, Return status            */
+/**********************************************************/
+long TAS_DigitalInput(int DigitalInput_CN)
+{
+  DigitalInput_CN &= 0x7;
+  if (DataOfCtrlTas.DigitalInput[DigitalInput_CN] != 0)
+    return 1;
+  else
+    return 0;
+}
+
+/**********************************************************/
+/* Func: TAS_AnalogInput                                  */
+/* Param AnalogInput_CN 1 to 5, Return AD value 0 - 1023           */
+/**********************************************************/
+long TAS_AnalogInput(int AnalogInput_CN)
+{
+  if (AnalogInput_CN < 6)
+    return DataOfCtrlTas.ADInput[AnalogInput_CN];
+  else
+    return 0;
+}

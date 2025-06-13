@@ -1,0 +1,109 @@
+/*@!Encoding:1252*/
+variables
+{
+  message STATUS_DMM STATUS_DMM_msg;
+  msTimer STATUS_DMM_Timer;
+  mstimer sleep;
+  const   STATUS_DMM_Cycle = 250;
+}
+
+on timer STATUS_DMM_Timer
+{
+  output(STATUS_DMM_msg);
+  setTimer(STATUS_DMM_Timer, STATUS_DMM_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0; 
+      cancelTimer(STATUS_DMM_Timer);
+      cancelTimer(sleep);
+    } 
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status)==1)  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_DMM_ACTIVE) == 1)
+    {
+      setTimer(STATUS_DMM_Timer, STATUS_DMM_Cycle);
+    }
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::Memorized
+{
+  STATUS_DMM_msg.Memorized = sysGetVariableInt(sysvar::RoadMap::Memorized);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DMM_ACTIVE) == 1)
+    {
+      output(STATUS_DMM_msg);
+    }
+}
+
+on sysvar sysvar::RoadMap::DMM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::DMM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_DMM_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_DMM_ACTIVE,0);
+  }	
+}
+
+on sysvar sysvar::RoadMap::STATUS_DMM_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_DMM_ACTIVE))
+  {
+    cancelTimer(STATUS_DMM_Timer);
+  }
+  else
+  {
+    setTimer(STATUS_DMM_Timer, STATUS_DMM_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_DMM_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DMM_DLC) == 8)
+  {
+    STATUS_DMM_msg.dlc = STATUS_DMM.dlc;
+  }
+  else
+  {
+    STATUS_DMM_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_DMM_DLC);
+  }
+}

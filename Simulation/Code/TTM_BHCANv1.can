@@ -1,0 +1,146 @@
+/*@!Encoding:1252*/
+variables
+{
+  message STATUS_TTM STATUS_TTM_msg;
+  msTimer STATUS_TTM_Timer;
+  mstimer sleep;
+  const   STATUS_TTM_Cycle = 250;
+}
+
+on timer STATUS_TTM_Timer
+{
+  output(STATUS_TTM_msg);
+  setTimer(STATUS_TTM_Timer, STATUS_TTM_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+       cancelTimer(STATUS_TTM_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_TTM_ACTIVE) == 1)
+    {
+      setTimer(STATUS_TTM_Timer, STATUS_TTM_Cycle);
+    } 
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::TTM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TTM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_TTM_ACTIVE,1); 
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_TTM_ACTIVE,0); 
+  }	
+}
+
+on sysvar sysvar::RoadMap::STATUS_TTM_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_TTM_ACTIVE))
+  {
+    cancelTimer(STATUS_TTM_Timer);
+  }
+  else
+  {
+    setTimer(STATUS_TTM_Timer, STATUS_TTM_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::IncompleteAssemblySts
+{
+   STATUS_TTM_msg.IncompleteAssemblySts = sysGetVariableInt(sysvar::RoadMap::IncompleteAssemblySts);
+}
+
+on sysvar sysvar::RoadMap::TrailerRearFogLightFailSts
+{
+   STATUS_TTM_msg.TrailerRearFogLightFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerRearFogLightFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerGenericFailSts
+{
+   STATUS_TTM_msg.TrailerGenericFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerGenericFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerLHParkingLightFailSts
+{
+   STATUS_TTM_msg.TrailerLHParkingLightFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerLHParkingLightFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerLHTurnSignalFailSts
+{
+   STATUS_TTM_msg.TrailerLHTurnSignalFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerLHTurnSignalFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerRHParkingLightFailSts
+{
+   STATUS_TTM_msg.TrailerRHParkingLightFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerRHParkingLightFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerRHTurnSignalFailSts
+{
+   STATUS_TTM_msg.TrailerRHTurnSignalFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerRHTurnSignalFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerStopLightFailSts
+{
+   STATUS_TTM_msg.TrailerStopLightFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerStopLightFailSts);
+}
+
+on sysvar sysvar::RoadMap::TrailerReverseGearFailSts
+{
+   STATUS_TTM_msg.TrailerReverseGearFailSts = sysGetVariableInt(sysvar::RoadMap::TrailerReverseGearFailSts);
+}
+
+on sysvar sysvar::RoadMap::STATUS_TTM_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TTM_DLC) == 4)
+  {
+    STATUS_TTM_msg.dlc = STATUS_TTM.dlc;
+  }
+  else
+  {
+    STATUS_TTM_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_TTM_DLC);
+  }
+}

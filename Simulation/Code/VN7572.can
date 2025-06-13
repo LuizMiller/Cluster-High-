@@ -1,0 +1,81 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  //current measurement variables
+  mstimer t_Current;
+  float voltage=0;
+  
+  //Coeficients for KL30=12V
+  /*float a3= -2.404418E-05;
+  float a2= 3.279204E-04;
+  float a1= 2.462410E-01;
+  float a0= 6.871282E-04;*/
+  
+  //Coeficients for KL30=13.5V
+  float a3= 5.506283E-05;
+  float a2= -4.201610E-04;
+  float a1= 2.473668E-01;
+  float a0= 5.292118E-04;
+  
+  int samples=1000;
+  float v_in=0;
+  int count=0;
+}
+
+
+on sysvar sysvar::RoadMap::KL30
+{
+  SysSetVariableInt(sysvar::IO::IOPiggy1::DOUT0,sysGetVariableInt(sysvar::RoadMap::KL30));
+}
+
+on sysvar sysvar::RoadMap::KL15
+{
+  if (sysGetVariableInt(sysvar::RoadMap::Automatic_KL15) == 1)
+  SysSetVariableInt(sysvar::IO::IOPiggy1::DOUT1,sysGetVariableInt(sysvar::RoadMap::KL15));
+}
+
+on sysvar sysvar::RoadMap::AuxiliaryFuelTank
+{
+  SysSetVariableInt(sysvar::IO::IOPiggy1::DOUT2,sysGetVariableInt(sysvar::RoadMap::AuxiliaryFuelTank));
+}
+
+//*** Current measurement functions ***
+on timer t_Current
+{
+  count++;
+  v_in+=@IO::IOPiggy1::AIN0;
+  if(count==samples)
+  {
+    v_in=v_in/samples;
+    @Test::Current=Compensation(v_in);
+    //write("%f",@Test::Current);
+    v_in=0;
+    count=0;
+  }
+  setTimer(t_Current,1);
+}
+
+float Compensation(float v_in)
+{
+  float current=0;
+  current=a3*_pow(v_in,3)+a2*_pow(v_in,2)+a1*v_in+a0;
+  return current;
+}
+
+void Calculate_Current()
+{
+  //@User::Current=Compensation(@IO::VN1600_1::AIN);
+  @Test::Current=Compensation(@IO::IOPiggy1::AIN0);
+  //write("%f",@User::Current);  
+}
+
+on start
+{
+  //openPanel("Current");//comment if gauge is embedded in Main Panel
+  setTimer(t_Current,1);
+}

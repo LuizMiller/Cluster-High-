@@ -1,0 +1,1017 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  byte buffer[4096];
+  int KeyCycleSts_Ton;
+  int KeyCycleSts_Toff;
+  int odometer_reset = 0;
+  int quant_reset = 0;
+  int flag_diag_response = 0;
+  mstimer KeyCycle_ON;
+  mstimer KeyCycle_OFF;
+  msTimer init;
+  int contj = 0;
+  message DIAGNOSTIC_REQUEST_IPC DIAGNOSTIC_REQUEST_IPC_MSG;
+  byte teststep;
+  message DIAGNOSTIC_REQUEST_IPC DiagReq;
+ 
+  diagRequest HardReset_Reset hardreset_rq;
+  diagresponse HardReset_Reset hardreset_rp;
+  
+  diagrequest SystemSupplierEcuHardwareVersionNumber_Read Supplier_Manufacturer_ECU_Hardware_Version_Number_Read_rq;  //0xF193
+  diagresponse SystemSupplierEcuHardwareVersionNumber_Read Supplier_Manufacturer_ECU_Hardware_Version_Number_Read_rp; //0xF193 
+  
+  //diagrequest SystemSupplierEcuSoftwareVersionNumber_Read Supplier_Manufacturer_ECU_Software_Version_Number_Read_rq; //0xF195
+  //diagresponse SystemSupplierEcuSoftwareVersionNumber_Read Supplier_Manufacturer_ECU_Software_Version_Number_Read_rp; //0xF195
+  
+  diagrequest ApplicationDataIdentification_Read  ApplicationDataIdentification_Read_rq; //0xF182
+  diagresponse ApplicationDataIdentification_Read ApplicationDataIdentification_Read_rp; //0xF182
+  
+  diagresponse * allres;
+  
+  const   diagcycle = 5000;  
+  
+  msTimer CalibrationModeTimer;
+  mstimer RefreshRateAdjustment;
+  msTimer Backlight;
+  msTimer Tester_present_Timer;
+  msTimer TimerB;
+  msTimer TimerX, TimerZ, TimerY, TimerJ;
+  msTimer TimerSendSA;
+ 
+  word seedIn;
+  word VIN_RSA_REV_POLY = 0x1929;
+  
+//  dword keySA;
+  dword KeySA;
+  dword MMSeed;
+  dword MMKey;
+  dword SeedSA = 0;
+  
+  byte count = 0;
+  byte flagsendSeedandKey = 0;
+  byte flagsendSeed = 0;
+  byte flagsendKey = 0;
+  byte flagTimerLock = 0;
+  byte flagseedandkey = 0;
+  byte byteNack = 0;
+  byte flagSecAccs;
+  
+  int test_case=0;
+  int unlockIsTrue=0;
+  int kpz=1;
+
+
+}
+
+on start
+{
+DiagSetTarget("Magneti_Marelli_IPC_Instrument_Panel_Cluster_P598_DXXXX");
+if( 0 != DiagSetTarget( "Magneti_Marelli_IPC_Instrument_Panel_Cluster_P598_DXXXX")) write( "Error setting target!");
+diagStopTesterPresent("Magneti_Marelli_IPC_Instrument_Panel_Cluster_P598_DXXXX");
+//SysSetVariableInt(sysvar::RoadMap::KL15,1);
+KeyCycleSts_Ton = sysGetVariableInt(sysvar::RoadMap::KeyCycleSts_Ton);   
+KeyCycleSts_Toff = sysGetVariableInt(sysvar::RoadMap::KeyCycleSts_Toff);   
+setTimerCyclic(init,1000);
+}
+
+on timer init
+{
+  int i = 0;
+   
+  i = i+1;
+  if(i == 1)  
+    {
+      i=0; 
+      diagSendRequest(Supplier_Manufacturer_ECU_Hardware_Version_Number_Read_rq);
+      diagStopTesterPresent("Magneti_Marelli_IPC_Instrument_Panel_Cluster_P598_DXXXX");
+      cancelTimer(init);
+      SysSetVariableInt(sysvar::RoadMap::KL15,0);
+    }  
+}
+
+on timer KeyCycle_ON
+{
+  int i = 0;
+  sysSetVariableInt(sysvar::RoadMap::WC_ON,1);
+  i = i+1;
+  if(i == 1)  
+    {
+      setTimer(KeyCycle_OFF,KeyCycleSts_Ton);
+      i = 0;
+      cancelTimer(KeyCycle_ON);
+    }  
+}
+
+on timer KeyCycle_OFF
+{
+  int i = 0;
+  sysSetVariableInt(sysvar::RoadMap::WC_ON,0);
+  i = i+1;
+  if(i == 1)  
+    {
+      setTimer(KeyCycle_ON,KeyCycleSts_Toff);
+      i = 0;
+      cancelTimer(KeyCycle_OFF);
+    }  
+}
+
+//-------------TESTER PRESENT CONTÍNUO-----------------------
+
+on sysvar sysvar::RoadMap::Tester_present
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::Tester_present))
+  {
+    output(DiagReq);
+    setTimer(Tester_present_Timer, 4000); 
+  }
+  else cancelTimer(Tester_present_Timer);
+}
+
+on timer Tester_present_Timer
+{
+  DiagReq.byte(0) = 0x02;
+  DiagReq.byte(1) = 0x3E;
+  DiagReq.byte(2) = 0x00;
+  output(DiagReq);
+  setTimer(Tester_present_Timer, 4000);
+}
+//----------------------------------------------------------
+
+
+on diagResponse SystemSupplierEcuHardwareVersionNumber_Read
+{
+  diagGetLastResponse(Supplier_Manufacturer_ECU_Hardware_Version_Number_Read_rp);
+  DiagGetPrimitivedata(Supplier_Manufacturer_ECU_Hardware_Version_Number_Read_rp,buffer,4096);
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","\n"); 
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","IPC identification: ");
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","\n"); 
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","HW version:"); 
+  putvaluetocontrol("MainPanel_IPC598_v0","output1",buffer[3],0,1); 
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","\n");
+  sysSetVariableInt(sysvar::RoadMap::HWversion,buffer[3]);
+  //diagSendRequest(Supplier_Manufacturer_ECU_Software_Version_Number_Read_rq);
+  diagSendRequest(ApplicationDataIdentification_Read_rq);
+}
+
+//on diagResponse SystemSupplierEcuSoftwareVersionNumber_Read {}
+on diagResponse ApplicationDataIdentification_Read
+{
+	//DiagGetLastResponse(Supplier_Manufacturer_ECU_Software_Version_Number_Read_rp);
+  //DiagGetPrimitivedata(Supplier_Manufacturer_ECU_Software_Version_Number_Read_rp,buffer,4096);
+  DiagGetLastResponse(ApplicationDataIdentification_Read_rp);
+  DiagGetPrimitivedata(ApplicationDataIdentification_Read_rp,buffer,4096);
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","SW version: "); 
+  putvaluetocontrol("MainPanel_IPC598_v0","output1",buffer[5],0,1);
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","."); 
+  putvaluetocontrol("MainPanel_IPC598_v0","output1",buffer[6],0,1);
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","\n");
+  sysSetVariableInt(sysvar::RoadMap::SWversionMSB,buffer[5]);
+  sysSetVariableInt(sysvar::RoadMap::SWversionLSB,buffer[6]);
+  putvaluetocontrol("MainPanel_IPC598_v0","output1","\n");
+  SysSetVariableInt(sysvar::RoadMap::KL15,0);
+}
+
+on sysvar sysvar::RoadMap::KeyCycleSts
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::KeyCycleSts))
+  {    
+    if(1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+    {
+      setTimer(KeyCycle_OFF,KeyCycleSts_Ton);
+    }
+    else if(0 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+    {
+      setTimer(KeyCycle_ON,KeyCycleSts_Toff);
+    }
+  }
+  else if(0 == sysGetVariableInt(sysvar::RoadMap::KeyCycleSts))
+  {    
+    cancelTimer(KeyCycle_ON);
+    cancelTimer(KeyCycle_OFF);
+  }  
+}
+
+on sysvar sysvar::RoadMap::KeyCycleSts_Ton
+{
+  KeyCycleSts_Ton = sysGetVariableInt(sysvar::RoadMap::KeyCycleSts_Ton);   
+}
+ 
+on sysvar sysvar::RoadMap::KeyCycleSts_Toff
+{
+  KeyCycleSts_Toff = sysGetVariableInt(sysvar::RoadMap::KeyCycleSts_Toff);   
+}
+
+on sysvar sysvar::RoadMap::ResetCCAN
+{
+  ResetCANEx(1); 
+}
+
+on sysvar sysvar::RoadMap::ResetBHCAN
+{
+  ResetCANEx(2); 
+}
+
+on busOff
+{
+int errRxCnt;
+int errTxCnt;
+int channel;
+double timestamp; // [seconds]
+
+timestamp = (double)timeNow() / (double)100000;
+channel = this.can;
+errRxCnt = this.errorCountRX;
+errTxCnt = this.errorCountTX;
+Write("Bus Off: time=%f channel=%d, errRxCnt=%d, errTxCnt=%d",timestamp, channel, errRxCnt, errTxCnt);
+
+resetCanEx(1);
+resetCanEx(2);
+}
+
+
+void White()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x00;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG); 
+}
+
+void Black()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x01;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG); 
+}
+
+void Red()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x02;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+}
+
+void Green()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x03;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+}
+
+void Blue()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x04;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+}
+
+void RGB()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x05;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG); 
+}
+
+void CrossTalk()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x07;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x31;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x00; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x80;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x00;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x07;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+}
+
+void SessionMM()
+{
+	DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 3;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x02; 
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x10;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x60;
+
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+//	write(" ");
+//	write("Session - MM");
+//	write(" ");	
+}
+
+void RequestSeed()
+{
+	DIAGNOSTIC_REQUEST_IPC_MSG.id=0x18DA60F1x;
+	DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 3;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x02;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x27;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x61;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+}
+
+void wakeUp()
+{
+  DIAGNOSTIC_REQUEST_IPC_MSG.id=0x18DA60F1x;
+	DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 3;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x02;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x11;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x01;
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+}
+
+void SendKey()
+{
+	DIAGNOSTIC_REQUEST_IPC_MSG.id=0x18DA60F1x;
+	DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 7;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x06;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x27;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x62;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = (MMKey>>24)&0xFF;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = (MMKey>>16)&0xFF;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = (MMKey>> 8)&0xFF;
+	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = (MMKey    )&0xFF;
+//	write("check : %x %x %x %x %x %x", DIAGNOSTIC_REQUEST_IPC_msg.byte(1),DIAGNOSTIC_REQUEST_IPC_msg.byte(2),DIAGNOSTIC_REQUEST_IPC_msg.byte(3),DIAGNOSTIC_REQUEST_IPC_msg.byte(4),DIAGNOSTIC_REQUEST_IPC_msg.byte(5),DIAGNOSTIC_REQUEST_IPC_msg.byte(6));
+	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+//	write(" ");
+//	write("Security Access - MM");
+//	write(" ");
+}
+
+on timer RefreshRateAdjustment{
+int i = 0;
+  if(i == 0){
+    DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 8;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x10;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x08;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x31;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x01;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x00;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x84;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x01;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x06;
+  	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+    i++;
+  }
+  else if(i==1){
+    i=0;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 3;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x21;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x13;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x88;
+  	output(DIAGNOSTIC_REQUEST_IPC_MSG);   
+    cancelTimer(RefreshRateAdjustment);
+  }
+}
+
+on timer Backlight{
+int i = 0;
+  if(i == 0){
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x10;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x08;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x31;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(3) = 0x01;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(4) = 0x00;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(5) = 0x84;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(6) = 0x01;
+  	DIAGNOSTIC_REQUEST_IPC_MSG.byte(7) = 0x07;
+  	output(DIAGNOSTIC_REQUEST_IPC_MSG);
+    i++;
+  }
+  else if(i==1){
+    i=0;
+	  DIAGNOSTIC_REQUEST_IPC_MSG.dlc = 3;
+	  DIAGNOSTIC_REQUEST_IPC_MSG.byte(0) = 0x21;
+	  DIAGNOSTIC_REQUEST_IPC_MSG.byte(1) = 0x27;
+	  DIAGNOSTIC_REQUEST_IPC_MSG.byte(2) = 0x10;
+	  output(DIAGNOSTIC_REQUEST_IPC_MSG);   
+    cancelTimer(Backlight);
+  }
+}
+
+on sysvar_update RoadMap::CalibrationMode
+{
+  if(sysGetVariableInt(sysvar::RoadMap::CalibrationMode) == 1)
+  {
+    setTimerCyclic(CalibrationModeTimer, 10);
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::CalibrationMode) == 0)
+  {
+   diagSendRequest(hardreset_rq);
+   putvaluetocontrol("MainPainel","output1","\n");  
+   putvaluetocontrol("MainPainel","output1","Exiting calibration mode...\n");  
+  }
+}
+
+on sysvar_update RoadMap::PatternSelection
+{
+  if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 0)
+  {
+   White();   
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 1)
+  {
+   Black(); 
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 2)
+  {
+   Red(); 
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 3)
+  {
+   Green(); 
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 4)
+  {
+   Blue(); 
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 5)
+  {
+   RGB();
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::PatternSelection) == 6)
+  {
+   CrossTalk();
+  }
+}
+
+on timer CalibrationModeTimer
+{
+  
+  switch(contj)
+  {
+    case (0):
+    putvaluetocontrol("MainPainel","output1","\n");  
+    putvaluetocontrol("MainPainel","output1","Initializing calibration mode, please wait...\n");
+    sysSetVariableInt(sysvar::RoadMap::SA,1);
+    contj++;
+    setTimer(CalibrationModeTimer,3000);
+      break;
+  
+    case (1):
+    Black();
+    contj++;
+    setTimer(CalibrationModeTimer,500);  
+      break;
+      
+    case (2):
+    SetTimerCyclic(Backlight, 10);
+    contj++;
+    setTimer(CalibrationModeTimer,500);   
+      break;
+      
+    case (3):
+    putvaluetocontrol("MainPainel","output1","\n");  
+    putvaluetocontrol("MainPainel","output1","Calibration mode activated!\n");  
+    putvaluetocontrol("MainPainel","output1","\n");  
+    SetTimerCyclic(RefreshRateAdjustment,10);
+    contj = 0;
+    cancelTimer(CalibrationModeTimer);
+      break;
+  }
+}
+
+/*              ITALY                        */
+/*********************************************/
+
+on message DIAGNOSTIC_RESPONSE_IPC
+{
+
+if ((this.byte(1)==0x67) && (this.byte(2)==flagSecAccs+1) && this.byte(0)==0x02)
+			{
+			unlockIsTrue=1; 
+			write("Accesso eseguito!!!");
+			}
+else if ((this.byte(1)==0x7F) && (this.byte(2)==0x27) && ((this.byte(3)==0x36) || (this.byte(3)==0x37)))
+			{
+				setTimer(TimerJ,1);
+			}
+else if ((this.byte(1)==0x50))
+			{
+			if (test_case==7)
+				{
+				DiagReq.byte(0) = 2;
+				DiagReq.byte(1) = 0x27;
+				DiagReq.byte(2) = flagSecAccs;
+				DiagReq.byte(3) = 0x00;
+				DiagReq.byte(4) = 0x00;
+				DiagReq.byte(5) = 0x00;
+				DiagReq.byte(6) = 0x00;
+				DiagReq.byte(7) = 0x00;
+				output(DiagReq);
+				test_case=66;
+				}
+			}
+else if ((this.byte(1)==0x7F) && test_case==66) write("Uscito dal SA per cambio sessione - Inviata nack 7F su richiesta invio seed");				
+else if  (this.byte(1)==0x7F && (this.byte(2)==0x27) && this.byte(0)==0x03 && this.byte(3)==0x24)
+		{
+			if (test_case==3) write("Nack 24!!! Comportamento corretto");
+			test_case=0;
+		}
+else if ((test_case==66) && (this.byte(1) == 0x67) && (this.byte(2) == flagSecAccs) && (this.byte(3)!=0x00))
+		{
+			write("Siamo usciti da SA normalmente, mi ha ridato un altro seed");
+		}
+else if ((test_case==66) && (this.byte(1) == 0x67) && (this.byte(2) == flagSecAccs) && (this.byte(3)==0x00))
+		{
+			write("Non siamo usciti da SA nonostante i cambi sessione, mi risponde con seed 0");
+		}
+else if ((this.byte(1) == 0x67) && (this.byte(2) == flagSecAccs))
+			{
+			SeedSA = (this.byte(3) << 24) | (this.byte(4) << 16) | (this.byte(5) << 8) | this.byte(6);
+			write("Seed %x", SeedSA);
+			if (flagSecAccs == 0x05)
+			{ 
+			  KeySA = SeedKeyVIN(SeedSA);
+			  write("VIN");
+			}
+			else if (flagSecAccs == 0x01)
+			{
+			  KeySA = SeedKeyDownload(SeedSA);
+			  write("Download");
+			}
+			if (test_case==6) {
+				//PulisciDiagReq();
+				write("Chiave %x", KeySA);
+				DiagReq.byte(0) = 6;
+				DiagReq.byte(1) = 0x27;
+				DiagReq.byte(2) = flagSecAccs + 1;
+				DiagReq.byte(3) = KeySA  >> 24;
+				DiagReq.byte(4) = KeySA >> 16;
+				DiagReq.byte(5) = KeySA >> 8;
+				DiagReq.byte(6) = KeySA;
+			    output(DiagReq);
+				//PulisciDiagReq();
+				//setTimer(TimerX,2000);
+				
+				
+			}
+			else if (test_case==4) {
+				write("Chiave %x", KeySA);
+				DiagReq.byte(0) = 6;
+				DiagReq.byte(1) = 0x27;
+				DiagReq.byte(2) = flagSecAccs + 1;
+				DiagReq.byte(3) = KeySA  >> 24;
+				DiagReq.byte(4) = 0x00; //qui genera il caos nella key
+				DiagReq.byte(5) = KeySA >> 8;
+				DiagReq.byte(6) = KeySA;
+				output(DiagReq);
+				//PulisciDiagReq();
+				//setTimer(TimerX,2000);
+				//test_case=0;
+			}
+			
+			
+		}
+/* 070311 SC - non manda nulla nel caso di sa granted da prima */
+else if ((this.byte(1) == 0x67) && (this.byte(2) == flagSecAccs) && this.byte(3)==0x00 && this.byte(4)==0x00 && this.byte(5)==0x00 && this.byte(6)==0x00)
+		{
+		write("Tester già entrato in Security Access");
+		}
+/* - */	
+	
+    
+  if ((this.byte(1) == 0x71) && (this.byte(2) == 0x01) && (this.byte(3) == 0x20))
+  {
+    switch(this.byte(4))
+    {
+      case 0x00: write("VIN bloccato con successo!"); break;
+      case 0x01: write("VIN sbloccato con successo: è possibile modificare il VIN"); break;
+    }
+  }
+  if ((this.byte(1) == 0x62) && (this.byte(2) == 0x20) && (this.byte(3) == 0x13))
+  {
+    switch(this.byte(4))
+    {
+      case 0x00: write("VIN sbloccato"); break;
+      case 0x01: write("VIN bloccato da routine"); break;
+      case 0x02: write("VIN bloccato da odometro"); break;
+    }
+  }
+}
+
+on timer TimerB
+{
+DiagReq.Byte(0) = 2;
+DiagReq.Byte(1) = 0x3e;
+DiagReq.Byte(2) = 0x00;
+output(DiagReq);
+setTimer(TimerB, 4000);
+}
+
+on timer TimerX
+{ /*Eseguo richiesta lettura non possibile in boot mode, in tutte le sessioni normal mode*/
+				/*DiagReq.byte(0)=0x02;
+				DiagReq.byte(1)=0x27;
+				DiagReq.byte(2)=flagSecAccs;
+				output(DiagReq);
+				//PulisciDiagReq();*/
+				
+	DiagReq.byte(0) = 2;  DiagReq.byte(1) = 0x10; DiagReq.byte(2) = 0x03; output(DiagReq); write("Switch veloce 02/03");
+	setTimer(TimerZ, 200);
+}
+
+on timer TimerY
+{ /*Eseguo richiesta lettura non possibile in boot mode, in tutte le sessioni normal mode*/
+				/*DiagReq.byte(0)=0x02;
+				DiagReq.byte(1)=0x27;
+				DiagReq.byte(2)=flagSecAccs;
+				output(DiagReq);
+				//PulisciDiagReq();*/
+				
+	DiagReq.byte(0) = 2;  DiagReq.byte(1) = 0x10; DiagReq.byte(2) = 0x02; output(DiagReq); write("Switch veloce 03/02");
+	setTimer(TimerZ, 200);
+}
+
+on timer TimerZ
+{ 
+		DiagReq.byte(0) = 2;
+				DiagReq.byte(1) = 0x27;
+				DiagReq.byte(2) = flagSecAccs;
+				DiagReq.byte(3) = 0x00;
+				DiagReq.byte(4) = 0x00;
+				DiagReq.byte(5) = 0x00;
+				DiagReq.byte(6) = 0x00;
+				DiagReq.byte(7) = 0x00;
+				output(DiagReq);
+}
+
+on timer TimerJ
+{ 
+	if(kpz!=11) { 
+	write("Passati %d sec",kpz);
+	kpz++;
+	setTimer(TimerJ,1000);
+	}
+	
+}
+
+DWORD SeedKeyVIN (DWORD seed) {
+	DWORD keyM[4] ;
+    DWORD y,z,sum;
+    BYTE n;
+    
+keyM[0]= 0x9b127d51;//128 bits
+keyM[1]= 0x5ba41903; 
+keyM[2]= 0x4fe87269; 
+keyM[3]= 0x6bc361d8;   
+    
+	y = ((seed<<24)&0xff000000) + ((seed<<8)&0xff0000) + ((seed>>8)&0xff00) + ((seed>>24)&0xff); //swap byte order
+	z = 0; 
+    sum = 0; //y = LOW_PART, z = HIGH_PART
+	n = 64; //number of iterations
+	while (n-- > 0) { //encrypt
+		y += (((z << 4) ^ (z >> 5)) + z) ^ (sum + keyM[sum & 3]);
+		sum += 0x8f750a1d;
+		z += (((y << 4) ^ (y >> 5)) + y) ^ (sum + keyM[(sum >> 11) & 3]);
+	}
+	return ((z<<24)&0xff000000) + ((z<<8)&0xff0000) + ((z>>8)&0xff00) + ((z>>24)&0xff); //swap byte order
+}
+
+word VIN_rsa_calc_crc(byte data[], word NumChars)
+{
+    word  crc;/* Result of the calculation   */
+    byte NextByte; /* The next byte to bring down */
+    byte BitCount;          /* Count of bits processed     */
+    byte ByteCount;
+    byte carry;
+
+    crc = 0xa5a5;
+
+    write("START DEBUG SeedKeyVIN");
+    ByteCount=0x00;
+    while (NumChars-- > 0){
+        //write("NumChars %x",NumChars);
+        BitCount = 0;
+        NextByte = data[ByteCount];
+
+        while(BitCount < 8){
+            carry = (char)(crc & 0x0001);
+            crc = crc >> 1; /* Rotar right the CRC */
+
+            if (carry ^ (NextByte & 0x1)){   /* XOR the Poly */
+                crc = crc ^ VIN_RSA_REV_POLY;
+            }
+            NextByte = (byte)(NextByte >> 1);
+            BitCount++;
+        }
+        ByteCount++;
+    }
+    write("END DEBUG SeedKeyVIN");
+    return(crc);
+}
+
+byte VIN_F1 (byte value)
+{
+  word rotate_reg;
+
+  rotate_reg = ((value << 8) | value);
+  value = (byte) (rotate_reg >> 3);
+  return value;
+}
+
+byte VIN_F2 (byte value)
+{
+  word rotate_reg;
+
+  rotate_reg = ((value << 8) | value)^ 0xFFFF;
+  value = (byte) (rotate_reg >> 2);
+  return value;
+}
+
+byte VIN_F3 (byte value)
+{
+  value ^= 0x9A;
+  return value;
+}
+
+byte VIN_F4 (byte value)
+{
+  byte hold;
+
+  hold = 0;
+  hold |= 0x40 & (value << 6); /*A*/
+  hold |= 0x10 & (value << 3); /*B*/
+  hold |= 0x2  & (value >> 1); /*C*/
+  hold |= 0x80 & (value << 4); /*D*/
+  hold |= 0x4  & (value >> 2); /*E*/
+  hold |= 0x1  & (value >> 5); /*F*/
+  hold |= 0x20 & (value >> 1); /*G*/
+  hold |= 0x8  & (value >> 4); /*H*/
+  value = hold;
+  return value;
+}
+
+on key '3'
+{
+  DiagReq.byte(0) = 0x02;
+  DiagReq.byte(1) = 0x10;
+  DiagReq.byte(2) = 0x03;
+  flagSecAccs = 0x05;
+  output(DiagReq);
+  setTimer(TimerB, 4000);
+  
+}
+
+on sysvar sysvar::RoadMap::VehicleManufacturerEndOfLine
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::VehicleManufacturerEndOfLine))
+    {
+  DiagReq.byte(0) = 0x02;
+  DiagReq.byte(1) = 0x10;
+  DiagReq.byte(2) = 0x40;
+  flagSecAccs = 0x05;
+  output(DiagReq);
+  setTimer(TimerB, 4000);
+    } 
+}
+
+on timer TimerSendSA
+{
+  DiagReq.byte(0) = 2;
+  DiagReq.byte(1) = 0x27;
+  DiagReq.byte(2) = flagSecAccs;
+  output(DiagReq);
+}
+
+on sysvar sysvar::RoadMap::Seed1040
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::Seed1040))
+    {
+//67 05 03 C3 03 C1  : VINRequestSeed Request Seed
+//    9.44328 Tx 6        F1->60 : 27 06 1C E2 03 61
+  test_case=6;
+  DiagReq.byte(0) = 2;
+  DiagReq.byte(1) = 0x27;
+  DiagReq.byte(2) = flagSecAccs;
+  output(DiagReq);
+    }
+}
+
+on key 'w'
+{
+
+  test_case=3;
+  DiagReq.byte(0) = 6;
+  DiagReq.byte(1) = 0x27;
+  DiagReq.byte(2) = flagSecAccs+1;
+  //DiagReq.byte(2) = 0x04;
+  output(DiagReq);
+
+}
+
+on key 'p'
+{
+
+  test_case=7;
+  DiagReq.byte(0) = 2;
+  DiagReq.byte(1) = 0x10;
+  
+  if (flagSecAccs==0x01) { DiagReq.byte(2) = 0x03; write("Entriamo in 10 03"); output(DiagReq); setTimer(TimerY, 1000);
+							}
+  else if (flagSecAccs==0x05) {DiagReq.byte(2) = 0x02; write("Entriamo in 10 02"); output(DiagReq); setTimer(TimerX, 1000);
+								}
+  //DiagReq.byte(2) = 0x04;
+  
+
+}
+
+on key 'e'
+{
+// nack 35
+	kpz=0;
+  test_case=4;
+  DiagReq.byte(0) = 2;
+  DiagReq.byte(1) = 0x27;
+  DiagReq.byte(2) = flagSecAccs;
+  //DiagReq.byte(2) = 0x04;
+  output(DiagReq);
+
+}
+
+on key 'u' //Original VIN Unlock
+{
+  
+  DiagReq.byte(0) = 4;
+  DiagReq.byte(1) = 0x31;
+  DiagReq.byte(2) = 0x01;
+  DiagReq.byte(3) = 0x20;
+  DiagReq.byte(4) = 0x01;
+  DiagReq.byte(5) = 0x00;
+  DiagReq.byte(6) = 0x00;
+  DiagReq.byte(7) = 0x00;
+  output(DiagReq);
+}
+
+on key 'l' //Original VIN Lock
+{
+  
+  DiagReq.byte(0) = 4;
+  DiagReq.byte(1) = 0x31;
+  DiagReq.byte(2) = 0x01;
+  DiagReq.byte(3) = 0x20;
+  DiagReq.byte(4) = 0x00;
+  DiagReq.byte(5) = 0x00;
+  DiagReq.byte(6) = 0x00;
+  DiagReq.byte(7) = 0x00;
+  output(DiagReq);
+}
+
+on key 's' //VIN Lock state
+{
+  DiagReq.byte(0) = 3;
+  DiagReq.byte(1) = 0x22;
+  DiagReq.byte(2) = 0x20;
+  DiagReq.byte(3) = 0x13;
+  output(DiagReq);
+}
+
+ResetSA ()
+{
+  flagTimerLock = 0;
+  flagsendSeed = 0;
+  flagsendKey = 0;
+  flagsendSeedandKey = 0;
+  count = 0;
+}
+
+on key '2'
+{
+  DiagReq.byte(0) = 0x02;
+  DiagReq.byte(1) = 0x10;
+  DiagReq.byte(2) = 0x02;
+  flagSecAccs = 0x01;
+  output(DiagReq);
+  setTimer(TimerB, 4000);
+}
+
+on key '1'
+{
+  DiagReq.byte(0) = 0x02;
+  DiagReq.byte(1) = 0x10;
+  DiagReq.byte(2) = 0x01;
+  output(DiagReq);
+  setTimer(TimerB,4000);
+}
+
+dword SeedKeyDownload(dword Seed){ 
+	
+	dword calc, tamponeH, tamponeL;
+
+    word appli_key=0x4D4D;
+	word r2=0x5345; //invertire forse
+	word seed_1,seed_2;
+ 	
+	seed_1 = Seed >> 16; //MSB
+	seed_2 = Seed; //LSB
+	
+	tamponeH=DblKey(seed_1,appli_key);
+	tamponeL=DblKey(seed_2,r2);
+	
+	calc = tamponeH << 16 | tamponeL ;
+	
+		
+	return(calc);
+}
+
+word DblKey (int Seme, int Chiave)
+{
+	dword tmp1;
+	dword tmp2;
+
+	tmp1=ACC_F1(Chiave)+ACC_F2(Seme);
+	tmp2=ACC_F1(Seme)+ACC_F2(tmp1);
+	
+	return tmp2;
+}
+
+dword ACC_F1 (int E1)
+{      
+	dword K,R,NI;
+    
+ 	K=E1/178;
+	R=E1 - (K*178);
+	NI = ((-63 * K) + (R * 170));
+	
+	if (NI < 0) {
+					NI = NI + 30323;
+				}
+	
+	return(NI);
+}
+
+dword ACC_F2(int E2)
+{
+	dword K;
+	dword R;
+	dword NY;
+	
+	K =   E2 / 177;
+	R = E2 - (K * 177);
+	NY = ((-K - K) + (R * 171));
+	if(NY < 0) {
+				NY = NY + 30269;
+				}
+	return (NY);
+}
+
+void PulisciDiagReq()
+{
+	DiagReq.byte(0)=0x00;
+	DiagReq.byte(1)=0x00;
+	DiagReq.byte(2)=0x00;
+	DiagReq.byte(3)=0x00;
+	DiagReq.byte(4)=0x00;
+	DiagReq.byte(5)=0x00;
+	DiagReq.byte(6)=0x00;
+	DiagReq.byte(7)=0x00;
+}
+
+

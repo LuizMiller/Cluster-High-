@@ -1,0 +1,471 @@
+/*@!Encoding:1252*/
+variables
+{
+  message DASM_INFO_3 DASM_INFO_3_msg;
+  message STATUS_DASM_DISPLAY STATUS_DASM_DISPLAY_msg;
+  message STATUS_DASM_INDICATION STATUS_DASM_INDICATION_msg;
+  
+  msTimer DASM_INFO_3_Timer;
+  msTimer STATUS_DASM_DISPLAY_Timer;
+  msTimer STATUS_DASM_INDICATION_Timer;
+  mstimer sleep;
+  
+  const   DASM_INFO_3_Cycle = 100;
+  const   STATUS_DASM_DISPLAY_Cycle = 1000;
+  const   STATUS_DASM_INDICATION_Cycle = 1000;
+}
+
+on timer DASM_INFO_3_Timer
+{
+  output(DASM_INFO_3_msg);
+  setTimer(DASM_INFO_3_Timer, DASM_INFO_3_Cycle);
+}
+
+on timer STATUS_DASM_DISPLAY_Timer
+{
+  output(STATUS_DASM_DISPLAY_msg);
+  setTimer(STATUS_DASM_DISPLAY_Timer, STATUS_DASM_DISPLAY_Cycle);
+}
+
+on timer STATUS_DASM_INDICATION_Timer
+{
+  output(STATUS_DASM_INDICATION_msg);
+  setTimer(STATUS_DASM_INDICATION_Timer, STATUS_DASM_INDICATION_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  
+  i = i+1;
+  if(i == 8)  
+    {
+       i=0; 
+       cancelTimer(DASM_INFO_3_Timer);
+       cancelTimer(STATUS_DASM_DISPLAY_Timer);
+       cancelTimer(STATUS_DASM_INDICATION_Timer);
+       cancelTimer(sleep);
+    }  
+  if((sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)||(sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) >= 4)
+      || sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE) == 1)
+    {
+      setTimer(DASM_INFO_3_Timer, DASM_INFO_3_Cycle);
+    }
+    
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+    {
+      setTimer(STATUS_DASM_DISPLAY_Timer, STATUS_DASM_DISPLAY_Cycle);
+    } 
+    
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+    {
+      setTimer(STATUS_DASM_INDICATION_Timer, STATUS_DASM_INDICATION_Cycle);
+    }
+  }
+  else
+  {
+    setTimerCyclic(sleep,1000);
+  }
+}
+
+on sysvar sysvar::RoadMap::WC_ON
+{
+  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+  {
+    cancelTimer(sleep);
+  }
+  else
+  {
+    setTimerCyclic(sleep,1000);
+  }
+}
+
+on sysvar sysvar::RoadMap::AEB_SystemSts
+{
+  DASM_INFO_3_msg.AEB_SystemSts = sysGetVariableInt(sysvar::RoadMap::AEB_SystemSts);
+  if(sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE) == 1)
+  {
+  output(DASM_INFO_3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DDD_Setting_Avail
+{
+  DASM_INFO_3_msg.DDD_Setting_Avail = sysGetVariableInt(sysvar::RoadMap::DDD_Setting_Avail);
+  if(sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE) == 1)
+  {
+  output(DASM_INFO_3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PEB_SystemSts
+{
+  DASM_INFO_3_msg.PEB_SystemSts = sysGetVariableInt(sysvar::RoadMap::PEB_SystemSts);
+  if(sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE) == 1)
+  {
+  output(DASM_INFO_3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACC_Set_Speed_Strike
+{
+  STATUS_DASM_DISPLAY_msg.ACC_Set_Speed_Strike = sysGetVariableInt(sysvar::RoadMap::ACC_Set_Speed_Strike);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DisplaySts_ACC
+{
+  STATUS_DASM_DISPLAY_msg.DisplaySts_ACC = sysGetVariableInt(sysvar::RoadMap::DisplaySts_ACC);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DisplaySts_OFF
+{
+  STATUS_DASM_DISPLAY_msg.DisplaySts_OFF = sysGetVariableInt(sysvar::RoadMap::DisplaySts_OFF);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DisplaySts_Veh
+{
+  STATUS_DASM_DISPLAY_msg.DisplaySts_Veh = sysGetVariableInt(sysvar::RoadMap::DisplaySts_Veh);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Lane_DisplaySts_Left
+{
+  STATUS_DASM_DISPLAY_msg.Lane_DisplaySts_Left = sysGetVariableInt(sysvar::RoadMap::Lane_DisplaySts_Left);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Lane_DisplaySts_Right
+{
+  STATUS_DASM_DISPLAY_msg.Lane_DisplaySts_Right = sysGetVariableInt(sysvar::RoadMap::Lane_DisplaySts_Right);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Set_Speed_KPH
+{
+  STATUS_DASM_DISPLAY_msg.Set_Speed_KPH = sysGetVariableInt(sysvar::RoadMap::Set_Speed_KPH);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Set_Speed_MPH
+{
+  STATUS_DASM_DISPLAY_msg.Set_Speed_MPH = sysGetVariableInt(sysvar::RoadMap::Set_Speed_MPH);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SVI_Request
+{
+  STATUS_DASM_DISPLAY_msg.SVI_Request = sysGetVariableInt(sysvar::RoadMap::SVI_Request);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_DISPLAY_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACC_Blind
+{
+  STATUS_DASM_INDICATION_msg.ACC_Blind = sysGetVariableInt(sysvar::RoadMap::ACC_Blind);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::LKA_Status
+{
+  STATUS_DASM_INDICATION_msg.LKA_Status = sysGetVariableInt(sysvar::RoadMap::LKA_Status);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACC_DispPopupSts
+{
+  STATUS_DASM_INDICATION_msg.ACC_DispPopupSts = sysGetVariableInt(sysvar::RoadMap::ACC_DispPopupSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACC_FailSts
+{
+  STATUS_DASM_INDICATION_msg.ACC_FailSts = sysGetVariableInt(sysvar::RoadMap::ACC_FailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACC_Limit_Fail
+{
+  STATUS_DASM_INDICATION_msg.ACC_Limit_Fail = sysGetVariableInt(sysvar::RoadMap::ACC_Limit_Fail);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACC_Limited
+{
+  STATUS_DASM_INDICATION_msg.ACC_Limited = sysGetVariableInt(sysvar::RoadMap::ACC_Limited);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AEB_Blind
+{
+  STATUS_DASM_INDICATION_msg.AEB_Blind = sysGetVariableInt(sysvar::RoadMap::AEB_Blind);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AEB_DispPopupSts
+{
+  STATUS_DASM_INDICATION_msg.AEB_DispPopupSts = sysGetVariableInt(sysvar::RoadMap::AEB_DispPopupSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AEB_FailSts
+{
+  STATUS_DASM_INDICATION_msg.AEB_FailSts = sysGetVariableInt(sysvar::RoadMap::AEB_FailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AEB_Limit_Fail
+{
+  STATUS_DASM_INDICATION_msg.AEB_Limit_Fail = sysGetVariableInt(sysvar::RoadMap::AEB_Limit_Fail);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AEB_Limited
+{
+  STATUS_DASM_INDICATION_msg.AEB_Limited = sysGetVariableInt(sysvar::RoadMap::AEB_Limited);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DDD_DispPopupSts
+{
+  STATUS_DASM_INDICATION_msg.DDD_DispPopupSts = sysGetVariableInt(sysvar::RoadMap::DDD_DispPopupSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DDD_FailSts
+{
+  STATUS_DASM_INDICATION_msg.DDD_FailSts = sysGetVariableInt(sysvar::RoadMap::DDD_FailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::FCW_Setting_Avail
+{
+  STATUS_DASM_INDICATION_msg.FCW_Setting_Avail = sysGetVariableInt(sysvar::RoadMap::FCW_Setting_Avail);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Lane_DispPopupSts
+{
+  DASM_INFO_3_msg.Lane_DispPopupSts = sysGetVariableInt(sysvar::RoadMap::Lane_DispPopupSts);
+  if(sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE) == 1)
+  {
+  output(DASM_INFO_3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::LKA_Blind
+{
+  STATUS_DASM_INDICATION_msg.LKA_Blind = sysGetVariableInt(sysvar::RoadMap::LKA_Blind);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::LKA_FailSts
+{
+  STATUS_DASM_INDICATION_msg.LKA_FailSts = sysGetVariableInt(sysvar::RoadMap::LKA_FailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NCC_FailSts
+{
+  STATUS_DASM_INDICATION_msg.NCC_FailSts = sysGetVariableInt(sysvar::RoadMap::NCC_FailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PEB_FailSts
+{
+  STATUS_DASM_INDICATION_msg.PEB_FailSts = sysGetVariableInt(sysvar::RoadMap::PEB_FailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PEB_Setting_Avail
+{
+  STATUS_DASM_INDICATION_msg.PEB_Setting_Avail = sysGetVariableInt(sysvar::RoadMap::PEB_Setting_Avail);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE) == 1)
+  {
+  output(STATUS_DASM_INDICATION_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DASM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::DASM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE,1);  
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE,0);  
+  }	
+}
+
+on sysvar sysvar::RoadMap::DASM_INFO_3_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_ACTIVE))
+  {
+    cancelTimer(DASM_INFO_3_Timer);
+  }
+  else
+  {
+    output(DASM_INFO_3_msg);
+    setTimer(DASM_INFO_3_Timer, DASM_INFO_3_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_ACTIVE))
+  {
+    cancelTimer(STATUS_DASM_DISPLAY_Timer);
+  }
+  else
+  {
+    output(STATUS_DASM_DISPLAY_msg);
+    setTimer(STATUS_DASM_DISPLAY_Timer, STATUS_DASM_DISPLAY_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_ACTIVE))
+  {
+    cancelTimer(STATUS_DASM_INDICATION_Timer);
+  }
+  else
+  {
+    output(STATUS_DASM_INDICATION_msg);
+    setTimer(STATUS_DASM_INDICATION_Timer, STATUS_DASM_INDICATION_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::DASM_INFO_3_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_DLC) == 8)
+  {
+    DASM_INFO_3_msg.dlc = DASM_INFO_3.dlc;
+  }
+  else
+  {
+    DASM_INFO_3_msg.dlc = sysGetVariableInt(sysvar::RoadMap::DASM_INFO_3_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_DASM_DISPLAY_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_DLC) == 8)
+  {
+    STATUS_DASM_DISPLAY_msg.dlc = STATUS_DASM_DISPLAY.dlc;
+  }
+  else
+  {
+    STATUS_DASM_DISPLAY_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_DISPLAY_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_DASM_INDICATION_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_DLC) == 8)
+  {
+    STATUS_DASM_INDICATION_msg.dlc = STATUS_DASM_INDICATION.dlc;
+  }
+  else
+  {
+    STATUS_DASM_INDICATION_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_DASM_INDICATION_DLC);
+  }
+}

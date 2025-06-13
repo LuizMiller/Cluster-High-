@@ -1,0 +1,1260 @@
+/*@!Encoding:1252*/
+variables
+{
+  message ENGINE1 ENGINE1_msg;
+  message ENGINE2 ENGINE2_msg;
+  message ENGINE3 ENGINE3_msg;  
+  message ENGINE4 ENGINE4_msg;
+  message ENGINE6 ENGINE6_msg;
+  message ENGINE7 ENGINE7_msg;
+  message ENGINE9 ENGINE9_msg;
+  message ENGINE10 ENGINE10_msg;
+  message ENGINE11 ENGINE11_msg;
+  message ENGINE12 ENGINE12_msg;
+  message ENGINE13 ENGINE13_msg;
+  message ENGINE15 ENGINE15_msg;
+  message STATUS_ECM STATUS_ECM_msg;
+  message MOT_TRANSM3 MOT_TRANSM3_msg;
+  
+  msTimer ENGINE1_Timer;
+  msTimer ENGINE2_Timer;
+  msTimer ENGINE3_Timer;
+  msTimer ENGINE4_Timer;
+  msTimer ENGINE6_Timer;
+  msTimer ENGINE7_Timer;
+  msTimer ENGINE9_Timer;
+  msTimer ENGINE10_Timer;
+  msTimer ENGINE11_Timer;
+  msTimer ENGINE12_Timer;
+  msTimer ENGINE13_Timer;
+  msTimer ENGINE15_Timer;
+  msTimer STATUS_ECM_Timer;
+  msTimer MOT_TRANSM3_Timer;
+  mstimer sleep;
+  
+  const   ENGINE1_Cycle = 10;
+  const   ENGINE2_Cycle = 100;  
+  const   ENGINE3_Cycle = 10;
+  const   ENGINE4_Cycle = 10;
+  const   ENGINE6_Cycle = 50;
+  const   ENGINE7_Cycle = 50;
+  const   ENGINE9_Cycle = 1000;
+  const   ENGINE10_Cycle = 1000;
+  const   ENGINE11_Cycle = 500;
+  const   ENGINE12_Cycle = 250;
+  const   ENGINE13_Cycle = 100;
+  const   ENGINE15_Cycle = 100;
+  const   STATUS_ECM_Cycle = 1000;
+  const   MOT_TRANSM3_Cycle = 20;
+  byte    OilPressureSts;
+  byte    EngineWaterTempWaning;
+  int     keystatus;
+}
+
+on start
+{
+  ENGINE1_msg.AlternatorFail = 1;
+//  STATUS_ECM_msg.OilPressureSts = 1;
+  ENGINE7_msg.DPFLoad = 127;
+  ENGINE15_msg.TerrainModeStat_ECM = 15;
+//  ENGINE9_msg.ReagentWarningConsReq = 15;
+//  ENGINE9_msg.ReagentWarningLevelReq = 15;
+//  ENGINE9_msg.ReagentWarningQualityReq = 15;
+//  MOT_TRANSM3_msg.ESS_ENG_ST = 15;
+//  STATUS_ECM_msg.EMSFailSts = 2;
+//  ENGINE7_msg.EngineOilTemp =7;
+  //ENGINE15_msg.TerrainModeStat_ECM = @RoadMap::TerrainModeStat_ECM;
+  ENGINE9_msg.ReagentWarningConsReq = @RoadMap::ReagentWarningConsReq;
+  ENGINE9_msg.ReagentWarningLevelReq = @RoadMap::ReagentWarningLevelReq;
+  ENGINE9_msg.ReagentWarningQualityReq = @RoadMap::ReagentWarningQualityReq;
+  MOT_TRANSM3_msg.ESS_ENG_ST = @RoadMap::ESS_ENG_ST;
+  STATUS_ECM_msg.EMSFailSts = @RoadMap::EMSFailSts;
+  ENGINE7_msg.EngineOilTemp = @RoadMap::EngineOilTemp;
+  //ENGINE15_msg.TerrainModeStat_ECM = @RoadMap::TerrainModeStat_ECM;
+//  ENGINE10_msg.SpeedLimitSts = 2;
+//  ENGINE1_msg.EngineSts = 3;
+  ENGINE12_msg.ReagentRemainDist = 4095;
+  //ENGINE2_msg.AFSts = 8;
+  ENGINE12_msg.ReagentLevel = 127;
+}
+
+on timer ENGINE1_Timer
+{
+  output(ENGINE1_msg);
+  setTimer(ENGINE1_Timer, ENGINE1_Cycle);
+}
+
+on timer ENGINE2_Timer
+{
+  ENGINE1_msg.EngineSpeed = sysGetVariableInt(sysvar::RoadMap::EngineSpeed);
+  output(ENGINE2_msg);
+  setTimer(ENGINE2_Timer, ENGINE2_Cycle);
+}
+
+on timer ENGINE3_Timer
+{
+  ENGINE6_msg.EngineWaterTemp = sysGetVariableInt(sysvar::RoadMap::EngineWaterTemp)+40;
+  
+  output(ENGINE3_msg);
+  setTimer(ENGINE3_Timer, ENGINE3_Cycle);
+}
+
+on timer ENGINE4_Timer
+{
+  output(ENGINE4_msg);
+  setTimer(ENGINE4_Timer, ENGINE4_Cycle);
+}
+
+on timer ENGINE6_Timer
+{
+  output(ENGINE6_msg);
+  setTimer(ENGINE6_Timer, ENGINE6_Cycle);
+}
+
+on timer ENGINE7_Timer
+{
+  output(ENGINE7_msg);
+  setTimer(ENGINE7_Timer, ENGINE7_Cycle);
+}
+
+on timer ENGINE9_Timer
+{
+  output(ENGINE9_msg);
+  setTimer(ENGINE9_Timer, ENGINE9_Cycle);
+}
+
+on timer ENGINE10_Timer
+{
+  output(ENGINE10_msg);
+  setTimer(ENGINE10_Timer, ENGINE10_Cycle);
+}
+
+on timer ENGINE11_Timer
+{
+  output(ENGINE11_msg);
+  setTimer(ENGINE11_Timer, ENGINE11_Cycle);
+}
+
+on timer ENGINE12_Timer
+{
+  output(ENGINE12_msg);
+  setTimer(ENGINE12_Timer, ENGINE12_Cycle);
+}
+
+on timer ENGINE13_Timer
+{
+  output(ENGINE13_msg);
+  setTimer(ENGINE13_Timer, ENGINE13_Cycle);
+}
+
+on timer ENGINE15_Timer
+{
+ output(ENGINE15_msg);
+ setTimer(ENGINE15_Timer, ENGINE15_Cycle);
+}
+
+on timer STATUS_ECM_Timer
+{
+  output(STATUS_ECM_msg);
+  setTimer(STATUS_ECM_Timer, STATUS_ECM_Cycle);
+}
+
+on timer MOT_TRANSM3_Timer
+{
+  output(MOT_TRANSM3_msg);
+  setTimer(MOT_TRANSM3_Timer, MOT_TRANSM3_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+       i=0; 
+       cancelTimer(ENGINE1_Timer);
+       cancelTimer(ENGINE2_Timer);
+       cancelTimer(ENGINE3_Timer);
+       cancelTimer(ENGINE4_Timer);
+       cancelTimer(ENGINE6_Timer);
+       cancelTimer(ENGINE7_Timer);
+       cancelTimer(ENGINE9_Timer);
+       cancelTimer(ENGINE10_Timer);
+       cancelTimer(ENGINE11_Timer);
+       cancelTimer(ENGINE12_Timer);
+       cancelTimer(ENGINE13_Timer);
+       cancelTimer(ENGINE15_Timer);
+       cancelTimer(STATUS_ECM_Timer);
+       cancelTimer(MOT_TRANSM3_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE) == 1)
+    {
+      setTimer(ENGINE1_Timer, ENGINE1_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE) == 1)
+    {
+      setTimer(ENGINE2_Timer, ENGINE2_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE3_ACTIVE) == 1)
+    {      
+      setTimer(ENGINE3_Timer, ENGINE3_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE4_ACTIVE) == 1)
+    {    
+      setTimer(ENGINE4_Timer, ENGINE4_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE) == 1)
+    {
+      setTimer(ENGINE6_Timer, ENGINE6_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+    {      
+      setTimer(ENGINE7_Timer, ENGINE7_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+    {    
+      setTimer(ENGINE9_Timer, ENGINE9_Cycle);
+    }    
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+    {    
+      setTimer(ENGINE10_Timer, ENGINE10_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE) == 1)
+    {    
+      setTimer(ENGINE11_Timer, ENGINE11_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE12_ACTIVE) == 1)
+    {    
+      setTimer(ENGINE12_Timer, ENGINE12_Cycle);
+    } 
+    if(sysGetVariableInt(sysvar::RoadMap::ENGINE13_ACTIVE) == 1)
+    {    
+      setTimer(ENGINE13_Timer, ENGINE13_Cycle);
+    }
+   if(sysGetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE) == 1)
+   {    
+     setTimer(ENGINE15_Timer, ENGINE15_Cycle);
+   }
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+    {    
+      setTimer(STATUS_ECM_Timer, STATUS_ECM_Cycle);
+    }        
+    if(sysGetVariableInt(sysvar::RoadMap::MOT_TRANSM3_ACTIVE) == 1)
+    {    
+      setTimer(MOT_TRANSM3_Timer, MOT_TRANSM3_Cycle);
+    }                  
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+on sysvar sysvar::RoadMap::ECM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::ECM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE3_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE4_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE12_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE13_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::MOT_TRANSM3_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE3_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE4_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE12_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE13_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::MOT_TRANSM3_ACTIVE,0);
+  }	
+}
+
+on sysvar sysvar::RoadMap::STATUS_ECM_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE))
+  {
+    cancelTimer(STATUS_ECM_Timer);
+  }
+  else
+  {
+    output(STATUS_ECM_msg);
+    setTimer(STATUS_ECM_Timer, STATUS_ECM_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE1_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE))
+  {
+    cancelTimer(ENGINE1_Timer);
+  }
+  else
+  {
+    setTimer(ENGINE1_Timer, ENGINE1_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE2_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE))
+  {
+    cancelTimer(ENGINE2_Timer);
+  }
+  else
+  {
+    setTimer(ENGINE2_Timer, ENGINE2_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE3_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE3_ACTIVE))
+  {
+    cancelTimer(ENGINE3_Timer);
+  }
+  else
+  {
+    setTimer(ENGINE3_Timer, ENGINE3_Cycle);
+  }
+}
+
+//on sysvar sysvar::RoadMap::ENGINE4_ACTIVE
+//{
+//  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE4_ACTIVE))
+//  {
+//    cancelTimer(ENGINE4_Timer);
+//  }
+//  else
+//  {
+//    setTimer(ENGINE4_Timer, ENGINE4_Cycle);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::ENGINE6_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE))
+  {
+    cancelTimer(ENGINE6_Timer);
+  }
+  else
+  {
+    setTimer(ENGINE6_Timer, ENGINE6_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE7_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE))
+  {
+    cancelTimer(ENGINE7_Timer);
+  }
+  else
+  {
+    setTimer(ENGINE7_Timer, ENGINE7_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE9_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE))
+  {
+    cancelTimer(ENGINE9_Timer);
+  }
+  else
+  {
+    output(ENGINE9_msg);
+    setTimer(ENGINE9_Timer, ENGINE9_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE10_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE))
+  {
+    cancelTimer(ENGINE10_Timer);
+  }
+  else
+  {
+    output(ENGINE10_msg);
+    setTimer(ENGINE10_Timer, ENGINE10_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE11_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE))
+  {
+    cancelTimer(ENGINE11_Timer);
+  }
+  else
+  {
+    output(ENGINE11_msg);
+    setTimer(ENGINE11_Timer, ENGINE11_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE12_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE12_ACTIVE))
+  {
+    cancelTimer(ENGINE12_Timer);
+  }
+  else
+  {
+    output(ENGINE12_msg);
+    setTimer(ENGINE12_Timer, ENGINE12_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE13_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE13_ACTIVE))
+  {
+    cancelTimer(ENGINE13_Timer);
+  }
+  else
+  {
+    output(ENGINE13_msg);
+    setTimer(ENGINE13_Timer, ENGINE13_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE15_ACTIVE
+{
+ if(0 == sysGetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE))
+ {
+   cancelTimer(ENGINE15_Timer);
+ }
+ else
+ {
+   output(ENGINE15_msg);
+   setTimer(ENGINE15_Timer, ENGINE15_Cycle);
+ }
+}
+
+on sysvar sysvar::RoadMap::MOT_TRANSM3_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::MOT_TRANSM3_ACTIVE))
+  {
+    cancelTimer(MOT_TRANSM3_Timer);
+  }
+  else
+  {
+   output(MOT_TRANSM3_msg);
+   setTimer(MOT_TRANSM3_Timer, MOT_TRANSM3_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineSpeedSNA
+{
+  int actualrpm;
+  if(sysGetVariableInt(sysvar::RoadMap::EngineSpeedSNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::EngineSpeed,actualrpm);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::EngineSpeedSNA) == 1)
+  {
+    actualrpm = sysGetVariableInt(sysvar::RoadMap::EngineSpeed);
+    sysSetVariableInt(sysvar::RoadMap::EngineSpeed,16383);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineWaterTempSNA
+{
+  int actualtemp;
+  if(sysGetVariableInt(sysvar::RoadMap::EngineWaterTempSNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::EngineWaterTemp,actualtemp);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::EngineWaterTempSNA) == 1)
+  {
+    actualtemp = sysGetVariableInt(sysvar::RoadMap::EngineWaterTemp);
+    sysSetVariableInt(sysvar::RoadMap::EngineWaterTemp,215);
+  }
+}
+
+on sysvar sysvar::RoadMap::FuelConsumptionSNA
+{
+  int actualconsump;
+  if(sysGetVariableInt(sysvar::RoadMap::FuelConsumptionSNA) == 0)
+  {
+    sysSetVariableFloat(sysvar::RoadMap::FuelConsumption_GAG,actualconsump);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::FuelConsumptionSNA) == 1)
+  {
+    actualconsump = sysGetVariableFloat(sysvar::RoadMap::FuelConsumption_GAG);
+    sysSetVariableFloat(sysvar::RoadMap::FuelConsumption_GAG,65535*0.0022);
+  }
+}
+
+on sysvar sysvar::RoadMap::AlternatorFail
+{
+  ENGINE1_msg.AlternatorFail = sysGetVariableInt(sysvar::RoadMap::AlternatorFail);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE) == 1)
+  {
+    output(ENGINE1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineSpeed
+{
+  ENGINE1_msg.EngineSpeed = sysGetVariableInt(sysvar::RoadMap::EngineSpeed);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE) == 1)
+  {
+  output(ENGINE1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineSpeedFailSts
+{
+  ENGINE1_msg.EngineSpeedFailSts = sysGetVariableInt(sysvar::RoadMap::EngineSpeedFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE) == 1)
+  {
+  output(ENGINE1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineSts
+{
+  ENGINE1_msg.EngineSts = sysGetVariableInt(sysvar::RoadMap::EngineSts);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE) == 1)
+  {
+  output(ENGINE1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ReverseGearSts
+{
+  ENGINE1_msg.ReverseGearSts = sysGetVariableInt(sysvar::RoadMap::ReverseGearSts);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_ACTIVE) == 1)
+  {
+  output(ENGINE1_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::AF_FailSts
+//{
+//  ENGINE2_msg.AF_FailSts = sysGetVariableInt(sysvar::RoadMap::AF_FailSts);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE) == 1)
+//  {
+//  output(ENGINE2_msg);
+//  }
+//}
+//
+//on sysvar sysvar::RoadMap::AFSts
+//{
+//  ENGINE2_msg.AFSts = sysGetVariableFloat(sysvar::RoadMap::AFSts);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE) == 1)
+//  {
+//  output(ENGINE2_msg);
+//  }
+//}
+
+//on sysvar sysvar::RoadMap::EconomyPercentage
+//{
+//  ENGINE2_msg.EconomyPercentage = sysGetVariableInt(sysvar::RoadMap::EconomyPercentage);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE2_ACTIVE) == 1)
+//  {
+//  output(ENGINE2_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::FpsActuated
+{
+  ENGINE3_msg.FpsActuated = sysGetVariableInt(sysvar::RoadMap::FpsActuated);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE3_ACTIVE) == 1)
+  {
+  output(ENGINE3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineWaterTemp
+{
+  ENGINE6_msg.EngineWaterTemp = sysGetVariableInt(sysvar::RoadMap::EngineWaterTemp);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE) == 1)
+  {
+  output(ENGINE6_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineWaterTempFailSts
+{
+  ENGINE6_msg.EngineWaterTempFailSts = sysGetVariableInt(sysvar::RoadMap::EngineWaterTempFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE) == 1)
+  {
+  output(ENGINE6_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::FuelConsumption_GAG
+{
+  if(sysGetVariableFloat(sysvar::RoadMap::FuelConsumption_GAG) == 144)
+  {
+    ENGINE6_msg.FuelConsumption_GAG = 65535;
+  }  
+  else
+  {
+    ENGINE6_msg.FuelConsumption_GAG = sysGetVariableFloat(sysvar::RoadMap::FuelConsumption_GAG)/0.0022;
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE) == 1)
+  {
+  output(ENGINE6_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::GearShiftIndication
+{
+  ENGINE6_msg.GearShiftIndication = sysGetVariableInt(sysvar::RoadMap::GearShiftIndication);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE6_ACTIVE) == 1)
+  {
+  output(ENGINE6_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ActualGearGSI
+{
+  ENGINE7_msg.ActualGearGSI = sysGetVariableInt(sysvar::RoadMap::ActualGearGSI);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+  {
+  output(ENGINE7_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineOilTemp
+{
+  ENGINE7_msg.EngineOilTemp = sysGetVariableInt(sysvar::RoadMap::EngineOilTemp);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+  {
+  output(ENGINE7_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SuggestedGearGSI
+{
+  ENGINE7_msg.SuggestedGearGSI = sysGetVariableInt(sysvar::RoadMap::SuggestedGearGSI);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+  {
+  output(ENGINE7_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DPF_MILReq
+{
+  ENGINE7_msg.DPF_MILReq = sysGetVariableInt(sysvar::RoadMap::DPF_MILReq);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+  {
+  output(ENGINE7_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::DPFInterruptSts
+//{
+//  ENGINE7_msg.DPFInterruptSts = sysGetVariableInt(sysvar::RoadMap::DPFInterruptSts);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+//  {
+//  output(ENGINE7_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::DPFLoad
+{
+  ENGINE7_msg.DPFLoad = sysGetVariableInt(sysvar::RoadMap::DPFLoad);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_ACTIVE) == 1)
+  {
+  output(ENGINE7_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DPFLoadSNA
+{
+  int actualdpf;
+  if(sysGetVariableInt(sysvar::RoadMap::DPFLoadSNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::DPFLoad,actualdpf);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::DPFLoadSNA) == 1)
+  {
+    actualdpf = sysGetVariableInt(sysvar::RoadMap::DPFLoad);
+    sysSetVariableInt(sysvar::RoadMap::DPFLoad,127);
+  }
+}
+
+on sysvar sysvar::RoadMap::ECM_WARN
+{
+  ENGINE9_msg.ECM_WARN = sysGetVariableInt(sysvar::RoadMap::ECM_WARN); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ReagentWarningConsReq
+{
+  ENGINE9_msg.ReagentWarningConsReq = sysGetVariableInt(sysvar::RoadMap::ReagentWarningConsReq); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ReagentWarningLevelReq
+{
+  ENGINE9_msg.ReagentWarningLevelReq = sysGetVariableInt(sysvar::RoadMap::ReagentWarningLevelReq); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ReagentWarningQualityReq
+{
+  ENGINE9_msg.ReagentWarningQualityReq = sysGetVariableInt(sysvar::RoadMap::ReagentWarningQualityReq); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ReagentLevel
+{
+  ENGINE12_msg.ReagentLevel = sysGetVariableInt(sysvar::RoadMap::ReagentLevel); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE12_ACTIVE) == 1)
+  {
+  output(ENGINE12_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpStDispstat
+{
+  ENGINE9_msg.SpStDispstat = sysGetVariableInt(sysvar::RoadMap::SpStDispstat); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpStInhIndSts
+{
+  ENGINE9_msg.SpStInhIndSts = sysGetVariableInt(sysvar::RoadMap::SpStInhIndSts); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpStIndRq
+{
+  ENGINE9_msg.SpStIndRq = sysGetVariableInt(sysvar::RoadMap::SpStIndRq);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpStWarnStat
+{
+  ENGINE9_msg.SpStWarnStat = sysGetVariableInt(sysvar::RoadMap::SpStWarnStat); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::AfterRunCoolantPumpFailSts
+//{
+//  ENGINE10_msg.AfterRunCoolantPumpFailSts = sysGetVariableInt(sysvar::RoadMap::AfterRunCoolantPumpFailSts);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+//  {
+//    output(ENGINE10_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::CC_SetSpdDspl_KPH
+{
+  ENGINE10_msg.CC_SetSpdDspl_KPH = sysGetVariableFloat(sysvar::RoadMap::CC_SetSpdDspl_KPH)/0.0625;
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+  output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::CC_SetSpdDspl_MPH
+{
+  ENGINE10_msg.CC_SetSpdDspl_MPH = sysGetVariableInt(sysvar::RoadMap::CC_SetSpdDspl_MPH);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+  output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::CruiseControlLampSts
+{
+  ENGINE10_msg.CruiseControlLampSts = sysGetVariableInt(sysvar::RoadMap::CruiseControlLampSts);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+  output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::CruiseControlSts
+{
+ ENGINE10_msg.CruiseControlSts = sysGetVariableInt(sysvar::RoadMap::CruiseControlSts);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+  output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Override
+{
+  ENGINE10_msg.Override = sysGetVariableInt(sysvar::RoadMap::Override);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+  output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpeedLimitSts
+{
+  ENGINE10_msg.SpeedLimitSts = sysGetVariableInt(sysvar::RoadMap::SpeedLimitSts); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+  output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ReagentRemainDist
+{
+  ENGINE12_msg.ReagentRemainDist = sysGetVariableInt(sysvar::RoadMap::ReagentRemainDist);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE12_ACTIVE) == 1)
+  {
+  output(ENGINE12_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::HighPressureFuelSystemFailure
+//{
+//  ENGINE13_msg.HighPressureFuelSystemFailure = sysGetVariableInt(sysvar::RoadMap::HighPressureFuelSystemFailure);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE13_ACTIVE) == 1)
+//  {
+//  output(ENGINE13_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::OIL_PRESS //added V0011
+{
+  ENGINE13_msg.OIL_PRESS = sysGetVariableInt(sysvar::RoadMap::OIL_PRESS)/4;
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE13_ACTIVE) == 1)
+  {
+  output(ENGINE13_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Selector_SystemFailSts
+{
+ ENGINE15_msg.Selector_SystemFailSts = sysGetVariableInt(sysvar::RoadMap::Selector_SystemFailSts);
+ if(sysGetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE) == 1)
+ {
+ output(ENGINE15_msg);
+ }
+}
+//
+//on sysvar sysvar::RoadMap::SelectorRequest
+//{
+//  ENGINE15_msg.SelectorRequest = sysGetVariableInt(sysvar::RoadMap::SelectorRequest);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE) == 1)
+//  {
+//  output(ENGINE15_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::Terrain_HMI_Rq_ECM
+{
+ ENGINE15_msg.Terrain_HMI_Rq_ECM = sysGetVariableInt(sysvar::RoadMap::Terrain_HMI_Rq_ECM);
+ if(sysGetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE) == 1)
+ {
+ output(ENGINE15_msg);
+ }
+}
+
+on sysvar sysvar::RoadMap::TerrainModeStat_ECM
+{
+ ENGINE15_msg.TerrainModeStat_ECM = sysGetVariableInt(sysvar::RoadMap::TerrainModeStat_ECM);
+ if(sysGetVariableInt(sysvar::RoadMap::ENGINE15_ACTIVE) == 1)
+ {
+ output(ENGINE15_msg);
+ }
+}
+
+on sysvar sysvar::RoadMap::ESS_ENG_ST
+{ 
+  MOT_TRANSM3_msg.ESS_ENG_ST = sysGetVariableInt(sysvar::RoadMap::ESS_ENG_ST);
+  if(sysGetVariableInt(sysvar::RoadMap::MOT_TRANSM3_ACTIVE) == 1)
+  {
+    output(MOT_TRANSM3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DPFSts
+{
+  STATUS_ECM_msg.DPFSts = sysGetVariableInt(sysvar::RoadMap::DPFSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EMSFailSts
+{
+  STATUS_ECM_msg.EMSFailSts = sysGetVariableInt(sysvar::RoadMap::EMSFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineWaterTempWarningLightSts
+{
+  STATUS_ECM_msg.EngineWaterTempWarningLightSts = sysGetVariableInt(sysvar::RoadMap::EngineWaterTempWarningLightSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::FuelWaterPresentFailSts
+{
+  STATUS_ECM_msg.FuelWaterPresentFailSts = sysGetVariableInt(sysvar::RoadMap::FuelWaterPresentFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::FuelWaterPresentSts
+{
+  STATUS_ECM_msg.FuelWaterPresentSts = sysGetVariableInt(sysvar::RoadMap::FuelWaterPresentSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::GlowPlugFailSts
+{
+  STATUS_ECM_msg.GlowPlugFailSts = sysGetVariableInt(sysvar::RoadMap::GlowPlugFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::GlowPlugLampSts
+{
+  STATUS_ECM_msg.GlowPlugLampSts = sysGetVariableInt(sysvar::RoadMap::GlowPlugLampSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::OilLifeSts
+{
+  STATUS_ECM_msg.OilLifeSts = sysGetVariableInt(sysvar::RoadMap::OilLifeSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::OilPressureFailSts
+{
+  STATUS_ECM_msg.OilPressureFailSts = sysGetVariableInt(sysvar::RoadMap::OilPressureFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::OilPressureSts
+{
+  STATUS_ECM_msg.OilPressureSts = sysGetVariableInt(sysvar::RoadMap::OilPressureSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_ACTIVE) == 1)
+  {
+  output(STATUS_ECM_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpStChmRq
+{
+  ENGINE9_msg.SpStChmRq = sysGetVariableInt(sysvar::RoadMap::SpStChmRq); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SpStSwStat
+{
+  ENGINE9_msg.SpStSwStat = sysGetVariableInt(sysvar::RoadMap::SpStSwStat); 
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_ACTIVE) == 1)
+  {
+  output(ENGINE9_msg);
+  }
+}
+//
+//on sysvar sysvar::RoadMap::EngineTorque
+//{
+//  ENGINE4_msg.EngineTorque = sysGetVariableInt(sysvar::RoadMap::EngineTorque);
+//  if(sysGetVariableInt(sysvar::RoadMap::ENGINE4_ACTIVE) == 1)
+//  {
+//  output(ENGINE4_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::OIL_TEMP_IND_RQ
+{
+  ENGINE10_msg.OIL_TEMP_IND_RQ = sysGetVariableInt(sysvar::RoadMap::OIL_TEMP_IND_RQ);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_ACTIVE) == 1)
+  {
+    output(ENGINE10_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineOilTemperature
+{
+  ENGINE11_msg.EngineOilTemperature = sysGetVariableInt(sysvar::RoadMap::EngineOilTemperature)+40;
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE) == 1)
+  {
+    output(ENGINE11_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineOilLevel //added V0011
+{
+  ENGINE11_msg.EngineOilLevel = sysGetVariableInt(sysvar::RoadMap::EngineOilLevel);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE) == 1)
+  {
+    output(ENGINE11_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineOilMin //added V0011
+{
+  ENGINE11_msg.EngineOilMin = sysGetVariableInt(sysvar::RoadMap::EngineOilMin);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE) == 1)
+  {
+    output(ENGINE11_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EngineOilOverfill //added V0011
+{
+  ENGINE11_msg.EngineOilOverfill = sysGetVariableInt(sysvar::RoadMap::EngineOilOverfill);
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE11_ACTIVE) == 1)
+  {
+    output(ENGINE11_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE1_DLC) == 8)
+  {
+    ENGINE1_msg.dlc = ENGINE1.dlc;
+  }
+  else
+  {
+    ENGINE1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE1_DLC);
+  }
+}
+on sysvar sysvar::RoadMap::ENGINE2_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE2_DLC) == 8)
+  {
+    ENGINE2_msg.dlc = ENGINE2.dlc;
+  }
+  else
+  {
+    ENGINE2_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE2_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE3_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE3_DLC) == 8)
+  {
+    ENGINE3_msg.dlc = ENGINE3.dlc;
+  }
+  else
+  {
+    ENGINE3_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE3_DLC);
+  }
+}
+
+//on sysvar sysvar::RoadMap::ENGINE4_DLC
+//{
+// if(sysGetVariableInt(sysvar::RoadMap::ENGINE4_DLC) == 8)
+//  {
+//    ENGINE4_msg.dlc = ENGINE4.dlc;
+//  }
+//  else
+//  {
+//    ENGINE4_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE4_DLC);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::ENGINE6_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE6_DLC) == 8)
+  {
+    ENGINE6_msg.dlc = ENGINE6.dlc;
+  }
+  else
+  {
+    ENGINE6_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE6_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE7_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE7_DLC) == 8)
+  {
+    ENGINE7_msg.dlc = ENGINE7.dlc;
+  }
+  else
+  {
+    ENGINE7_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE7_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE9_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE9_DLC) == 8)
+  {
+    ENGINE9_msg.dlc = ENGINE9.dlc;
+  }
+  else
+  {
+    ENGINE9_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE9_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE10_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE10_DLC) == 8)
+  {
+    ENGINE10_msg.dlc = ENGINE10.dlc;
+  }
+  else
+  {
+    ENGINE10_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE10_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE11_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE11_DLC) == 8)
+  {
+    ENGINE11_msg.dlc = ENGINE11.dlc;
+  }
+  else
+  {
+    ENGINE11_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE11_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE12_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE12_DLC) == 8)
+  {
+    ENGINE12_msg.dlc = ENGINE12.dlc;
+  }
+  else
+  {
+    ENGINE12_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE12_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE13_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ENGINE13_DLC) == 8)
+  {
+    ENGINE13_msg.dlc = ENGINE13.dlc;
+  }
+  else
+  {
+    ENGINE13_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE13_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::ENGINE15_DLC
+{
+ if(sysGetVariableInt(sysvar::RoadMap::ENGINE15_DLC) == 8)
+ {
+   ENGINE15_msg.dlc = ENGINE15.dlc;
+ }
+ else
+ {
+   ENGINE15_msg.dlc = sysGetVariableInt(sysvar::RoadMap::ENGINE15_DLC);
+ }
+}
+
+on sysvar sysvar::RoadMap::STATUS_ECM_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_DLC) == 8)
+  {
+    STATUS_ECM_msg.dlc = STATUS_ECM.dlc;
+  }
+  else
+  {
+    STATUS_ECM_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_ECM_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::MOT_TRANSM3_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::MOT_TRANSM3_DLC) == 8)
+  {
+    MOT_TRANSM3_msg.dlc = MOT_TRANSM3.dlc;
+  }
+  else
+  {
+    MOT_TRANSM3_msg.dlc = sysGetVariableInt(sysvar::RoadMap::MOT_TRANSM3_DLC);
+  }
+}

@@ -1,0 +1,961 @@
+/*@!Encoding:1252*/
+variables
+{
+  
+//VARIÁVEIS PARA O TESTE DE 1H (LP7Z072 - 11.2.1.3)
+  float IPC_VEHICLE_SETUP_msg_received = 0;
+  float IPC_VEHICLE_SETUP_cont = 0;
+  float IPC_VEHICLE_SETUP_now = 0;
+  float IPC_VEHICLE_SETUP_last = 0;
+  float IPC_VEHICLE_SETUP_diff = 0;
+  float IPC_VEHICLE_SETUP_init = 0;
+  float IPC_VEHICLE_SETUP_min = 0;
+  float IPC_VEHICLE_SETUP_max = 0;
+  float IPC_VEHICLE_SETUP_avg = 0;
+  float IPC_VEHICLE_SETUP_sum = 0;
+  
+  float IPC_VEHICLE_SETUP2_msg_received = 0;
+  float IPC_VEHICLE_SETUP2_cont = 0;
+  float IPC_VEHICLE_SETUP2_now = 0;
+  float IPC_VEHICLE_SETUP2_last = 0;
+  float IPC_VEHICLE_SETUP2_diff = 0;
+  float IPC_VEHICLE_SETUP2_init = 0;
+  float IPC_VEHICLE_SETUP2_min = 0;
+  float IPC_VEHICLE_SETUP2_max = 0;
+  float IPC_VEHICLE_SETUP2_avg = 0;
+  float IPC_VEHICLE_SETUP2_sum = 0;
+  
+  float IPC_VEHICLE_SETUP3_msg_received = 0;
+  float IPC_VEHICLE_SETUP3_cont = 0;
+  float IPC_VEHICLE_SETUP3_now = 0;
+  float IPC_VEHICLE_SETUP3_last = 0;
+  float IPC_VEHICLE_SETUP3_diff = 0;
+  float IPC_VEHICLE_SETUP3_init = 0;
+  float IPC_VEHICLE_SETUP3_min = 0;
+  float IPC_VEHICLE_SETUP3_max = 0;
+  float IPC_VEHICLE_SETUP3_avg = 0;
+  float IPC_VEHICLE_SETUP3_sum = 0;
+  
+  float SERVICEINFO2_msg_received = 0;
+  float SERVICEINFO2_cont = 0;
+  float SERVICEINFO2_now = 0;
+  float SERVICEINFO2_last = 0;
+  float SERVICEINFO2_diff = 0;
+  float SERVICEINFO2_init = 0;
+  float SERVICEINFO2_min = 0;
+  float SERVICEINFO2_max = 0;
+  float SERVICEINFO2_avg = 0;
+  float SERVICEINFO2_sum = 0;
+  
+  float TIME_DATE_BH_msg_received = 0;
+  float TIME_DATE_BH_cont = 0;
+  float TIME_DATE_BH_now = 0;
+  float TIME_DATE_BH_last = 0;
+  float TIME_DATE_BH_diff = 0;
+  float TIME_DATE_BH_init = 0;
+  float TIME_DATE_BH_min = 0;
+  float TIME_DATE_BH_max = 0;
+  float TIME_DATE_BH_avg = 0;
+  float TIME_DATE_BH_sum = 0;
+  
+  float TRIP_A_msg_received = 0;
+  float TRIP_A_cont = 0;
+  float TRIP_A_now = 0;
+  float TRIP_A_last = 0;
+  float TRIP_A_diff = 0;
+  float TRIP_A_init = 0;
+  float TRIP_A_min = 0;
+  float TRIP_A_max = 0;
+  float TRIP_A_avg = 0;
+  float TRIP_A_sum = 0;
+  
+  float TRIP_B_msg_received = 0;
+  float TRIP_B_cont = 0;
+  float TRIP_B_now = 0;
+  float TRIP_B_last = 0;
+  float TRIP_B_diff = 0;
+  float TRIP_B_init = 0;
+  float TRIP_B_min = 0;
+  float TRIP_B_max = 0;
+  float TRIP_B_avg = 0;
+  float TRIP_B_sum = 0;
+  
+  float TRIP_A_B_msg_received = 0;
+  float TRIP_A_B_cont = 0;
+  float TRIP_A_B_now = 0;
+  float TRIP_A_B_last = 0;
+  float TRIP_A_B_diff = 0;
+  float TRIP_A_B_init = 0;
+  float TRIP_A_B_min = 0;
+  float TRIP_A_B_max = 0;
+  float TRIP_A_B_avg = 0;
+  float TRIP_A_B_sum = 0;
+  
+  float CLUSTER3_msg_received = 0;
+  float CLUSTER3_cont = 0;
+  float CLUSTER3_now = 0;
+  float CLUSTER3_last = 0;
+  float CLUSTER3_diff = 0;
+  float CLUSTER3_init = 0;
+  float CLUSTER3_min = 0;
+  float CLUSTER3_max = 0;
+  float CLUSTER3_avg = 0;
+  float CLUSTER3_sum = 0;
+  
+  float COMPASS_A1_msg_received = 0;
+  float COMPASS_A1_cont = 0;
+  float COMPASS_A1_now = 0;
+  float COMPASS_A1_last = 0;
+  float COMPASS_A1_diff = 0;
+  float COMPASS_A1_init = 0;
+  float COMPASS_A1_min = 0;
+  float COMPASS_A1_max = 0;
+  float COMPASS_A1_avg = 0;
+  float COMPASS_A1_sum = 0;
+  
+//VARIÁVEIS PARA O TESTE DE START UP (LP7Z072 - 11.2.1.4)
+  message BHCAN::IPC::NWM_IPC NWM_IPC_msg;
+  float NWM_IPC_elapsed_time = 0;
+  float NWM_IPC_initial_time = 0;
+  int cont = 0;
+  
+//VARIÁVEIS PARA O TESTE DE START UP (LP7Z072 - 11.2.1.3)
+  float NWM_BCM_current_time = 0;
+  float NWM_IPC_current_time = 0;
+  float NWM_IPC_previous_time = 0;
+  float NWM_BCM_previous_time = 0;
+  
+//VARIÁVEIS PARA O TEST 11.2.3.3
+  message BHCAN::BCM::NWM_BCM NWM_BCM_msg;
+  msTimer output_NWM_BCM_Timer;
+ 
+}
+
+on message IPC_VEHICLE_SETUP
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  IPC_VEHICLE_SETUP_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_elapsed_time, (IPC_VEHICLE_SETUP_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    IPC_VEHICLE_SETUP_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    IPC_VEHICLE_SETUP_cont = IPC_VEHICLE_SETUP_cont + 1;
+    if(IPC_VEHICLE_SETUP_cont == 1)
+    {
+      IPC_VEHICLE_SETUP_now = (timeNowFloat() / 100.0); //time in ms
+      IPC_VEHICLE_SETUP_last = IPC_VEHICLE_SETUP_now;
+      IPC_VEHICLE_SETUP_min = IPC_VEHICLE_SETUP_now - IPC_VEHICLE_SETUP_init;
+      IPC_VEHICLE_SETUP_max = IPC_VEHICLE_SETUP_now - IPC_VEHICLE_SETUP_init;
+      IPC_VEHICLE_SETUP_sum = IPC_VEHICLE_SETUP_now - IPC_VEHICLE_SETUP_init;
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_min, IPC_VEHICLE_SETUP_min);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_max, IPC_VEHICLE_SETUP_max);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_avg, IPC_VEHICLE_SETUP_avg);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_cont, IPC_VEHICLE_SETUP_cont);
+    }
+    else
+    {
+      IPC_VEHICLE_SETUP_now = (timeNowFloat() / 100.0); //time in ms
+      IPC_VEHICLE_SETUP_diff = IPC_VEHICLE_SETUP_now - IPC_VEHICLE_SETUP_last;
+      IPC_VEHICLE_SETUP_sum = IPC_VEHICLE_SETUP_sum + IPC_VEHICLE_SETUP_diff;
+      if(IPC_VEHICLE_SETUP_diff < IPC_VEHICLE_SETUP_min)
+      {
+        IPC_VEHICLE_SETUP_min = IPC_VEHICLE_SETUP_diff;
+        sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_min, IPC_VEHICLE_SETUP_min);
+      }
+      if(IPC_VEHICLE_SETUP_diff > IPC_VEHICLE_SETUP_max)
+      {
+        IPC_VEHICLE_SETUP_max = IPC_VEHICLE_SETUP_diff;
+        sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_max, IPC_VEHICLE_SETUP_max);
+      }
+      IPC_VEHICLE_SETUP_last = IPC_VEHICLE_SETUP_now;
+    }
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_cont, IPC_VEHICLE_SETUP_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (IPC_VEHICLE_SETUP_cont != 0))
+  {
+    IPC_VEHICLE_SETUP_avg = IPC_VEHICLE_SETUP_sum / IPC_VEHICLE_SETUP_cont;
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP_avg, IPC_VEHICLE_SETUP_avg);
+  }  
+  
+  
+}
+
+on message IPC_VEHICLE_SETUP2
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  IPC_VEHICLE_SETUP2_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_elapsed_time, (IPC_VEHICLE_SETUP2_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    IPC_VEHICLE_SETUP2_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    IPC_VEHICLE_SETUP2_cont = IPC_VEHICLE_SETUP2_cont + 1;
+    if(IPC_VEHICLE_SETUP2_cont == 1)
+    {
+      IPC_VEHICLE_SETUP2_now = (timeNowFloat() / 100.0); //time in ms
+      IPC_VEHICLE_SETUP2_last = IPC_VEHICLE_SETUP2_now;
+      IPC_VEHICLE_SETUP2_min = IPC_VEHICLE_SETUP2_now - IPC_VEHICLE_SETUP2_init;
+      IPC_VEHICLE_SETUP2_max = IPC_VEHICLE_SETUP2_now - IPC_VEHICLE_SETUP2_init;
+      IPC_VEHICLE_SETUP2_sum = IPC_VEHICLE_SETUP2_now - IPC_VEHICLE_SETUP2_init;
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_min, IPC_VEHICLE_SETUP2_min);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_max, IPC_VEHICLE_SETUP2_max);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_avg, IPC_VEHICLE_SETUP2_avg);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_cont, IPC_VEHICLE_SETUP2_cont);
+    }
+    else
+    {
+      IPC_VEHICLE_SETUP2_now = (timeNowFloat() / 100.0); //time in ms
+      IPC_VEHICLE_SETUP2_diff = IPC_VEHICLE_SETUP2_now - IPC_VEHICLE_SETUP2_last;
+      IPC_VEHICLE_SETUP2_sum = IPC_VEHICLE_SETUP2_sum + IPC_VEHICLE_SETUP2_diff;
+      if(IPC_VEHICLE_SETUP2_diff < IPC_VEHICLE_SETUP2_min)
+      {
+        IPC_VEHICLE_SETUP2_min = IPC_VEHICLE_SETUP2_diff;
+        sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_min, IPC_VEHICLE_SETUP2_min);
+      }
+      if(IPC_VEHICLE_SETUP2_diff > IPC_VEHICLE_SETUP2_max)
+      {
+        IPC_VEHICLE_SETUP2_max = IPC_VEHICLE_SETUP2_diff;
+        sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_max, IPC_VEHICLE_SETUP2_max);
+      }
+      IPC_VEHICLE_SETUP2_last = IPC_VEHICLE_SETUP2_now;
+    }
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_cont, IPC_VEHICLE_SETUP2_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (IPC_VEHICLE_SETUP2_cont != 0))
+  {
+    IPC_VEHICLE_SETUP2_avg = IPC_VEHICLE_SETUP2_sum / IPC_VEHICLE_SETUP2_cont;
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP2_avg, IPC_VEHICLE_SETUP2_avg);
+  }  
+}
+
+on message IPC_VEHICLE_SETUP3
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  IPC_VEHICLE_SETUP3_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_elapsed_time, (IPC_VEHICLE_SETUP3_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    IPC_VEHICLE_SETUP3_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    IPC_VEHICLE_SETUP3_cont = IPC_VEHICLE_SETUP3_cont + 1;
+    if(IPC_VEHICLE_SETUP3_cont == 1)
+    {
+      IPC_VEHICLE_SETUP3_now = (timeNowFloat() / 100.0); //time in ms
+      IPC_VEHICLE_SETUP3_last = IPC_VEHICLE_SETUP3_now;
+      IPC_VEHICLE_SETUP3_min = IPC_VEHICLE_SETUP3_now - IPC_VEHICLE_SETUP3_init;
+      IPC_VEHICLE_SETUP3_max = IPC_VEHICLE_SETUP3_now - IPC_VEHICLE_SETUP3_init;
+      IPC_VEHICLE_SETUP3_sum = IPC_VEHICLE_SETUP3_now - IPC_VEHICLE_SETUP3_init;
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_min, IPC_VEHICLE_SETUP3_min);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_max, IPC_VEHICLE_SETUP3_max);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_avg, IPC_VEHICLE_SETUP3_avg);
+      sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_cont, IPC_VEHICLE_SETUP3_cont);
+    }
+    else
+    {
+      IPC_VEHICLE_SETUP3_now = (timeNowFloat() / 100.0); //time in ms
+      IPC_VEHICLE_SETUP3_diff = IPC_VEHICLE_SETUP3_now - IPC_VEHICLE_SETUP3_last;
+      IPC_VEHICLE_SETUP3_sum = IPC_VEHICLE_SETUP3_sum + IPC_VEHICLE_SETUP3_diff;
+      if(IPC_VEHICLE_SETUP3_diff < IPC_VEHICLE_SETUP3_min)
+      {
+        IPC_VEHICLE_SETUP3_min = IPC_VEHICLE_SETUP3_diff;
+        sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_min, IPC_VEHICLE_SETUP3_min);
+      }
+      if(IPC_VEHICLE_SETUP3_diff > IPC_VEHICLE_SETUP3_max)
+      {
+        IPC_VEHICLE_SETUP3_max = IPC_VEHICLE_SETUP3_diff;
+        sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_max, IPC_VEHICLE_SETUP3_max);
+      }
+      IPC_VEHICLE_SETUP3_last = IPC_VEHICLE_SETUP3_now;
+    }
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_cont, IPC_VEHICLE_SETUP3_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (IPC_VEHICLE_SETUP3_cont != 0))
+  {
+    IPC_VEHICLE_SETUP3_avg = IPC_VEHICLE_SETUP3_sum / IPC_VEHICLE_SETUP3_cont;
+    sysSetVariableFloat(sysvar::Test::IPC_VEHICLE_SETUP3_avg, IPC_VEHICLE_SETUP3_avg);
+  }  
+}
+
+on message SERVICEINFO2
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  SERVICEINFO2_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::SERVICEINFO2_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::SERVICEINFO2_elapsed_time, (SERVICEINFO2_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    SERVICEINFO2_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    SERVICEINFO2_cont = SERVICEINFO2_cont + 1;
+    if(SERVICEINFO2_cont == 1)
+    {
+      SERVICEINFO2_now = (timeNowFloat() / 100.0); //time in ms
+      SERVICEINFO2_last = SERVICEINFO2_now;
+      SERVICEINFO2_min = SERVICEINFO2_now - SERVICEINFO2_init;
+      SERVICEINFO2_max = SERVICEINFO2_now - SERVICEINFO2_init;
+      SERVICEINFO2_sum = SERVICEINFO2_now - SERVICEINFO2_init;
+      sysSetVariableFloat(sysvar::Test::SERVICEINFO2_min, SERVICEINFO2_min);
+      sysSetVariableFloat(sysvar::Test::SERVICEINFO2_max, SERVICEINFO2_max);
+      sysSetVariableFloat(sysvar::Test::SERVICEINFO2_avg, SERVICEINFO2_avg);
+      sysSetVariableFloat(sysvar::Test::SERVICEINFO2_cont, SERVICEINFO2_cont);
+    }
+    else
+    {
+      SERVICEINFO2_now = (timeNowFloat() / 100.0); //time in ms
+      SERVICEINFO2_diff = SERVICEINFO2_now - SERVICEINFO2_last;
+      SERVICEINFO2_sum = SERVICEINFO2_sum + SERVICEINFO2_diff;
+      if(SERVICEINFO2_diff < SERVICEINFO2_min)
+      {
+        SERVICEINFO2_min = SERVICEINFO2_diff;
+        sysSetVariableFloat(sysvar::Test::SERVICEINFO2_min, SERVICEINFO2_min);
+      }
+      if(SERVICEINFO2_diff > SERVICEINFO2_max)
+      {
+        SERVICEINFO2_max = SERVICEINFO2_diff;
+        sysSetVariableFloat(sysvar::Test::SERVICEINFO2_max, SERVICEINFO2_max);
+      }
+      SERVICEINFO2_last = SERVICEINFO2_now;
+    }
+    sysSetVariableFloat(sysvar::Test::SERVICEINFO2_cont, SERVICEINFO2_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (SERVICEINFO2_cont != 0))
+  {
+    SERVICEINFO2_avg = SERVICEINFO2_sum / SERVICEINFO2_cont;
+    sysSetVariableFloat(sysvar::Test::SERVICEINFO2_avg, SERVICEINFO2_avg);
+  }  
+}
+
+on message BHCAN::IPC::TIME_DATE
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  TIME_DATE_BH_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::TIME_DATE_BH_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_elapsed_time, (TIME_DATE_BH_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    TIME_DATE_BH_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    TIME_DATE_BH_cont = TIME_DATE_BH_cont + 1;
+    if(TIME_DATE_BH_cont == 1)
+    {
+      TIME_DATE_BH_now = (timeNowFloat() / 100.0); //time in ms
+      TIME_DATE_BH_last = TIME_DATE_BH_now;
+      TIME_DATE_BH_min = TIME_DATE_BH_now - TIME_DATE_BH_init;
+      TIME_DATE_BH_max = TIME_DATE_BH_now - TIME_DATE_BH_init;
+      TIME_DATE_BH_sum = TIME_DATE_BH_now - TIME_DATE_BH_init;
+      sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_min, TIME_DATE_BH_min);
+      sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_max, TIME_DATE_BH_max);
+      sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_avg, TIME_DATE_BH_avg);
+      sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_cont, TIME_DATE_BH_cont);
+    }
+    else
+    {
+      TIME_DATE_BH_now = (timeNowFloat() / 100.0); //time in ms
+      TIME_DATE_BH_diff = TIME_DATE_BH_now - TIME_DATE_BH_last;
+      TIME_DATE_BH_sum = TIME_DATE_BH_sum + TIME_DATE_BH_diff;
+      if(TIME_DATE_BH_diff < TIME_DATE_BH_min)
+      {
+        TIME_DATE_BH_min = TIME_DATE_BH_diff;
+        sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_min, TIME_DATE_BH_min);
+      }
+      if(TIME_DATE_BH_diff > TIME_DATE_BH_max)
+      {
+        TIME_DATE_BH_max = TIME_DATE_BH_diff;
+        sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_max, TIME_DATE_BH_max);
+      }
+      TIME_DATE_BH_last = TIME_DATE_BH_now;
+    }
+    sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_cont, TIME_DATE_BH_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (TIME_DATE_BH_cont != 0))
+  {
+    TIME_DATE_BH_avg = TIME_DATE_BH_sum / TIME_DATE_BH_cont;
+    sysSetVariableFloat(sysvar::Test::TIME_DATE_BH_avg, TIME_DATE_BH_avg);
+  }  
+}
+
+on message TRIP_A
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  TRIP_A_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::TRIP_A_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::TRIP_A_elapsed_time, (TRIP_A_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    TRIP_A_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    TRIP_A_cont = TRIP_A_cont + 1;
+    if(TRIP_A_cont == 1)
+    {
+      TRIP_A_now = (timeNowFloat() / 100.0); //time in ms
+      TRIP_A_last = TRIP_A_now;
+      TRIP_A_min = TRIP_A_now - TRIP_A_init;
+      TRIP_A_max = TRIP_A_now - TRIP_A_init;
+      TRIP_A_sum = TRIP_A_now - TRIP_A_init;
+      sysSetVariableFloat(sysvar::Test::TRIP_A_min, TRIP_A_min);
+      sysSetVariableFloat(sysvar::Test::TRIP_A_max, TRIP_A_max);
+      sysSetVariableFloat(sysvar::Test::TRIP_A_avg, TRIP_A_avg);
+      sysSetVariableFloat(sysvar::Test::TRIP_A_cont, TRIP_A_cont);
+    }
+    else
+    {
+      TRIP_A_now = (timeNowFloat() / 100.0); //time in ms
+      TRIP_A_diff = TRIP_A_now - TRIP_A_last;
+      TRIP_A_sum = TRIP_A_sum + TRIP_A_diff;
+      if(TRIP_A_diff < TRIP_A_min)
+      {
+        TRIP_A_min = TRIP_A_diff;
+        sysSetVariableFloat(sysvar::Test::TRIP_A_min, TRIP_A_min);
+      }
+      if(TRIP_A_diff > TRIP_A_max)
+      {
+        TRIP_A_max = TRIP_A_diff;
+        sysSetVariableFloat(sysvar::Test::TRIP_A_max, TRIP_A_max);
+      }
+      TRIP_A_last = TRIP_A_now;
+    }
+    sysSetVariableFloat(sysvar::Test::TRIP_A_cont, TRIP_A_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (TRIP_A_cont != 0))
+  {
+    TRIP_A_avg = TRIP_A_sum / TRIP_A_cont;
+    sysSetVariableFloat(sysvar::Test::TRIP_A_avg, TRIP_A_avg);
+  }  
+}
+
+on message TRIP_B
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  TRIP_B_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::TRIP_B_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::TRIP_B_elapsed_time, (TRIP_B_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    TRIP_B_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    TRIP_B_cont = TRIP_B_cont + 1;
+    if(TRIP_B_cont == 1)
+    {
+      TRIP_B_now = (timeNowFloat() / 100.0); //time in ms
+      TRIP_B_last = TRIP_B_now;
+      TRIP_B_min = TRIP_B_now - TRIP_B_init;
+      TRIP_B_max = TRIP_B_now - TRIP_B_init;
+      TRIP_B_sum = TRIP_B_now - TRIP_B_init;
+      sysSetVariableFloat(sysvar::Test::TRIP_B_min, TRIP_B_min);
+      sysSetVariableFloat(sysvar::Test::TRIP_B_max, TRIP_B_max);
+      sysSetVariableFloat(sysvar::Test::TRIP_B_avg, TRIP_B_avg);
+      sysSetVariableFloat(sysvar::Test::TRIP_B_cont, TRIP_B_cont);
+    }
+    else
+    {
+      TRIP_B_now = (timeNowFloat() / 100.0); //time in ms
+      TRIP_B_diff = TRIP_B_now - TRIP_B_last;
+      TRIP_B_sum = TRIP_B_sum + TRIP_B_diff;
+      if(TRIP_B_diff < TRIP_B_min)
+      {
+        TRIP_B_min = TRIP_B_diff;
+        sysSetVariableFloat(sysvar::Test::TRIP_B_min, TRIP_B_min);
+      }
+      if(TRIP_B_diff > TRIP_B_max)
+      {
+        TRIP_B_max = TRIP_B_diff;
+        sysSetVariableFloat(sysvar::Test::TRIP_B_max, TRIP_B_max);
+      }
+      TRIP_B_last = TRIP_B_now;
+    }
+    sysSetVariableFloat(sysvar::Test::TRIP_B_cont, TRIP_B_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (TRIP_B_cont != 0))
+  {
+    TRIP_B_avg = TRIP_B_sum / TRIP_B_cont;
+    sysSetVariableFloat(sysvar::Test::TRIP_B_avg, TRIP_B_avg);
+  }  
+}
+
+on message TRIP_A_B
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  TRIP_A_B_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::TRIP_A_B_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::TRIP_A_B_elapsed_time, (TRIP_A_B_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    TRIP_A_B_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    TRIP_A_B_cont = TRIP_A_B_cont + 1;
+    if(TRIP_A_B_cont == 1)
+    {
+      TRIP_A_B_now = (timeNowFloat() / 100.0); //time in ms
+      TRIP_A_B_last = TRIP_A_B_now;
+      TRIP_A_B_min = TRIP_A_B_now - TRIP_A_B_init;
+      TRIP_A_B_max = TRIP_A_B_now - TRIP_A_B_init;
+      TRIP_A_B_sum = TRIP_A_B_now - TRIP_A_B_init;
+      sysSetVariableFloat(sysvar::Test::TRIP_A_B_min, TRIP_A_B_min);
+      sysSetVariableFloat(sysvar::Test::TRIP_A_B_max, TRIP_A_B_max);
+      sysSetVariableFloat(sysvar::Test::TRIP_A_B_avg, TRIP_A_B_avg);
+      sysSetVariableFloat(sysvar::Test::TRIP_A_B_cont, TRIP_A_B_cont);
+    }
+    else
+    {
+      TRIP_A_B_now = (timeNowFloat() / 100.0); //time in ms
+      TRIP_A_B_diff = TRIP_A_B_now - TRIP_A_B_last;
+      TRIP_A_B_sum = TRIP_A_B_sum + TRIP_A_B_diff;
+      if(TRIP_A_B_diff < TRIP_A_B_min)
+      {
+        TRIP_A_B_min = TRIP_A_B_diff;
+        sysSetVariableFloat(sysvar::Test::TRIP_A_B_min, TRIP_A_B_min);
+      }
+      if(TRIP_A_B_diff > TRIP_A_B_max)
+      {
+        TRIP_A_B_max = TRIP_A_B_diff;
+        sysSetVariableFloat(sysvar::Test::TRIP_A_B_max, TRIP_A_B_max);
+      }
+      TRIP_A_B_last = TRIP_A_B_now;
+    }
+    sysSetVariableFloat(sysvar::Test::TRIP_A_B_cont, TRIP_A_B_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (TRIP_A_B_cont != 0))
+  {
+    TRIP_A_B_avg = TRIP_A_B_sum / TRIP_A_B_cont;
+    sysSetVariableFloat(sysvar::Test::TRIP_A_B_avg, TRIP_A_B_avg);
+  }  
+}
+
+on message COMPASS_A1
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  COMPASS_A1_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::COMPASS_A1_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::COMPASS_A1_elapsed_time, (COMPASS_A1_msg_received - NWM_IPC_initial_time));
+  }
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    COMPASS_A1_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    COMPASS_A1_cont = COMPASS_A1_cont + 1;
+    if(COMPASS_A1_cont == 1)
+    {
+      COMPASS_A1_now = (timeNowFloat() / 100.0); //time in ms
+      COMPASS_A1_last = COMPASS_A1_now;
+      COMPASS_A1_min = COMPASS_A1_now - COMPASS_A1_init;
+      COMPASS_A1_max = COMPASS_A1_now - COMPASS_A1_init;
+      COMPASS_A1_sum = COMPASS_A1_now - COMPASS_A1_init;
+      sysSetVariableFloat(sysvar::Test::COMPASS_A1_min, COMPASS_A1_min);
+      sysSetVariableFloat(sysvar::Test::COMPASS_A1_max, COMPASS_A1_max);
+      sysSetVariableFloat(sysvar::Test::COMPASS_A1_avg, COMPASS_A1_avg);
+      sysSetVariableFloat(sysvar::Test::COMPASS_A1_cont, COMPASS_A1_cont);
+    }
+    else
+    {
+      COMPASS_A1_now = (timeNowFloat() / 100.0); //time in ms
+      COMPASS_A1_diff = COMPASS_A1_now - COMPASS_A1_last;
+      COMPASS_A1_sum = COMPASS_A1_sum + COMPASS_A1_diff;
+      if(COMPASS_A1_diff < COMPASS_A1_min)
+      {
+        COMPASS_A1_min = COMPASS_A1_diff;
+        sysSetVariableFloat(sysvar::Test::COMPASS_A1_min, COMPASS_A1_min);
+      }
+      if(COMPASS_A1_diff > COMPASS_A1_max)
+      {
+        COMPASS_A1_max = COMPASS_A1_diff;
+        sysSetVariableFloat(sysvar::Test::COMPASS_A1_max, COMPASS_A1_max);
+      }
+      COMPASS_A1_last = COMPASS_A1_now;
+    }
+    sysSetVariableFloat(sysvar::Test::COMPASS_A1_cont, COMPASS_A1_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (COMPASS_A1_cont != 0))
+  {
+    COMPASS_A1_avg = COMPASS_A1_sum / COMPASS_A1_cont;
+    sysSetVariableFloat(sysvar::Test::COMPASS_A1_avg, COMPASS_A1_avg);
+  }  
+}
+
+on message CLUSTER3
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.3
+  CLUSTER3_msg_received = (timeNowFloat() / 100.0);
+  if((sysGetVariableFloat(sysvar::Test::CLUSTER3_elapsed_time) == 0) && (sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (cont == 1))
+  {
+    sysSetVariableFloat(sysvar::Test::CLUSTER3_elapsed_time, (CLUSTER3_msg_received - NWM_IPC_initial_time));
+  }
+  
+  
+  //11.2.1.4
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    CLUSTER3_init = (timeNowFloat() / 100.0); //time in ms
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    CLUSTER3_cont = CLUSTER3_cont + 1;
+    if(CLUSTER3_cont == 1)
+    {
+      CLUSTER3_now = (timeNowFloat() / 100.0); //time in ms
+      CLUSTER3_last = CLUSTER3_now;
+      CLUSTER3_min = CLUSTER3_now - CLUSTER3_init;
+      CLUSTER3_max = CLUSTER3_now - CLUSTER3_init;
+      CLUSTER3_sum = CLUSTER3_now - CLUSTER3_init;
+      sysSetVariableFloat(sysvar::Test::CLUSTER3_min, CLUSTER3_min);
+      sysSetVariableFloat(sysvar::Test::CLUSTER3_max, CLUSTER3_max);
+      sysSetVariableFloat(sysvar::Test::CLUSTER3_avg, CLUSTER3_avg);
+      sysSetVariableFloat(sysvar::Test::CLUSTER3_cont, CLUSTER3_cont);
+    }
+    else
+    {
+      CLUSTER3_now = (timeNowFloat() / 100.0); //time in ms
+      CLUSTER3_diff = CLUSTER3_now - CLUSTER3_last;
+      CLUSTER3_sum = CLUSTER3_sum + CLUSTER3_diff;
+      if(CLUSTER3_diff < CLUSTER3_min)
+      {
+        CLUSTER3_min = CLUSTER3_diff;
+        sysSetVariableFloat(sysvar::Test::CLUSTER3_min, CLUSTER3_min);
+      }
+      if(CLUSTER3_diff > CLUSTER3_max)
+      {
+        CLUSTER3_max = CLUSTER3_diff;
+        sysSetVariableFloat(sysvar::Test::CLUSTER3_max, CLUSTER3_max);
+      }
+      CLUSTER3_last = CLUSTER3_now;
+    }
+    sysSetVariableFloat(sysvar::Test::CLUSTER3_cont, CLUSTER3_cont);
+  }
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 2 && (CLUSTER3_cont != 0))
+  {
+    CLUSTER3_avg = CLUSTER3_sum / CLUSTER3_cont;
+    sysSetVariableFloat(sysvar::Test::CLUSTER3_avg, CLUSTER3_avg);
+  }  
+}
+
+on message BHCAN::IPC::NWM_IPC
+{
+  //11.2.15.3 step 6
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    sysSetVariableInt(sysvar::Test::Message_resume_flag_BHCAN, 1);
+  }
+  
+  //11.2.1.4
+  if((sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (getSignal(BHCAN::IPC::SystemStatus_IPC) == 2) && (cont == 0))
+  {
+    NWM_IPC_initial_time = (timeNowFloat() / 100.0); //time in ms
+    cont = 1;
+  }
+  if((sysGetVariableInt(sysvar::Test::LP7z0071_72_start) != 1))
+  {
+    cont = 0;
+  }
+  //11.2.2.3
+  if((sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1))
+  {
+    NWM_IPC_current_time = (timeNowFloat() / 100.0); //time in ms 
+    write("\n NWM_IPC current time: %f", NWM_IPC_current_time);
+    sysSetVariableFloat(sysvar::Test::NWM_BCM_to_NWM_IPC_time, (NWM_IPC_current_time - NWM_BCM_current_time));
+    sysSetVariableFloat(sysvar::Test::NWM_IPC_to_NWM_IPC_time, (NWM_IPC_current_time - NWM_IPC_previous_time));
+    NWM_IPC_previous_time = NWM_IPC_current_time;
+  }
+}
+
+on message BHCAN::BCM::NWM_BCM
+{
+  //11.2.2.3
+//  if((sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1) && (getSignal(BHCAN::BCM::SystemCommand) == 2 && (IPC_VEHICLE_SETUP_cont != 0)))
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 1)
+  {
+    NWM_BCM_current_time = (timeNowFloat() / 100.0); //time in ms
+    write("\n NWM_BCM current time: %f", NWM_BCM_current_time);
+    sysSetVariableFloat(sysvar::Test::NWM_BCM_to_NWM_BCM_time, (NWM_BCM_current_time - NWM_BCM_previous_time));
+    write("\n NWM_BCM_to_NWM_BCM_time: %f", sysGetVariableFloat(sysvar::Test::NWM_BCM_to_NWM_BCM_time));
+    NWM_BCM_previous_time = NWM_BCM_current_time;
+  }
+}
+
+on sysvar sysvar::Test::LP7z0071_72_start
+{
+  if(sysGetVariableInt(sysvar::Test::LP7z0071_72_start) == 0)
+  {
+    cont = 0;
+    IPC_VEHICLE_SETUP_msg_received = 0;
+    IPC_VEHICLE_SETUP_cont = 0;
+    IPC_VEHICLE_SETUP_now = 0;
+    IPC_VEHICLE_SETUP_last = 0;
+    IPC_VEHICLE_SETUP_diff = 0;
+    IPC_VEHICLE_SETUP_init = 0;
+    IPC_VEHICLE_SETUP_min = 0;
+    IPC_VEHICLE_SETUP_max = 0;
+    IPC_VEHICLE_SETUP_avg = 0;
+    IPC_VEHICLE_SETUP_sum = 0;
+  
+    IPC_VEHICLE_SETUP2_msg_received = 0;
+    IPC_VEHICLE_SETUP2_cont = 0;
+    IPC_VEHICLE_SETUP2_now = 0;
+    IPC_VEHICLE_SETUP2_last = 0;
+    IPC_VEHICLE_SETUP2_diff = 0;
+    IPC_VEHICLE_SETUP2_init = 0;
+    IPC_VEHICLE_SETUP2_min = 0;
+    IPC_VEHICLE_SETUP2_max = 0;
+    IPC_VEHICLE_SETUP2_avg = 0;
+    IPC_VEHICLE_SETUP2_sum = 0;
+  
+    IPC_VEHICLE_SETUP3_msg_received = 0;
+    IPC_VEHICLE_SETUP3_cont = 0;
+    IPC_VEHICLE_SETUP3_now = 0;
+    IPC_VEHICLE_SETUP3_last = 0;
+    IPC_VEHICLE_SETUP3_diff = 0;
+    IPC_VEHICLE_SETUP3_init = 0;
+    IPC_VEHICLE_SETUP3_min = 0;
+    IPC_VEHICLE_SETUP3_max = 0;
+    IPC_VEHICLE_SETUP3_avg = 0;
+    IPC_VEHICLE_SETUP3_sum = 0;
+  
+    SERVICEINFO2_msg_received = 0;
+    SERVICEINFO2_cont = 0;
+    SERVICEINFO2_now = 0;
+    SERVICEINFO2_last = 0;
+    SERVICEINFO2_diff = 0;
+    SERVICEINFO2_init = 0;
+    SERVICEINFO2_min = 0;
+    SERVICEINFO2_max = 0;
+    SERVICEINFO2_avg = 0;
+    SERVICEINFO2_sum = 0;
+  
+    TIME_DATE_BH_msg_received = 0;
+    TIME_DATE_BH_cont = 0;
+    TIME_DATE_BH_now = 0;
+    TIME_DATE_BH_last = 0;
+    TIME_DATE_BH_diff = 0;
+    TIME_DATE_BH_init = 0;
+    TIME_DATE_BH_min = 0;
+    TIME_DATE_BH_max = 0;
+    TIME_DATE_BH_avg = 0;
+    TIME_DATE_BH_sum = 0;
+  
+    TRIP_A_msg_received = 0;
+    TRIP_A_cont = 0;
+    TRIP_A_now = 0;
+    TRIP_A_last = 0;
+    TRIP_A_diff = 0;
+    TRIP_A_init = 0;
+    TRIP_A_min = 0;
+    TRIP_A_max = 0;
+    TRIP_A_avg = 0;
+    TRIP_A_sum = 0;
+  
+    TRIP_B_msg_received = 0;
+    TRIP_B_cont = 0;
+    TRIP_B_now = 0;
+    TRIP_B_last = 0;
+    TRIP_B_diff = 0;
+    TRIP_B_init = 0;
+    TRIP_B_min = 0;
+    TRIP_B_max = 0;
+    TRIP_B_avg = 0;
+    TRIP_B_sum = 0;
+  
+    TRIP_A_B_msg_received = 0;
+    TRIP_A_B_cont = 0;
+    TRIP_A_B_now = 0;
+    TRIP_A_B_last = 0;
+    TRIP_A_B_diff = 0;
+    TRIP_A_B_init = 0;
+    TRIP_A_B_min = 0;
+    TRIP_A_B_max = 0;
+    TRIP_A_B_avg = 0;
+    TRIP_A_B_sum = 0;
+  
+    CLUSTER3_msg_received = 0;
+    CLUSTER3_cont = 0;
+    CLUSTER3_now = 0;
+    CLUSTER3_last = 0;
+    CLUSTER3_diff = 0;
+    CLUSTER3_init = 0;
+    CLUSTER3_min = 0;
+    CLUSTER3_max = 0;
+    CLUSTER3_avg = 0;
+    CLUSTER3_sum = 0;
+  
+    COMPASS_A1_msg_received = 0;
+    COMPASS_A1_cont = 0;
+    COMPASS_A1_now = 0;
+    COMPASS_A1_last = 0;
+    COMPASS_A1_diff = 0;
+    COMPASS_A1_init = 0;
+    COMPASS_A1_min = 0;
+    COMPASS_A1_max = 0;
+    COMPASS_A1_avg = 0;
+    COMPASS_A1_sum = 0;
+  
+    NWM_IPC_elapsed_time = 0;
+    NWM_IPC_initial_time = 0;
+  
+    NWM_BCM_current_time = 0;
+    NWM_IPC_current_time = 0;
+    NWM_IPC_previous_time = 0;
+    NWM_BCM_previous_time = 0;
+  }
+}
+
+on sysvar sysvar::Test::output_NWM_BCM
+{
+  if(sysGetVariableInt(sysvar::Test::output_NWM_BCM) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SystemCommand) == 0)
+    {
+      NWM_BCM_msg.byte(0) = 0x00;
+      NWM_BCM_msg.byte(1) = 0x00;
+      NWM_BCM_msg.byte(2) = 0x00;
+      NWM_BCM_msg.byte(3) = 0x00;
+      NWM_BCM_msg.byte(4) = 0x00;
+      NWM_BCM_msg.byte(5) = 0x00;
+    }
+    else if(sysGetVariableInt(sysvar::RoadMap::SystemCommand) == 2 && (IPC_VEHICLE_SETUP_cont != 0))
+    {
+      NWM_BCM_msg.byte(0) = 0x00;
+      NWM_BCM_msg.byte(1) = 0x02;
+      NWM_BCM_msg.byte(2) = 0xFF;
+      NWM_BCM_msg.byte(3) = 0xFF;
+      NWM_BCM_msg.byte(4) = 0xFF;
+      NWM_BCM_msg.byte(5) = 0xFF;
+    }
+    else if(sysGetVariableInt(sysvar::RoadMap::SystemCommand) == 3)
+    {
+      NWM_BCM_msg.byte(0) = 0x00;
+      NWM_BCM_msg.byte(1) = 0x03;
+      NWM_BCM_msg.byte(2) = 0xFF;
+      NWM_BCM_msg.byte(3) = 0xFF;
+      NWM_BCM_msg.byte(4) = 0xFF;
+      NWM_BCM_msg.byte(5) = 0xFF;
+    }
+    output(NWM_BCM_msg);
+    setTimer(output_NWM_BCM_Timer, 10);
+  }
+}
+
+on timer output_NWM_BCM_Timer
+{
+  sysSetVariableInt(sysvar::Test::output_NWM_BCM, 0);
+}
+
+
+
+
+
+
+

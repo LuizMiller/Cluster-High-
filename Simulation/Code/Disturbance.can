@@ -1,0 +1,133 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  long deviceID;
+  dword bus_context;
+}
+
+on preStart
+{
+   deviceID = @sysvar::CANDisturbanceInterface2::DeviceNo;
+   bus_context = GetBusNameContext("BHCAN");
+}
+
+/// <FrameTriggerWithSequence>
+on key 'D'
+{
+    CanDisturbanceFrameTrigger          frameTrigger;
+    CanDisturbanceSequence              sequence;
+    CanDisturbanceTriggerRepetitions    repetitions;
+    long                                result;
+    long                                validityMask;
+    message 0x764                       triggerMessage;
+
+    setBusContext(bus_context);
+  
+    //clear the sequence
+    sequence.Clear();
+
+    //configure the message should be triggered
+
+    //ID must standard ID and a CAN message must on the bus
+//    validityMask = @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDBase
+//                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDE
+//                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::FDF;
+  
+    validityMask = @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDBase 
+                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDExtended
+                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDE 
+                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::FDF;
+
+    frameTrigger.SetMessage(triggerMessage, deviceID, validityMask);
+    //trigger position is the CRC delimiter
+    frameTrigger.TriggerFieldType =
+                   @sysvar::CanDisturbance::Enums::FieldType::CRCDel;
+    frameTrigger.TriggerFieldOffset = 0;
+  
+//    frameTrigger.TriggerFieldType =
+//                   @sysvar::CanDisturbance::Enums::FieldType::AckSlot;
+//    frameTrigger.TriggerFieldOffset = 0;
+
+    //BHCAN: configure a sequence 1280 FPGA ticks long and send a recessive bit at the Ack slot bit on the bus. A FPGA tick is 6.25 ns long, which leads to a bit time of 2 탎
+    //CCAN: configure a sequence 320 FPGA ticks long and send a recessive bit at the Ack slot bit on the bus. A FPGA tick is 6.25 ns long, which leads to a bit time of 2 탎
+    result = sequence.AppendToSequence(1280, 'R');
+  
+    //Define 32 repetitions and one cycle with a 1 ms hold off time 
+    repetitions.Cycles = 1;
+    repetitions.HoldOffCycles = 1;
+    repetitions.HoldOffRepetitions = 0;
+    repetitions.Repetitions = 33;
+
+    //Configure the frame trigger and the sequence to the CAN Disturbance Interface
+    if(result == 1)
+    {
+      result = canDisturbanceTriggerEnable(deviceID, frameTrigger, sequence, repetitions);
+      if(result == 1)
+      {
+        write("Trigger is enabled (33)");
+      }
+      else
+      {
+        write("Enable trigger error Result = %d", result);
+      }
+    }
+}
+
+
+on key 'C'
+{
+    CanDisturbanceFrameTrigger   frameTrigger;
+    CanDisturbanceSequence       sequence;
+    CanDisturbanceTriggerRepetitions   repetitions;
+    long                         result;
+    long                         valditiyMask;
+    message 0x764                triggerMessage;
+    long                         validityMask;
+
+    setBusContext(bus_context);
+  
+    //clear the sequence
+    sequence.Clear();
+
+    //configure the message should be triggered
+
+    //ID must standard ID and a CAN message must on the bus
+    validityMask = @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDBase
+                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDE
+                   | @sysvar::CanDisturbance::Enums::ValidityMaskFlags::FDF;
+
+    frameTrigger.SetMessage(triggerMessage, deviceID, validityMask);
+    //trigger position is the CRC delimiter
+    frameTrigger.TriggerFieldType =
+                   @sysvar::CanDisturbance::Enums::FieldType::CRCDel;
+    frameTrigger.TriggerFieldOffset = 0;
+
+    //BHCAN: configure a sequence 1280 FPGA ticks long and send a recessive bit at the Ack slot bit on the bus. A FPGA tick is 6.25 ns long, which leads to a bit time of 2 탎
+    //CCAN: configure a sequence 320 FPGA ticks long and send a recessive bit at the Ack slot bit on the bus. A FPGA tick is 6.25 ns long, which leads to a bit time of 2 탎
+    result = sequence.AppendToSequence(1280, 'R');
+  
+    //Define 26 repetitions and one cycle with a 1 ms hold off time 
+    repetitions.Cycles = 1;
+    repetitions.HoldOffCycles = 1;
+    repetitions.HoldOffRepetitions = 0;
+    repetitions.Repetitions = 26;
+
+    //Configure the frame trigger and the sequence to the CAN Disturbance Interface
+    if(result == 1)
+    {
+      result = canDisturbanceTriggerEnable(deviceID, frameTrigger, sequence, repetitions);
+      if(result == 1)
+      {
+        write("Trigger is enabled (26)");
+      }
+      else
+      {
+        write("Enable trigger error Result = %d", result);
+      }
+    }
+}

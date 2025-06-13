@@ -1,0 +1,1983 @@
+/*@!Encoding:1252*/
+variables
+{
+  message NAV_DATA NAV_DATA_msg;
+  message RADIO_B1 RADIO_B1_msg;
+  message RADIO_B2 RADIO_B2_msg;
+  message RADIO_B3 RADIO_B3_msg;
+  message RADIO_B4 RADIO_B4_msg;
+  message RADIO_B5 RADIO_B5_msg;
+  message RADIO_B9 RADIO_B9_msg;
+  message STATUS_TELEMATIC STATUS_TELEMATIC_msg;
+  message TLM_Managed_TIME_DATE TLM_Managed_TIME_DATE_msg;
+  message TELEMATIC_TIME_DATE TELEMATIC_TIME_DATE_msg;
+  message TELEMATIC_VEHICLE_SETUP TELEMATIC_VEHICLE_SETUP_msg;
+  message TELEMATIC_VEHICLE_SETUP2 TELEMATIC_VEHICLE_SETUP2_msg;
+  message TELEMATIC_VEHICLE_SETUP3 TELEMATIC_VEHICLE_SETUP3_msg;
+//  message TELEMATIC_VEHICLE_SETUP4 TELEMATIC_VEHICLE_SETUP4_msg;
+  message TELEMATIC_NAV_INFO TELEMATIC_NAV_INFO_msg;
+  message TELEMATIC_TIME_DATE APP_mTimeDate_msg;
+  mstimer NAV_DATA_Timer;
+  msTimer RADIO_B1_Timer;
+  msTimer RADIO_B2_Timer;
+  msTimer RADIO_B3_Timer;
+  msTimer RADIO_B4_Timer;
+  msTimer RADIO_B5_Timer;
+  msTimer RADIO_B9_Timer;
+  //msTimer TIMEDATE_AUTO_MASTER;
+  msTimer STATUS_TELEMATIC_Timer;
+  msTimer TLM_Managed_TIME_DATE_Timer;
+  msTimer Minute2_TLM_Master_timer;
+  msTimer delay;
+  mstimer sleep;
+  const TIMEDATE_AUTO_MASTER_Cycle = 60000;
+  const   CTRL_AMP_Cycle = 1000;
+  const   NAV_DATA_Cycle = 1000;
+  const   RADIO_B1_Cycle = 1000;
+  const   RADIO_B2_Cycle = 1000;
+  const   RADIO_B3_Cycle = 1000;
+  const   RADIO_B4_Cycle = 1000;
+  const   RADIO_B5_Cycle = 1000;
+  const   RADIO_B9_Cycle = 1000;
+  const   STATUS_TELEMATIC_Cycle = 1000;
+  const   TLM_Managed_TIME_DATE_Cycle = 1000;
+  int ano_bissexto = 2;
+  int ano_cheio = 0;
+  int ano = 0;
+  int mes = 0;
+  int dia = 0;
+  int hora = 0;
+  int minuto = 0;
+  byte      hour_panel = 0x00;
+  byte      minute_panel = 0x00;
+  byte      day_panel = 0x01;
+  byte      month_panel = 0x01;
+  byte      year_panel = 0x20;
+  char      UTF_Text1[255];
+  char      UTF_Text2[255];
+  char      UTF_Text3[255];
+  int       keystatus;
+  const int Marelli_LTM__SUCCESS = 0;
+  const int Marelli_LTM__FAILURE = -1;
+  const int Marelli_LTM__nMAX_FRAME = 100;
+  const int Marelli_LTM__ELLIPSIS_CHAR = '…';
+  const int Marelli_LTM__INDEX_TRUNCATE = 42;/*don't use ZERO!*/
+  const int Marelli_LTM__T_IMF1 = 50;//125;
+  const int Marelli_LTM__T_IMF2 = 17;//250;
+  struct    Marelli_LTM__Frame_t 
+  {
+  int       UTF_Text_1;
+  int       UTF_Text_2;
+  int       UTF_Text_3;
+  int       FrameNumber;
+  int       Conv;
+  };
+  struct    Marelli_LTM__Frames_t 
+  {
+  int       TGW_GrpNum_IC;
+  int       currentFrame;
+  int       TotalFrameNumber;
+  int       timeOfSilence;
+  struct    Marelli_LTM__Frame_t frame[Marelli_LTM__nMAX_FRAME];
+  };
+  int       Marelli_LTM__ActivateTextBox = 0;
+  struct    Marelli_LTM__Frames_t Marelli_LTM__Frames;
+//  msTimer   Marelli_LTM__SendFrame__Timer;
+  char      T_TGW_TEXT_IC[255];
+  char      T_NAV_TEXT_IC[255];						   
+  long      TempCount;
+  int64     decValue;
+  int64     tempSum;
+  int64     value1;
+  int64     value2;
+  int       textLen;
+}
+
+on timer NAV_DATA_Timer
+{
+  output(NAV_DATA_msg);
+  setTimer(NAV_DATA_Timer, NAV_DATA_Cycle);
+}
+
+on timer TLM_Managed_TIME_DATE_Timer
+{
+  TLM_Managed_TIME_DATE_msg.Minute1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Minute1_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Minute2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Minute2_TLM_Master);
+  
+  TLM_Managed_TIME_DATE_msg.Hour1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Hour1_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Hour2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Hour2_TLM_Master);
+  
+  TLM_Managed_TIME_DATE_msg.Day1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Day1_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Day2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Day2_TLM_Master);
+  
+  TLM_Managed_TIME_DATE_msg.Month1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Month1_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Month2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Month2_TLM_Master);
+  
+  TLM_Managed_TIME_DATE_msg.Year1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year1_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Year2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year2_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Year3_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year3_TLM_Master);
+  TLM_Managed_TIME_DATE_msg.Year4_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year4_TLM_Master);
+  
+  output(TLM_Managed_TIME_DATE_msg);
+  setTimer(TLM_Managed_TIME_DATE_Timer, TLM_Managed_TIME_DATE_Cycle);
+}
+
+on timer Minute2_TLM_Master_timer
+{
+  minuto = ((sysGetVariableInt(sysvar::RoadMap::Minute1_TLM_Master)) * 10) + (sysGetVariableInt(sysvar::RoadMap::Minute2_TLM_Master));
+  hora = ((sysGetVariableInt(sysvar::RoadMap::Hour1_TLM_Master)) * 10) + (sysGetVariableInt(sysvar::RoadMap::Hour2_TLM_Master));
+  dia = ((sysGetVariableInt(sysvar::RoadMap::Day1_TLM_Master)) * 10) + (sysGetVariableInt(sysvar::RoadMap::Day2_TLM_Master));
+  mes = ((sysGetVariableInt(sysvar::RoadMap::Month1_TLM_Master)) * 10) + (sysGetVariableInt(sysvar::RoadMap::Month2_TLM_Master));
+  ano = ((sysGetVariableInt(sysvar::RoadMap::Year3_TLM_Master)) * 10) + (sysGetVariableInt(sysvar::RoadMap::Year4_TLM_Master));
+  
+  if(sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE) == 1)
+  {
+  
+  if((mes == 01) || (mes == 03) || (mes == 05) || (mes == 07) || (mes == 08) || (mes == 10) || (mes == 12))
+  {
+    if(dia <= 31)
+    {
+      if(hora <= 23)
+      {
+        if(minuto < 59)
+        {
+          minuto = minuto + 1;
+        }
+        else
+        {
+          minuto = 0;
+          if(hora == 23)
+          {
+            hora = 0;
+            if(dia == 31)
+            {
+              dia = 01;
+              if(mes == 12)
+              {
+                mes = 01;
+                ano = ano + 1;
+              }
+              else
+              {
+                mes = mes + 1;
+              }
+            }
+            else
+            {
+              dia = dia + 1;
+            }
+          }
+          else 
+          {
+            hora = hora + 1;
+          }
+        }
+      }
+    }
+    sysSetVariableInt(sysvar::RoadMap::Minute1_TLM_Master, (minuto / 10));
+    sysSetVariableInt(sysvar::RoadMap::Minute2_TLM_Master, (minuto % 10));
+    sysSetVariableInt(sysvar::RoadMap::Hour1_TLM_Master, (hora / 10));
+    sysSetVariableInt(sysvar::RoadMap::Hour2_TLM_Master, (hora % 10));
+    sysSetVariableInt(sysvar::RoadMap::Day1_TLM_Master, (dia / 10));
+    sysSetVariableInt(sysvar::RoadMap::Day2_TLM_Master, (dia % 10));
+    sysSetVariableInt(sysvar::RoadMap::Month1_TLM_Master, (mes / 10));
+    sysSetVariableInt(sysvar::RoadMap::Month2_TLM_Master, (mes % 10));
+    sysSetVariableInt(sysvar::RoadMap::Year3_TLM_Master, (ano / 10));
+    sysSetVariableInt(sysvar::RoadMap::Year4_TLM_Master, (ano % 10));
+  }
+  
+  //MESES COM 30 DIAS
+  
+  if((mes == 04) || (mes == 06) || (mes == 09) || (mes == 11))
+  {
+    if(dia <= 30)
+    {
+      if(hora <= 23)
+      {
+        if(minuto < 59)
+        {
+          minuto = minuto + 1;
+        }
+        else
+        {
+          minuto = 0;
+          if(hora == 23)
+          {
+            hora = 0;
+            if(dia == 30)
+            {
+              dia = 01;
+              mes = mes + 1;
+            }
+            else
+            {
+              dia = dia + 1;
+            }
+          }
+          else 
+          {
+            hora = hora + 1;
+          }
+        }
+      }
+    }
+    sysSetVariableInt(sysvar::RoadMap::Minute1_TLM_Master, (minuto / 10));
+    sysSetVariableInt(sysvar::RoadMap::Minute2_TLM_Master, (minuto % 10));
+    sysSetVariableInt(sysvar::RoadMap::Hour1_TLM_Master, (hora / 10));
+    sysSetVariableInt(sysvar::RoadMap::Hour2_TLM_Master, (hora % 10));
+    sysSetVariableInt(sysvar::RoadMap::Day1_TLM_Master, (dia / 10));
+    sysSetVariableInt(sysvar::RoadMap::Day2_TLM_Master, (dia % 10));
+    sysSetVariableInt(sysvar::RoadMap::Month1_TLM_Master, (mes / 10));
+    sysSetVariableInt(sysvar::RoadMap::Month2_TLM_Master, (mes % 10));
+    sysSetVariableInt(sysvar::RoadMap::Year3_TLM_Master, (ano / 10));
+    sysSetVariableInt(sysvar::RoadMap::Year4_TLM_Master, (ano % 10));
+  }
+  
+  
+  //FEVEREIRO
+  
+  if(mes == 02)
+  {
+    ano_cheio = ((sysGetVariableInt(sysvar::RoadMap::Year1_TLM_Master)) * 1000) + (sysGetVariableInt(sysvar::RoadMap::Year2_TLM_Master) * 100) + ((sysGetVariableInt(sysvar::RoadMap::Year3_TLM_Master)) * 10) + (sysGetVariableInt(sysvar::RoadMap::Year4_TLM_Master));
+    if(ano_cheio % 4 == 0)
+    {
+      if((ano_cheio % 400 == 0) || (ano_cheio % 100 != 0))
+      {
+        ano_bissexto = 1;
+      }
+      else ano_bissexto = 0;
+    }
+    else ano_bissexto = 0;
+    
+    if(ano_bissexto == 1)
+    {
+      if(dia <= 29)
+      {
+        if(hora <= 23)
+        {
+          if(minuto < 59)
+          {
+            minuto = minuto + 1;
+          }
+          else
+          {
+            minuto = 0;
+            if(hora == 23)
+            {
+              hora = 0;
+              if(dia == 29)
+              {
+                dia = 01;
+                mes = mes + 1;
+              }
+              else
+              {
+                dia = dia + 1;
+              }
+            }
+            else 
+            {
+              hora = hora + 1;
+            }
+          }
+        }
+      }
+      sysSetVariableInt(sysvar::RoadMap::Minute1_TLM_Master, (minuto / 10));
+      sysSetVariableInt(sysvar::RoadMap::Minute2_TLM_Master, (minuto % 10));
+      sysSetVariableInt(sysvar::RoadMap::Hour1_TLM_Master, (hora / 10));
+      sysSetVariableInt(sysvar::RoadMap::Hour2_TLM_Master, (hora % 10));
+      sysSetVariableInt(sysvar::RoadMap::Day1_TLM_Master, (dia / 10));
+      sysSetVariableInt(sysvar::RoadMap::Day2_TLM_Master, (dia % 10));
+      sysSetVariableInt(sysvar::RoadMap::Month1_TLM_Master, (mes / 10));
+      sysSetVariableInt(sysvar::RoadMap::Month2_TLM_Master, (mes % 10));
+      sysSetVariableInt(sysvar::RoadMap::Year3_TLM_Master, (ano / 10));
+      sysSetVariableInt(sysvar::RoadMap::Year4_TLM_Master, (ano % 10));    
+    }
+    else
+    {
+      if(dia <= 28)
+      {
+        if(hora <= 23)
+        {
+          if(minuto < 59)
+          {
+            minuto = minuto + 1;
+          }
+          else
+          {
+            minuto = 0;
+            if(hora == 23)
+            {
+              hora = 0;
+              if(dia == 28)
+              {
+                dia = 01;
+                mes = mes + 1;
+              }
+              else
+              {
+                dia = dia + 1;
+              }
+            }
+            else 
+            {
+              hora = hora + 1;
+            }
+          }
+        }
+      }
+      sysSetVariableInt(sysvar::RoadMap::Minute1_TLM_Master, (minuto / 10));
+      sysSetVariableInt(sysvar::RoadMap::Minute2_TLM_Master, (minuto % 10));
+      sysSetVariableInt(sysvar::RoadMap::Hour1_TLM_Master, (hora / 10));
+      sysSetVariableInt(sysvar::RoadMap::Hour2_TLM_Master, (hora % 10));
+      sysSetVariableInt(sysvar::RoadMap::Day1_TLM_Master, (dia / 10));
+      sysSetVariableInt(sysvar::RoadMap::Day2_TLM_Master, (dia % 10));
+      sysSetVariableInt(sysvar::RoadMap::Month1_TLM_Master, (mes / 10));
+      sysSetVariableInt(sysvar::RoadMap::Month2_TLM_Master, (mes % 10));
+      sysSetVariableInt(sysvar::RoadMap::Year3_TLM_Master, (ano / 10));
+      sysSetVariableInt(sysvar::RoadMap::Year4_TLM_Master, (ano % 10));  
+    }
+  }
+  }
+  
+  setTimer(Minute2_TLM_Master_timer, sysGetVariableInt(sysvar::Test::Minute2_TLM_Master_Fast));
+  
+ 
+}
+
+
+//on timer NAV_DATA_Timer
+//{
+//  output(NAV_DATA_msg);
+//  setTimer(NAV_DATA_Timer, NAV_DATA_Cycle);
+//}
+
+on timer RADIO_B1_Timer
+{
+  output(RADIO_B1_msg);
+  setTimer(RADIO_B1_Timer, RADIO_B1_Cycle);
+}
+
+on timer RADIO_B2_Timer
+{
+  output(RADIO_B2_msg);
+  setTimer(RADIO_B2_Timer, RADIO_B2_Cycle);
+}
+
+on timer RADIO_B3_Timer
+{
+  output(RADIO_B3_msg);
+  setTimer(RADIO_B3_Timer, RADIO_B3_Cycle);
+}
+
+on timer RADIO_B4_Timer
+{
+  output(RADIO_B4_msg);
+  setTimer(RADIO_B4_Timer, RADIO_B4_Cycle);
+}
+
+on timer RADIO_B5_Timer
+{
+  output(RADIO_B5_msg);
+  setTimer(RADIO_B5_Timer, RADIO_B5_Cycle);
+}
+
+on timer RADIO_B9_Timer
+{
+  output(RADIO_B9_msg);
+  setTimer(RADIO_B9_Timer, RADIO_B9_Cycle);
+}
+
+on timer STATUS_TELEMATIC_Timer
+{
+  output(STATUS_TELEMATIC_msg);
+  setTimer(STATUS_TELEMATIC_Timer, STATUS_TELEMATIC_Cycle);
+}
+
+/*
+on timer Marelli_LTM__SendFrame__Timer
+{
+  Marelli_LTM__sendFrame__onTimer();
+}
+*/
+on start
+{
+  RADIO_B3_msg.RQ_DISP_INTS = 255;
+  STATUS_TELEMATIC_msg.AUDIOSts_Telematic = 1;
+  RADIO_B9_msg.NAV_ARROW = 0;
+  RADIO_B2_msg.Radio_Profile_Request = 1;
+  setTimer(Minute2_TLM_Master_timer, sysGetVariableInt(sysvar::Test::Minute2_TLM_Master_Fast));
+  //  sysSetVariableInt(sysvar::RoadMap::RQ_DISP_INTS,256);
+  //  sysSetVariableInt(sysvar::RoadMap::NAV_ARROW,0);
+  //  sysSetVariableInt(sysvar::RoadMap::AUDIOSts_Telematic,1);
+}
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+      cancelTimer(NAV_DATA_Timer);
+      cancelTimer(RADIO_B1_Timer);
+      cancelTimer(RADIO_B2_Timer);
+      cancelTimer(RADIO_B3_Timer);
+      cancelTimer(RADIO_B4_Timer);
+      cancelTimer(RADIO_B5_Timer);
+      cancelTimer(RADIO_B9_Timer);
+      cancelTimer(STATUS_TELEMATIC_Timer);
+      cancelTimer(TLM_Managed_TIME_DATE_Timer);
+      cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on timer delay
+{
+  int i = 0;
+  
+  if(i == 1)
+  {
+//    TELEMATIC_VEHICLE_SETUP_msg.ResetTripA_Req = 0;
+//    TELEMATIC_VEHICLE_SETUP_msg.ResetTripB_Req = 0;
+    output(NAV_DATA_msg);
+    output(RADIO_B1_msg);
+    output(RADIO_B2_msg); 
+    output(RADIO_B3_msg); 
+    output(RADIO_B4_msg);
+    output(RADIO_B5_msg);
+    output(RADIO_B9_msg);
+    output(STATUS_TELEMATIC_msg);
+    cancelTimer(delay);
+    i = 0;
+  }
+  i++;  
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) == 1)
+    {
+      setTimer(NAV_DATA_Timer, NAV_DATA_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B1_Timer, RADIO_B1_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B2_Timer, RADIO_B2_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B3_Timer, RADIO_B3_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B4_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B4_Timer, RADIO_B4_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B5_Timer, RADIO_B5_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B9_Timer, RADIO_B9_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE) == 1)
+    {
+      setTimer(STATUS_TELEMATIC_Timer, STATUS_TELEMATIC_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE)==1)
+		{
+ 			setTimer(TLM_Managed_TIME_DATE_Timer, TLM_Managed_TIME_DATE_Cycle);
+		}
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::LTM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::LTM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B4_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B4_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE,0);
+  }
+}
+
+//  NAV_DATA
+
+on sysvar sysvar::RoadMap::NAV_DATA_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE))
+  {
+    cancelTimer(NAV_DATA_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(NAV_DATA_Timer, NAV_DATA_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_DATA_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_DLC) == 8)
+  {
+    NAV_DATA_msg.dlc = NAV_DATA.dlc;
+  }
+  else
+  {
+    NAV_DATA_msg.dlc = sysGetVariableInt(sysvar::RoadMap::NAV_DATA_DLC);
+  }
+}
+
+//  NAV_DATA_Signals
+
+on sysvar sysvar::RoadMap::NAV_GrpNum
+{
+  NAV_DATA_msg.NAV_GrpNum = sysGetVariableInt(sysvar::RoadMap::NAV_GrpNum)-1;
+  if(1 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE))
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_GrpTyp
+{
+  NAV_DATA_msg.NAV_GrpTyp = sysGetVariableInt(sysvar::RoadMap::NAV_GrpTyp);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE))
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_GrpTypSNA
+{
+  int actualGrpTyp;
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_GrpTypSNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::NAV_GrpTyp,actualGrpTyp);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_GrpTypSNA) == 1)
+  {
+    actualGrpTyp = sysGetVariableInt(sysvar::RoadMap::NAV_GrpTyp);
+    sysSetVariableInt(sysvar::RoadMap::NAV_GrpTyp,63);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_HiGrpMark
+{
+  NAV_DATA_msg.NAV_HiGrpMark = sysGetVariableInt(sysvar::RoadMap::NAV_HiGrpMark);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE))
+  {
+    output(NAV_DATA_msg);
+  }
+}
+on sysvar sysvar::RoadMap::NAV_TEXT
+{
+  value2 = convertHex2Dec2();
+  NAV_DATA_msg.NAV_TEXT = value2;
+  //write("O valor decimal foi: %I64u",value2);
+  //NAV_DATA_msg.NAV_TEXT = sysGetVariableInt(sysvar::RoadMap::NAV_TEXT);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE))
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+//  RADIO_B1
+
+on sysvar sysvar::RoadMap::RADIO_B1_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE))
+  {
+    cancelTimer(RADIO_B1_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(RADIO_B1_Timer, RADIO_B1_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B1_DLC) == 8)
+  {
+    RADIO_B1_msg.dlc = RADIO_B1.dlc;
+  }
+  else
+  {
+    RADIO_B1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B1_DLC);
+  }
+}
+
+//  RADIO_B1_Signals
+
+on sysvar sysvar::RoadMap::TGW_GrpNum_IC
+{
+  RADIO_B1_msg.TGW_GrpNum_IC = sysGetVariableInt(sysvar::RoadMap::TGW_GrpNum_IC)-1;
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE))
+  {
+    output(RADIO_B1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TGW_GrpTyp_IC
+{
+  RADIO_B1_msg.TGW_GrpTyp_IC = sysGetVariableInt(sysvar::RoadMap::TGW_GrpTyp_IC);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE))
+  {
+    output(RADIO_B1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TGW_GrpTyp_IC_SNA
+{
+  int actualTGW_GrpTyp;
+  if(sysGetVariableInt(sysvar::RoadMap::TGW_GrpTyp_IC_SNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::TGW_GrpTyp_IC,actualTGW_GrpTyp);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::TGW_GrpTyp_IC_SNA) == 1)
+  {
+    actualTGW_GrpTyp = sysGetVariableInt(sysvar::RoadMap::TGW_GrpTyp_IC);
+    sysSetVariableInt(sysvar::RoadMap::TGW_GrpTyp_IC,63);
+  }
+}
+
+on sysvar sysvar::RoadMap::TGW_HiGrpMark_IC
+{
+  RADIO_B1_msg.TGW_HiGrpMark_IC = sysGetVariableInt(sysvar::RoadMap::TGW_HiGrpMark_IC);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B1_ACTIVE))
+  {
+    output(RADIO_B1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TGW_TEXT_IC
+{
+  value1 = convertHex2Dec();
+  RADIO_B1_msg.TGW_TEXT_IC = value1;
+  //write("O valor decimal foi: %I64u",value1);
+  
+}
+
+//  RADIO_B2
+
+on sysvar sysvar::RoadMap::RADIO_B2_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE))
+  {
+    cancelTimer(RADIO_B2_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE))
+  {
+    setTimer(RADIO_B2_Timer, RADIO_B2_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B2_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B2_DLC) == 8)
+  {
+    RADIO_B2_msg.dlc = RADIO_B2.dlc;
+  }
+  else
+  {
+    RADIO_B2_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B2_DLC);
+  }
+}
+
+//  RADIO_B2_Signals
+
+on sysvar sysvar::RoadMap::TGW_CAMERA_DISP_STAT
+{
+  RADIO_B2_msg.TGW_CAMERA_DISP_STAT = sysGetVariableInt(sysvar::RoadMap::TGW_CAMERA_DISP_STAT);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE))
+  {
+    output(RADIO_B2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Radio_Profile_Request
+{
+  RADIO_B2_msg.Radio_Profile_Request = sysGetVariableInt(sysvar::RoadMap::Radio_Profile_Request);
+  if (sysGetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE) == 1)
+  {
+    output(RADIO_B2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Radio_Delete_Request
+{
+  RADIO_B2_msg.Radio_Delete_Request = sysGetVariableInt(sysvar::RoadMap::Radio_Delete_Request);
+  if (sysGetVariableInt(sysvar::RoadMap::RADIO_B2_ACTIVE) == 1)
+  {
+    output(RADIO_B2_msg);
+  }
+}
+
+
+
+//  RADIO_B3
+
+on sysvar sysvar::RoadMap::RADIO_B3_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE))
+  {
+    cancelTimer(RADIO_B3_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE))
+  {
+    setTimer(RADIO_B3_Timer, RADIO_B3_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B3_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B3_DLC) == 8)
+  {
+    RADIO_B3_msg.dlc = RADIO_B3.dlc;
+  }
+  else
+  {
+    RADIO_B3_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B3_DLC);
+  }
+}
+
+//  RADIO_B3_Signals
+
+on sysvar sysvar::RoadMap::ManDispCtrl
+{
+  RADIO_B3_msg.ManDispCtrl = sysGetVariableInt(sysvar::RoadMap::ManDispCtrl);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE))
+  {
+    output(RADIO_B3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::RQ_DISP_INTS
+{
+  RADIO_B3_msg.RQ_DISP_INTS = sysGetVariableInt(sysvar::RoadMap::RQ_DISP_INTS)/0.5;
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B3_ACTIVE))
+  {
+    output(RADIO_B3_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::RQ_DISP_INTS_SNA
+{
+  int actualDISP_INTS;
+  if(sysGetVariableInt(sysvar::RoadMap::RQ_DISP_INTS_SNA) == 0)
+  {
+    actualDISP_INTS = sysGetVariableInt(sysvar::RoadMap::RQ_DISP_INTS)/0.5;
+    RADIO_B3_msg.RQ_DISP_INTS = actualDISP_INTS;
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::RQ_DISP_INTS_SNA) == 1)
+  {
+    RADIO_B3_msg.RQ_DISP_INTS = 255;
+  }
+}
+
+//  RADIO_B4
+
+on sysvar sysvar::RoadMap::RADIO_B4_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B4_ACTIVE))
+  {
+    cancelTimer(RADIO_B4_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B4_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(RADIO_B4_Timer, RADIO_B4_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B4_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B4_DLC) == 8)
+  {
+    RADIO_B4_msg.dlc = RADIO_B4.dlc;
+  }
+  else
+  {
+    RADIO_B4_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B4_DLC);
+  }
+}
+
+//  RADIO_B4_Signals
+
+on sysvar sysvar::RoadMap::ClusterAudiomode
+{
+   RADIO_B4_msg.ClusterAudiomode = sysGetVariableInt(sysvar::RoadMap::ClusterAudiomode);
+  if(1 == sysGetVariableInt(sysvar::RoadMap:: RADIO_B4_ACTIVE))
+  {
+    output(RADIO_B4_msg);
+  }
+}
+
+//  RADIO_B5
+
+on sysvar sysvar::RoadMap::RADIO_B5_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE))
+  {
+    cancelTimer(RADIO_B5_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(RADIO_B5_Timer, RADIO_B5_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B5_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B5_DLC) == 8)
+  {
+    RADIO_B5_msg.dlc = RADIO_B5.dlc;
+  }
+  else
+  {
+    RADIO_B5_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B5_DLC);
+  }
+}
+
+//  RADIO_B5_Signals
+
+on sysvar sysvar::RoadMap::Center_Cluster_Button_function
+{
+  RADIO_B5_msg.Center_Cluster_Button_function = sysGetVariableInt(sysvar::RoadMap::Center_Cluster_Button_function);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE))
+  {
+    output(RADIO_B5_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Left_Cluster_Button_function
+{
+  RADIO_B5_msg.Left_Cluster_Button_function = sysGetVariableInt(sysvar::RoadMap::Left_Cluster_Button_function);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE))
+  {
+    output(RADIO_B5_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Right_Cluster_Button_function
+{
+  RADIO_B5_msg.Right_Cluster_Button_function = sysGetVariableInt(sysvar::RoadMap::Right_Cluster_Button_function);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B5_ACTIVE))
+  {
+    output(RADIO_B5_msg);
+  }
+}
+
+//  RADIO_B9
+
+on sysvar sysvar::RoadMap::RADIO_B9_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    cancelTimer(RADIO_B9_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(RADIO_B9_Timer, RADIO_B9_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B9_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_DLC) == 8)
+  {
+    RADIO_B9_msg.dlc = RADIO_B9.dlc;
+  }
+  else
+  {
+    RADIO_B9_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B9_DLC);
+  }
+}
+
+//  RADIO_B9_Signals
+
+on sysvar sysvar::RoadMap::DIST_TO_TURN
+{
+  RADIO_B9_msg.DIST_TO_TURN = sysGetVariableInt(sysvar::RoadMap::DIST_TO_TURN);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    output(RADIO_B9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DIST_TO_TURNSNA
+{
+  int actualdist_to_turn;
+  if(sysGetVariableInt(sysvar::RoadMap::DIST_TO_TURNSNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::DIST_TO_TURN,actualdist_to_turn);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::DIST_TO_TURNSNA) == 1)
+  {
+    actualdist_to_turn = sysGetVariableInt(sysvar::RoadMap::DIST_TO_TURN);
+    sysSetVariableInt(sysvar::RoadMap::DIST_TO_TURN,65535);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_ARROW
+{
+  RADIO_B9_msg.NAV_ARROW = sysGetVariableInt(sysvar::RoadMap::NAV_ARROW);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    output(RADIO_B9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_UNITS
+{
+  RADIO_B9_msg.NAV_UNITS = sysGetVariableInt(sysvar::RoadMap::NAV_UNITS);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    output(RADIO_B9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAVPrsnt
+{
+  RADIO_B9_msg.NAVPrsnt = sysGetVariableInt(sysvar::RoadMap::NAVPrsnt);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    output(RADIO_B9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::T_BY_T_ON
+{
+  RADIO_B9_msg.T_BY_T_ON = sysGetVariableInt(sysvar::RoadMap::T_BY_T_ON);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    output(RADIO_B9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TURN_COMP
+{
+  RADIO_B9_msg.TURN_COMP = sysGetVariableInt(sysvar::RoadMap::TURN_COMP);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    output(RADIO_B9_msg);
+  }
+}
+
+//  STATUS_TELEMATIC
+
+on sysvar sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE))
+  {
+    cancelTimer(STATUS_TELEMATIC_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(STATUS_TELEMATIC_Timer, STATUS_TELEMATIC_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_TELEMATIC_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_DLC) == 8)
+  {
+    STATUS_TELEMATIC_msg.dlc = STATUS_TELEMATIC.dlc;
+  }
+  else
+  {
+    STATUS_TELEMATIC_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_DLC);
+  }
+}
+
+//  STATUS_TELEMATIC_Signals
+
+on sysvar sysvar::RoadMap::AUDIOSts_Telematic
+{
+  STATUS_TELEMATIC_msg.AUDIOSts_Telematic = sysGetVariableInt(sysvar::RoadMap::AUDIOSts_Telematic);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE))
+  {
+    output(STATUS_TELEMATIC_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::PowerSts_Telematic
+//{
+//  STATUS_TELEMATIC_msg.PowerSts_Telematic = sysGetVariableInt(sysvar::RoadMap::PowerSts_Telematic);
+//  if(1 == sysGetVariableInt(sysvar::RoadMap::STATUS_TELEMATIC_ACTIVE))
+//  {
+//    output(STATUS_TELEMATIC_msg);
+//  }
+//}
+
+//  TELEMATIC_TIME_DATE_Signals
+
+on sysvar sysvar::RoadMap::Day1_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Day1_TLM = sysGetVariableInt(sysvar::RoadMap::Day1_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Day2_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Day2_TLM = sysGetVariableInt(sysvar::RoadMap::Day2_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Hour1_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Hour1_TLM = sysGetVariableInt(sysvar::RoadMap::Hour1_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Hour2_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Hour2_TLM = sysGetVariableInt(sysvar::RoadMap::Hour2_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Minute1_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Minute1_TLM = sysGetVariableInt(sysvar::RoadMap::Minute1_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Minute2_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Minute2_TLM = sysGetVariableInt(sysvar::RoadMap::Minute2_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Month1_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Month1_TLM = sysGetVariableInt(sysvar::RoadMap::Month1_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Month2_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Month2_TLM = sysGetVariableInt(sysvar::RoadMap::Month2_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Year1_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Year1_TLM = sysGetVariableInt(sysvar::RoadMap::Year1_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Year2_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Year2_TLM = sysGetVariableInt(sysvar::RoadMap::Year2_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Year3_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Year3_TLM = sysGetVariableInt(sysvar::RoadMap::Year3_TLM); 
+}
+
+on sysvar sysvar::RoadMap::Year4_TLM
+{ 
+  TELEMATIC_TIME_DATE_msg.Year4_TLM = sysGetVariableInt(sysvar::RoadMap::Year4_TLM); 
+}
+
+//  TLM_Managed_TIME_DATE
+
+on sysvar sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    cancelTimer(TLM_Managed_TIME_DATE_Timer);
+    cancelTimer(Minute2_TLM_Master_timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(TLM_Managed_TIME_DATE_Timer, TLM_Managed_TIME_DATE_Cycle);
+    setTimer(Minute2_TLM_Master_timer, sysGetVariableInt(sysvar::Test::Minute2_TLM_Master_Fast));
+  }
+}
+
+on sysvar sysvar::RoadMap::TLM_Managed_TIME_DATE_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_DLC) == 8)
+  {
+    TLM_Managed_TIME_DATE_msg.dlc = TLM_Managed_TIME_DATE.dlc;
+  }
+  else
+  {
+    TLM_Managed_TIME_DATE_msg.dlc = sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_DLC);
+  }
+}
+
+//  TLM_Managed_TIME_DATE_Signals
+
+on sysvar sysvar::Test::Minute2_TLM_Master_Fast
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    setTimer(Minute2_TLM_Master_timer, sysGetVariableInt(sysvar::Test::Minute2_TLM_Master_Fast));
+  }
+}
+
+on sysvar sysvar::RoadMap::Day1_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Day1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Day1_TLM_Master);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Day2_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Day2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Day2_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Hour1_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Hour1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Hour1_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Hour2_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Hour2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Hour2_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Minute1_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Minute1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Minute1_TLM_Master);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Minute2_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Minute2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Minute2_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+//  setTimer(Minute2_TLM_Master_timer, Minute2_TLM_Master_Cycle);
+}
+
+on sysvar sysvar::RoadMap::Month1_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Month1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Month1_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Month2_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Month2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Month2_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Year1_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Year1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year1_TLM_Master);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Year2_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Year2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year2_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Year3_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Year3_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year3_TLM_Master);
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+on sysvar sysvar::RoadMap::Year4_TLM_Master
+{ 
+  TLM_Managed_TIME_DATE_msg.Year4_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year4_TLM_Master); 
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TLM_Managed_TIME_DATE_ACTIVE))
+  {
+    output(TLM_Managed_TIME_DATE_msg);
+  } 
+}
+
+//
+//on sysvar sysvar::RoadMap::FrameNumber
+//{
+//  TELEMATIC_DISPLAY_INFO_msg.FrameNumber = sysGetVariableInt(sysvar::RoadMap::FrameNumber);
+//}
+//
+//on sysvar sysvar::RoadMap::InfoCode
+//{
+//  TELEMATIC_DISPLAY_INFO_msg.InfoCode = sysGetVariableInt(sysvar::RoadMap::InfoCode);
+//}
+//
+//on sysvar sysvar::RoadMap::TotalFrameNumber
+//{
+//  TELEMATIC_DISPLAY_INFO_msg.TotalFrameNumber = sysGetVariableInt(sysvar::RoadMap::TotalFrameNumber);
+//}
+//
+//on sysvar sysvar::RoadMap::UTF_Text1
+//{
+//   sysGetVariableString(sysvar::RoadMap::UTF_Text1,UTF_Text1,64);
+//   TELEMATIC_DISPLAY_INFO_msg.UTF_Text_1 = UTF_Text1[0];
+//}
+//
+//on sysvar sysvar::RoadMap::UTF_Text2
+//{
+//   sysGetVariableString(sysvar::RoadMap::UTF_Text2,UTF_Text2,64);
+//   TELEMATIC_DISPLAY_INFO_msg.UTF_Text_2 = UTF_Text2[0];
+//}
+//
+//on sysvar sysvar::RoadMap::UTF_Text3
+//{
+//   sysGetVariableString(sysvar::RoadMap::UTF_Text3,UTF_Text3,64);
+//   TELEMATIC_DISPLAY_INFO_msg.UTF_Text_3 = UTF_Text3[0];
+//}
+//
+//on sysvar sysvar::RoadMap::SendTelematic
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::SendTelematic) == 1)
+//  {
+//    output(TELEMATIC_DISPLAY_INFO_msg);
+//  }
+//}
+
+
+on sysvar sysvar::RoadMap::SendVehicleSetup
+{
+  if (sysGetVariableInt(sysvar::RoadMap::SendVehicleSetup)==1)
+  {
+  TELEMATIC_VEHICLE_SETUP_msg.AmbientLightingLevel_Req = sysGetVariableInt(sysvar::RoadMap::AmbientLightingLevel_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.AutoHighBeamEnable_Req = sysGetVariableInt(sysvar::RoadMap::AutoHighBeamEnable_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.AutoParkBrake_Req = sysGetVariableInt(sysvar::RoadMap::AutoParkBrake_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.BSDEnable_Req = sysGetVariableInt(sysvar::RoadMap::BSDEnable_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.ConsumptionUnit_Req = sysGetVariableInt(sysvar::RoadMap::ConsumptionUnit_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.CorneringEnable_Req = sysGetVariableInt(sysvar::RoadMap::CorneringEnable_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.DistanceUnit_Req = sysGetVariableInt(sysvar::RoadMap::DistanceUnit_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.DRLEnable_Req = sysGetVariableInt(sysvar::RoadMap::DRLEnable_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.DynamicGrid_Req = sysGetVariableInt(sysvar::RoadMap::DynamicGrid_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.ExternalLightSensorLevel_Req = sysGetVariableInt(sysvar::RoadMap::ExternalLightSensorLevel_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.GreetingLightsEnable_Req = sysGetVariableInt(sysvar::RoadMap::GreetingLightsEnable_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.HourMode_Req = sysGetVariableInt(sysvar::RoadMap::HourMode_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.LanguageSelection_Req = sysGetVariableInt(sysvar::RoadMap::LanguageSelection_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.PamAlertMode_Req = sysGetVariableInt(sysvar::RoadMap::PamAlertMode_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.PamChimeVolumeFront_Req = sysGetVariableInt(sysvar::RoadMap::PamChimeVolumeFront_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.PamChimeVolumeRear_Req = sysGetVariableInt(sysvar::RoadMap::PamChimeVolumeRear_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.PassiveEntry_Req = sysGetVariableInt(sysvar::RoadMap::PassiveEntry_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.PhoneRepetition_Req = sysGetVariableInt(sysvar::RoadMap::PhoneRepetition_Req); 
+  TELEMATIC_VEHICLE_SETUP_msg.RainSensorLevel_Req = sysGetVariableInt(sysvar::RoadMap::RainSensorLevel_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.RemoteDoorUnlock_Req = sysGetVariableInt(sysvar::RoadMap::RemoteDoorUnlock_Req);
+//  TELEMATIC_VEHICLE_SETUP_msg.Sdw_Req = sysGetVariableInt(sysvar::RoadMap::Sdw_Req);
+//  TELEMATIC_VEHICLE_SETUP_msg.SdwChimeVolume_Req = sysGetVariableInt(sysvar::RoadMap::SdwChimeVolume_Req);    
+  TELEMATIC_VEHICLE_SETUP_msg.SoundHornRemoteStart_Req = sysGetVariableInt(sysvar::RoadMap::SoundHornRemoteStart_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.SpeedLockDoorEnable_Req = sysGetVariableInt(sysvar::RoadMap::SpeedLockDoorEnable_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.TemperatureUnit_Req = sysGetVariableInt(sysvar::RoadMap::TemperatureUnit_Req);
+  TELEMATIC_VEHICLE_SETUP_msg.NavigationRepetition_Req = sysGetVariableInt(sysvar::RoadMap::NavigationRepetition_Req);
+  output(TELEMATIC_VEHICLE_SETUP_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SendVehicleSetup2
+{
+  if (sysGetVariableInt(sysvar::RoadMap::SendVehicleSetup2)==1)
+  {
+  TELEMATIC_VEHICLE_SETUP2_msg.AutoFoldingReq = sysGetVariableInt(sysvar::RoadMap::AutoFoldingReq);
+  TELEMATIC_VEHICLE_SETUP2_msg.AutoUnlockDoorExit_Req = sysGetVariableInt(sysvar::RoadMap::AutoUnlockDoorExit_Req);
+  TELEMATIC_VEHICLE_SETUP2_msg.Backup_Cam_Delay_Req = sysGetVariableInt(sysvar::RoadMap::Backup_Cam_Delay_Req);
+  TELEMATIC_VEHICLE_SETUP2_msg.EPB_MaintenanceMode_Req = sysGetVariableInt(sysvar::RoadMap::EPB_MaintenanceMode_Req);
+  TELEMATIC_VEHICLE_SETUP2_msg.FlashLightWLock_Req = sysGetVariableInt(sysvar::RoadMap::FlashLightWLock_Req);    
+  TELEMATIC_VEHICLE_SETUP2_msg.FSFCWPlusActivationMode_Req = sysGetVariableInt(sysvar::RoadMap::FSFCWPlusActivationMode_Req);    
+  TELEMATIC_VEHICLE_SETUP2_msg.FSFCWPlusSetting_Req = sysGetVariableInt(sysvar::RoadMap::FSFCWPlusSetting_Req);    
+//  TELEMATIC_VEHICLE_SETUP2_msg.Handsfree_Liftgate_Req = sysGetVariableInt(sysvar::RoadMap::Handsfree_Liftgate_Req);
+  TELEMATIC_VEHICLE_SETUP2_msg.HeadlightsOffDelay_Req = sysGetVariableInt(sysvar::RoadMap::HeadlightsOffDelay_Req);        
+  TELEMATIC_VEHICLE_SETUP2_msg.LDW_Intensity_Req = sysGetVariableInt(sysvar::RoadMap::LDW_Intensity_Req);    
+  TELEMATIC_VEHICLE_SETUP2_msg.LDW_Sensibility_Req = sysGetVariableInt(sysvar::RoadMap::LDW_Sensibility_Req);
+//  TELEMATIC_VEHICLE_SETUP2_msg.Ped_EM_Brk_Warn_Act_Req = sysGetVariableInt(sysvar::RoadMap::Ped_EM_Brk_Warn_Act_Req);
+  TELEMATIC_VEHICLE_SETUP2_msg.TyrePressureUnit_Req = sysGetVariableInt(sysvar::RoadMap::TyrePressureUnit_Req);    
+  output(TELEMATIC_VEHICLE_SETUP2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SendVehicleSetup3
+{
+  if (sysGetVariableInt(sysvar::RoadMap::SendVehicleSetup3)==1)
+  {
+//  TELEMATIC_VEHICLE_SETUP3_msg.Act_Lane_Mgt_Req = sysGetVariableInt(sysvar::RoadMap::Act_Lane_Mgt_Req);
+//  TELEMATIC_VEHICLE_SETUP3_msg.Act_Lane_Mgt_Strength_Req = sysGetVariableInt(sysvar::RoadMap::Act_Lane_Mgt_Strength_Req);
+//  TELEMATIC_VEHICLE_SETUP3_msg.Drowsy_Driver_Alert_Req = sysGetVariableInt(sysvar::RoadMap::Drowsy_Driver_Alert_Req);
+  TELEMATIC_VEHICLE_SETUP3_msg.SoundHornLockUnlock_Req = sysGetVariableInt(sysvar::RoadMap::SoundHornLockUnlock_Req);
+//  TELEMATIC_VEHICLE_SETUP3_msg.Traffic_Sign_Info_Req = sysGetVariableInt(sysvar::RoadMap::Traffic_Sign_Info_Req);
+  output(TELEMATIC_VEHICLE_SETUP3_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::SendVehicleSetup4
+//{
+//  if (sysGetVariableInt(sysvar::RoadMap::SendVehicleSetup4)==1)
+//  {
+//  TELEMATIC_VEHICLE_SETUP4_msg.Traffic_Sign_Warn_Req = sysGetVariableInt(sysvar::RoadMap::Traffic_Sign_Warn_Req);
+//  TELEMATIC_VEHICLE_SETUP4_msg.New_Spd_Zone_Ind_Req = sysGetVariableInt(sysvar::RoadMap::New_Spd_Zone_Ind_Req);
+//  output(TELEMATIC_VEHICLE_SETUP4_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::SEND_TIMEDATE_AUTOMATIC
+{ 
+  TELEMATIC_TIME_DATE_msg.Hour1_TLM = sysGetVariableInt(sysvar::RoadMap::Hour1_TLM); 
+  TELEMATIC_TIME_DATE_msg.Hour2_TLM = sysGetVariableInt(sysvar::RoadMap::Hour2_TLM); 
+  TELEMATIC_TIME_DATE_msg.Minute1_TLM = sysGetVariableInt(sysvar::RoadMap::Minute1_TLM); 
+  TELEMATIC_TIME_DATE_msg.Minute2_TLM = sysGetVariableInt(sysvar::RoadMap::Minute2_TLM); 
+  TELEMATIC_TIME_DATE_msg.Day1_TLM = sysGetVariableInt(sysvar::RoadMap::Day1_TLM); 
+  TELEMATIC_TIME_DATE_msg.Day2_TLM = sysGetVariableInt(sysvar::RoadMap::Day2_TLM); 
+  TELEMATIC_TIME_DATE_msg.Month1_TLM = sysGetVariableInt(sysvar::RoadMap::Month1_TLM); 
+  TELEMATIC_TIME_DATE_msg.Month2_TLM = sysGetVariableInt(sysvar::RoadMap::Month2_TLM); 
+  TELEMATIC_TIME_DATE_msg.Year1_TLM = sysGetVariableInt(sysvar::RoadMap::Year1_TLM); 
+  TELEMATIC_TIME_DATE_msg.Year2_TLM = sysGetVariableInt(sysvar::RoadMap::Year2_TLM); 
+  TELEMATIC_TIME_DATE_msg.Year3_TLM = sysGetVariableInt(sysvar::RoadMap::Year3_TLM); 
+  TELEMATIC_TIME_DATE_msg.Year4_TLM = sysGetVariableInt(sysvar::RoadMap::Year4_TLM); 
+  output(TELEMATIC_TIME_DATE_msg); 
+}
+
+void SEND_TIMEDATE_AUTO_MASTER1 (void)
+{ 
+  TLM_Managed_TIME_DATE_msg.Hour1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Hour1_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Hour2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Hour2_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Minute1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Minute1_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Minute2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Minute2_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Day1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Day1_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Day2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Day2_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Month1_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Month1_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Month2_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Month2_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Year1_TLM_Master = 2; 
+  TLM_Managed_TIME_DATE_msg.Year2_TLM_Master = 0; 
+  TLM_Managed_TIME_DATE_msg.Year3_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year3_TLM_Master); 
+  TLM_Managed_TIME_DATE_msg.Year4_TLM_Master = sysGetVariableInt(sysvar::RoadMap::Year4_TLM_Master); 
+  output(TLM_Managed_TIME_DATE_msg);
+  //setTimer(TIMEDATE_AUTO_MASTER1,TIMEDATE_AUTO_MASTER);
+ }
+
+on sysvar sysvar::RoadMap::SEND_TIMEDATE_AUTO_MASTER
+{
+ SEND_TIMEDATE_AUTO_MASTER1();
+}
+
+
+
+on sysvar sysvar::RoadMap::SendNav_info
+{
+  TELEMATIC_NAV_INFO_msg.Direction = sysGetVariableInt(sysvar::RoadMap::Direction);
+//  TELEMATIC_NAV_INFO_msg.DistToTurn = sysGetVariableInt(sysvar::RoadMap::DistToTurn);    
+//  TELEMATIC_NAV_INFO_msg.ResolutionDistToTurn = sysGetVariableInt(sysvar::RoadMap::ResolutionDistToTurn);    
+//  TELEMATIC_NAV_INFO_msg.Unit = sysGetVariableInt(sysvar::RoadMap::Unit);   
+//  TELEMATIC_NAV_INFO_msg.LastAnnouncement = sysGetVariableInt(sysvar::RoadMap::LastAnnouncement);   
+  output(TELEMATIC_NAV_INFO_msg);
+ }
+
+
+//on sysvar sysvar::RoadMap::SendRadio
+//{
+//  char cBuf[255];
+//  char cBuf1[255];
+//  int TGW_GrpNum_IC;
+//  int i = 12;
+//  int j = 12;
+//  char NewLine[1];
+//  char EndOfLine[1];
+//  NewLine[0] = 0x0D;
+//  EndOfLine[0] = 0x00;
+//  
+//  /* if button pressed */
+//  if(@this == 1) 
+//  {
+//   TGW_GrpNum_IC = sysGetVariableInt(sysvar::RoadMap::TGW_GrpNum_IC);
+//    
+//    sysGetVariableString(sysvar::RoadMap::TGW_TEXT_IC,cBuf1,elcount(cBuf1));
+//    if(strlen(cBuf1)>13){
+//      for (i = 12; i<=20; i++){
+//       if(i>=12 && i<=14){
+//         cBuf1[i] = '.';
+//       } 
+//      else{
+//        cBuf1[i] = 0x00;
+//      }
+//      }
+//      }
+//    else
+//      if(strlen(cBuf1)<=13){
+//        sysSetVariableString(sysvar::RoadMap::TGW_TEXT_IC,cBuf1);
+//      }
+//    strncat(cBuf, cBuf1, strlen(cBuf1)+1);
+//    strncat(cBuf, NewLine, strlen(cBuf) + strlen(NewLine)+1);
+//        
+//    Marelli_LTM__sendTextualMessage(cBuf, strlen(cBuf), TGW_GrpNum_IC);
+//    }
+//}
+
+
+/*on sysvar sysvar::RoadMap::LTM_AudioPhoneRepetSendAll -> Original
+{
+	int copiedBytes;
+  char cBuf[255];
+  char cBuf1[255];
+  char cBuf2[255];
+  char cBuf3[255];
+  char cBuf4[255];
+  int infoCode;
+  char NewLine[1];
+  char EndOfLine[1];
+  NewLine[0] = 0x0D;
+  EndOfLine[0] = 0x00;
+  /* if button pressed */
+  /*if(@this == 1) 
+  {
+    /* if selected option to send textual format */
+    /*strncpy(cBuf, "", 1);
+    strncpy(cBuf1, "", 1);
+    strncpy(cBuf2, "", 1);
+    strncpy(cBuf3, "", 1);
+    strncpy(cBuf4, "", 1);
+    
+    infoCode = sysGetVariableInt(sysvar::RoadMap::InfoCode);
+    
+    sysGetVariableString(sysvar::RoadMap::LTM_AudioPhoneRepetion1,cBuf1,elcount(cBuf1));
+    strncat(cBuf, cBuf1, strlen(cBuf1)+1);
+    strncat(cBuf, NewLine, strlen(cBuf) + strlen(NewLine)+1);
+        
+    sysGetVariableString(sysvar::RoadMap::LTM_AudioPhoneRepetion2, cBuf2,elcount(cBuf1));
+    strncat(cBuf, cBuf2, strlen(cBuf) + strlen(cBuf2)+1);
+    strncat(cBuf, NewLine, strlen(cBuf) + strlen(NewLine)+1);
+    
+    sysGetVariableString(sysvar::RoadMap::LTM_AudioPhoneRepetion3, cBuf3,elcount(cBuf1));
+    strncat(cBuf, cBuf3, strlen(cBuf) + strlen(cBuf3)+1);
+    strncat(cBuf, NewLine, strlen(cBuf) + strlen(NewLine)+1);
+        
+    sysGetVariableString(sysvar::RoadMap::LTM_AudioPhoneRepetion4, cBuf4,elcount(cBuf1));
+    strncat(cBuf, cBuf4, strlen(cBuf) + strlen(cBuf4)+1);
+    strncat(cBuf, EndOfLine, strlen(cBuf) + strlen(EndOfLine)+1);
+    
+    Marelli_LTM__sendTextualMessage(cBuf, strlen(cBuf), infoCode);
+  }
+}*/
+/*
+int Marelli_LTM__sendFrame__current ()
+{
+  message TELEMATIC_DISPLAY_INFO tdi;
+  int currentFrame;
+  currentFrame = Marelli_LTM__Frames.currentFrame;
+  if(currentFrame <= Marelli_LTM__Frames.TotalFrameNumber) 
+  {
+     tdi.InfoCode         = Marelli_LTM__Frames.InfoCode;
+     tdi.TotalFrameNumber = Marelli_LTM__Frames.TotalFrameNumber -1;
+     tdi.FrameNumber      = Marelli_LTM__Frames.frame[currentFrame].FrameNumber;
+     tdi.UTF_Text_1       = Marelli_LTM__Frames.frame[currentFrame].UTF_Text_1;
+     tdi.UTF_Text_2       = Marelli_LTM__Frames.frame[currentFrame].UTF_Text_2;
+     tdi.UTF_Text_3       = Marelli_LTM__Frames.frame[currentFrame].UTF_Text_3;
+     output(tdi);
+     write("Sended InfoCode         0x%02x", tdi.InfoCode);
+     write("Sended FrameNumber      0x%02x", tdi.FrameNumber);
+     write("Sended TotalFrameNumber 0x%02x", tdi.TotalFrameNumber);
+     write("Sended UTF_Text_1       0x%02x", tdi.UTF_Text_1);
+     write("Sended UTF_Text_2       0x%02x", tdi.UTF_Text_2);
+     write("Sended UTF_Text_3       0x%02x", tdi.UTF_Text_3);
+     write("Sended Marelli_LTM__sendFrame__current %d/%d = %c%c%c",
+     currentFrame,
+     Marelli_LTM__Frames.TotalFrameNumber,
+    (char) tdi.UTF_Text_1,
+    (char) tdi.UTF_Text_2,
+    (char) tdi.UTF_Text_3);
+    Marelli_LTM__Frames.currentFrame++;
+  }
+  return Marelli_LTM__SUCCESS;
+}*/
+
+//int Marelli_LTM__sendFrame__onTimer ()
+//{
+//  int currentFrame;
+  //write("on Marelli_LTM__sendFrame__onTimer");
+  /* send frame and increment currentFrame */
+//  Marelli_LTM__sendFrame__current();
+  /* get currentFrame */
+//  currentFrame = Marelli_LTM__Frames.currentFrame;
+  /* if has frames to send (transmission not  finished) */
+//  if(currentFrame < Marelli_LTM__Frames.TotalFrameNumber) 
+//  {  
+    //write("Recall Marelli_LTM__sendFrame__onTimer");    
+//    settimer(Marelli_LTM__SendFrame__Timer, Marelli_LTM__Frames.timeOfSilence);
+//  }
+//  return Marelli_LTM__SUCCESS;
+//}
+
+int Marelli_LTM__computeTimeOfSilence(int strLength)
+{
+  return (strLength <= 24) ? (Marelli_LTM__T_IMF1) : (Marelli_LTM__T_IMF2);
+}
+
+int Marelli_LTM__stringTruncate(char text[], int length)
+{
+  int truncate;
+  truncate = length;
+  if(length >= Marelli_LTM__INDEX_TRUNCATE) 
+  {
+    text[Marelli_LTM__INDEX_TRUNCATE -1] = Marelli_LTM__ELLIPSIS_CHAR;
+    truncate = Marelli_LTM__INDEX_TRUNCATE;
+  }
+  return truncate;
+}
+
+int Marelli_LTM__computeNumberOfFrames(int strLength)
+{
+  int nFrames;
+  nFrames = (strLength / 3) + ( (strLength % 3 == 0) ? 0 : 1);
+  return (nFrames > 0) ? nFrames : 1;
+}
+
+
+int Marelli_LTM__sendTextualMessage (char text[], int length, int TGW_GrpNum_IC)
+{
+  int countFrame;
+  int maxFrame;
+  int index;
+  int cLenght;
+//  write("Put text [%s]", text);
+  /* if message length is major or equals than 42 truncate the string */
+  cLenght = Marelli_LTM__stringTruncate(text, length);
+  /* if message length is major or equals than 24 set time between frame multi-message */
+  Marelli_LTM__Frames.timeOfSilence = Marelli_LTM__computeTimeOfSilence(cLenght);
+  Marelli_LTM__Frames.currentFrame = 0;
+  Marelli_LTM__Frames.TGW_GrpNum_IC = TGW_GrpNum_IC;
+  switch(TGW_GrpNum_IC)
+  {
+    case 0x0:      
+    case 0x1:      
+    case 0x11:
+    {
+//      write("not textual form");
+      Marelli_LTM__Frames.TotalFrameNumber = 1;
+      Marelli_LTM__Frames.frame[0].FrameNumber = 0;
+      Marelli_LTM__Frames.frame[0].UTF_Text_1 = 0;
+      Marelli_LTM__Frames.frame[0].UTF_Text_2 = 0;
+      Marelli_LTM__Frames.frame[0].UTF_Text_3 = 0;
+      break;
+    }
+    default:
+    {
+      maxFrame = Marelli_LTM__computeNumberOfFrames(cLenght);
+      Marelli_LTM__Frames.TotalFrameNumber = maxFrame;    
+//      write("max frame %d", maxFrame);
+      for(countFrame = 0; countFrame < maxFrame; countFrame++)
+      {      
+//        write("countFrame %d", countFrame);    
+        index = (((countFrame +1) * 3) -3); 
+//        write("index[1] %c", text[index]);
+        Marelli_LTM__Frames.frame[countFrame].UTF_Text_1 = text[index] & 0xFF;
+        Marelli_LTM__Frames.frame[countFrame].FrameNumber = countFrame/* +1*/;     
+        index = (((countFrame +1) * 3) -2); 
+//        write("index[2] %c", text[index]);
+        Marelli_LTM__Frames.frame[countFrame].UTF_Text_2 = text[index] & 0xFF;
+        Marelli_LTM__Frames.frame[countFrame].FrameNumber = countFrame/* +1*/;
+        index = (((countFrame +1) * 3) -1);
+//        write("index[3] %c", text[index]);
+        Marelli_LTM__Frames.frame[countFrame].UTF_Text_3 = text[index] & 0xFF;
+        Marelli_LTM__Frames.frame[countFrame].FrameNumber = countFrame/* +1*/;
+      }
+      break;
+    }    
+  }
+//  write("Call Marelli_LTM__SendFrame__Timer");
+//  settimer(Marelli_LTM__SendFrame__Timer, Marelli_LTM__Frames.timeOfSilence);
+  return Marelli_LTM__SUCCESS;
+}
+
+
+/*
+on sysvar sysvar::RoadMap::ResetTripA_Req
+{
+  if (sysGetVariableInt(sysvar::RoadMap::ResetTripA_Req)==1)
+  {
+  TELEMATIC_VEHICLE_SETUP_msg.ResetTripA_Req = 1;
+  output(TELEMATIC_VEHICLE_SETUP_msg);
+  setTimerCyclic(delay,500);
+  }
+}
+
+on sysvar sysvar::RoadMap::ResetTripB_Req
+{
+  if (sysGetVariableInt(sysvar::RoadMap::ResetTripB_Req)==1)
+  {
+    TELEMATIC_VEHICLE_SETUP_msg.ResetTripB_Req = 1;
+    output(TELEMATIC_VEHICLE_SETUP_msg);
+    setTimerCyclic(delay,500);
+  }
+}*/
+
+on sysvar sysvar::RoadMap::SendTimeDate
+{
+  TELEMATIC_TIME_DATE_msg.Hour1_TLM = ((hour_panel & 0xF0)>>4);
+  TELEMATIC_TIME_DATE_msg.Hour2_TLM = (hour_panel & 0x0F);
+  TELEMATIC_TIME_DATE_msg.Minute1_TLM = ((minute_panel & 0xF0)>>4);
+  TELEMATIC_TIME_DATE_msg.Minute2_TLM = (minute_panel & 0x0F);  
+  TELEMATIC_TIME_DATE_msg.Day1_TLM = ((day_panel & 0xF0)>>4);
+  TELEMATIC_TIME_DATE_msg.Day2_TLM = (day_panel & 0x0F);
+  TELEMATIC_TIME_DATE_msg.Month1_TLM = ((month_panel & 0xF0)>>4);
+  TELEMATIC_TIME_DATE_msg.Month2_TLM = (month_panel & 0x0F); 
+  TELEMATIC_TIME_DATE_msg.Year1_TLM = 2;
+  TELEMATIC_TIME_DATE_msg.Year2_TLM = 0;
+  TELEMATIC_TIME_DATE_msg.Year3_TLM = ((year_panel & 0xF0)>>4);
+  TELEMATIC_TIME_DATE_msg.Year4_TLM = (year_panel & 0x0F);  
+  output(TELEMATIC_TIME_DATE_msg);
+}
+
+on sysvar sysvar::RoadMap::Hour_panel
+{
+  hour_panel = sysGetVariableInt(sysvar::RoadMap::Hour_panel);
+}
+
+on sysvar sysvar::RoadMap::Minute_Panel
+{
+  minute_panel = sysGetVariableInt(sysvar::RoadMap::Minute_Panel);
+}
+
+on sysvar sysvar::RoadMap::Day_Panel
+{
+  day_panel = sysGetVariableInt(sysvar::RoadMap::Day_Panel);
+}
+
+on sysvar sysvar::RoadMap::Month_Panel
+{
+  month_panel = sysGetVariableInt(sysvar::RoadMap::Month_Panel);
+}
+
+on sysvar sysvar::RoadMap::Year_Panel
+{
+  year_panel = sysGetVariableInt(sysvar::RoadMap::Year_Panel);
+}
+
+void APP_vSend_TelematicTimeDate (void)
+{
+  APP_mTimeDate_msg.Day1_TLM = sysGetVariableInt(sysvar::RoadMap::Day1_TLM);
+  APP_mTimeDate_msg.Day2_TLM = sysGetVariableInt(sysvar::RoadMap::Day2_TLM);
+  APP_mTimeDate_msg.Hour1_TLM = sysGetVariableInt(sysvar::RoadMap::Hour1_TLM);
+  APP_mTimeDate_msg.Hour2_TLM = sysGetVariableInt(sysvar::RoadMap::Hour2_TLM);
+  APP_mTimeDate_msg.Minute1_TLM = sysGetVariableInt(sysvar::RoadMap::Minute1_TLM);
+  APP_mTimeDate_msg.Minute2_TLM = sysGetVariableInt(sysvar::RoadMap::Minute2_TLM);
+  APP_mTimeDate_msg.Month1_TLM = sysGetVariableInt(sysvar::RoadMap::Month1_TLM);
+  APP_mTimeDate_msg.Year1_TLM = 2;
+  APP_mTimeDate_msg.Year2_TLM = 0;
+  APP_mTimeDate_msg.Year3_TLM = sysGetVariableInt(sysvar::RoadMap::Year3_TLM);
+  APP_mTimeDate_msg.Year4_TLM = sysGetVariableInt(sysvar::RoadMap::Year4_TLM);
+  output(APP_mTimeDate_msg);
+}
+
+on sysvar sysvar::RoadMap::SendTimeDate1
+{
+ APP_vSend_TelematicTimeDate();
+}
+
+on message IPC_VEHICLE_SETUP
+{
+  //write("Received");
+  //write("%d",this.TelematicSetupACK);
+  if (this.TelematicSetupACK == 0)
+  {
+   @sysvar::RoadMap::TelematicACK_NoRequired = 1;
+   @sysvar::RoadMap::TelematicACK_KO = 0;
+   @sysvar::RoadMap::TelematicACK_OK = 0;
+   //write("ACK Idle");
+  }
+  
+  if (this.TelematicSetupACK == 1)
+  {
+    @sysvar::RoadMap::TelematicACK_KO = 1;
+    @sysvar::RoadMap::TelematicACK_OK = 0;
+    @sysvar::RoadMap::TelematicACK_NoRequired = 0;
+    //write("ACK KO");
+  }
+  if (this.TelematicSetupACK == 3)
+  {
+    @sysvar::RoadMap::TelematicACK_OK = 1;
+    @sysvar::RoadMap::TelematicACK_KO = 0;
+    @sysvar::RoadMap::TelematicACK_NoRequired = 0;
+    //write("ACK OK");
+  }
+}
+
+int64 convertHex2Dec2()
+{
+  int i;
+  int j;
+  decValue = 0;
+  
+  sysGetVariableString(sysvar::RoadMap::NAV_TEXT,T_NAV_TEXT_IC,48);
+  textLen = strlen(T_NAV_TEXT_IC);
+  //write("String: %s",T_NAV_TEXT_IC);
+  //write("Tamanho string: %d",strlen(T_NAV_TEXT_IC));
+  
+  for (i=0; i<textLen;i++){
+    //write("i = %d",i);
+    //write("%IC[ %d ] : %c",((strlen(T_NAV_TEXT_IC)-1)-i),T_NAV_TEXT_IC[11-i]);
+    
+    switch (T_NAV_TEXT_IC[(textLen-1)-i])
+    {
+      case '0':
+        TempCount = 0;
+        break;
+        
+      case '1':
+        TempCount = 1;
+        break;
+        
+      case '2':
+        TempCount = 2;
+        break;
+        
+      case '3':
+        TempCount = 3;
+        break;
+        
+      case '4':
+        TempCount = 4;
+        break;
+        
+      case '5':
+        TempCount = 5;
+        break;
+        
+      case '6':
+        TempCount = 6;
+        break;
+        
+      case '7':
+        TempCount = 7;
+        break;
+        
+      case '8':
+        TempCount = 8;
+        break;
+        
+      case '9':
+        TempCount = 9;
+        break;
+        
+      case 'A':
+        TempCount = 10;
+        break;
+        
+      case 'B':
+        TempCount = 11;
+        break;
+        
+      case 'C':
+        TempCount = 12;
+        break;
+        
+      case 'D':
+        TempCount = 13;
+        break;
+        
+      case 'E':
+        TempCount = 14;
+        break;
+        
+      case 'F':
+        TempCount = 15;
+        break;
+       
+      default:
+        write("Invalid Value");
+        TempCount = 0;
+    }
+    //write("Temp count: %d",TempCount);
+    if (i == 0)
+    {
+      decValue = TempCount;
+    }
+    else
+    {
+      tempSum = TempCount;
+      for (j=0;j<i;j++)
+      {
+        tempSum = tempSum*16;
+        //write("Temp x 16");
+      }
+      decValue += tempSum;
+    }
+    //write("O valor temporario foi: %I64u",tempSum);
+    //write("Sum atual: %I64u \n",decValue);
+  }
+  return decValue;
+}
+
+int64 convertHex2Dec()
+{
+  int i;
+  int j;
+  decValue = 0;
+  
+  sysGetVariableString(sysvar::RoadMap::TGW_TEXT_IC,T_TGW_TEXT_IC,48);
+  textLen = strlen(T_TGW_TEXT_IC);
+  //write("String: %s",T_TGW_TEXT_IC);
+  //write("Tamanho string: %d",strlen(T_TGW_TEXT_IC));
+  
+  for (i=0; i<textLen;i++){
+    //write("i = %d",i);
+    //write("%IC[ %d ] : %c",((strlen(T_TGW_TEXT_IC)-1)-i),T_TGW_TEXT_IC[11-i]);
+    
+    switch (T_TGW_TEXT_IC[(textLen-1)-i])
+    {
+      case '0':
+        TempCount = 0;
+        break;
+        
+      case '1':
+        TempCount = 1;
+        break;
+        
+      case '2':
+        TempCount = 2;
+        break;
+        
+      case '3':
+        TempCount = 3;
+        break;
+        
+      case '4':
+        TempCount = 4;
+        break;
+        
+      case '5':
+        TempCount = 5;
+        break;
+        
+      case '6':
+        TempCount = 6;
+        break;
+        
+      case '7':
+        TempCount = 7;
+        break;
+        
+      case '8':
+        TempCount = 8;
+        break;
+        
+      case '9':
+        TempCount = 9;
+        break;
+        
+      case 'A':
+        TempCount = 10;
+        break;
+        
+      case 'B':
+        TempCount = 11;
+        break;
+        
+      case 'C':
+        TempCount = 12;
+        break;
+        
+      case 'D':
+        TempCount = 13;
+        break;
+        
+      case 'E':
+        TempCount = 14;
+        break;
+        
+      case 'F':
+        TempCount = 15;
+        break;
+       
+      default:
+        write("Invalid Value");
+        TempCount = 0;
+    }
+    //write("Temp count: %d",TempCount);
+    if (i == 0)
+    {
+      decValue = TempCount;
+    }
+    else
+    {
+      tempSum = TempCount;
+      for (j=0;j<i;j++)
+      {
+        tempSum = tempSum*16;
+        //write("Temp x 16");
+      }
+      decValue += tempSum;
+    }
+    //write("O valor temporario foi: %I64u",tempSum);
+    //write("Sum atual: %I64u \n",decValue);
+  }
+  return decValue;
+}

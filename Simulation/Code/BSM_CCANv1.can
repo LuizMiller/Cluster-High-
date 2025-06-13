@@ -1,0 +1,964 @@
+/*@!Encoding:1252*/
+variables
+{
+  message BRAKE1 BRAKE1_msg;
+  message BRAKE4 BRAKE4_msg;
+  message BRAKE7 BRAKE7_msg;
+  message BRAKE8 BRAKE8_msg;
+  message BRAKE9 BRAKE9_msg;
+  message BRAKE13 BRAKE13_msg;
+  message BSM_YRS_DATA BSM_YRS_DATA_msg;
+  message STATUS_EPB STATUS_EPB_msg;
+  
+  msTimer BRAKE1_Timer;
+  msTimer BRAKE4_Timer;
+  msTimer BRAKE7_Timer;
+  msTimer BRAKE8_Timer;
+  msTimer BRAKE9_Timer;
+  msTimer BRAKE13_Timer;
+  msTimer BSM_YRS_DATA_Timer;
+  msTimer STATUS_EPB_Timer;
+  mstimer sleep;
+  mstimer ramp1;  
+  
+  const   BRAKE1_Cycle = 10;
+  const   BRAKE4_Cycle = 20;
+  const   BRAKE7_Cycle = 100;
+  const   BRAKE8_Cycle = 500;
+  const   BRAKE9_Cycle = 1000;
+  const   BRAKE13_Cycle = 20;
+  const   BSM_YRS_DATA_Cycle = 10;
+  int   STATUS_EPB_Cycle;
+  
+  byte    ABSFailSts; 
+  byte    EBDFail;
+  int     keystatus;
+  dword   ramp;
+  dword   t_ramp = 1000;
+}
+
+on preStart
+{
+	ChkConfig_Init();
+  ramp = StmCreate_Ramp(TravelDistance,10,t_ramp,0,0,0);
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE1_ACTIVE) == 1)
+    {
+      setTimer(BRAKE1_Timer, BRAKE1_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE4_ACTIVE) == 1)
+    {
+      setTimer(BRAKE4_Timer, BRAKE4_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE7_ACTIVE) == 1)
+    {
+      setTimer(BRAKE7_Timer, BRAKE7_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      setTimer(BRAKE8_Timer, BRAKE8_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+    {
+      setTimer(BRAKE9_Timer, BRAKE9_Cycle);
+    }
+    if(sysgetVariableInt(sysvar::RoadMap::BRAKE13_ACTIVE) == 1)
+    {
+      setTimer(BRAKE13_Timer, BRAKE13_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_ACTIVE) == 1)
+    {
+      setTimer(BSM_YRS_DATA_Timer, BSM_YRS_DATA_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+    {
+      setTimer(STATUS_EPB_Timer, STATUS_EPB_Cycle);
+    }
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+// ACTIVE
+
+on sysvar sysvar::RoadMap::BRAKE1_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BRAKE1_ACTIVE))
+  {
+    cancelTimer(BRAKE1_Timer);
+  }
+  else
+  {
+    setTimer(BRAKE1_Timer,BRAKE1_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE4_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BRAKE4_ACTIVE))
+  {
+    cancelTimer(BRAKE4_Timer);
+  }
+  else
+  {
+    setTimer(BRAKE4_Timer,BRAKE4_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE7_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BRAKE7_ACTIVE))
+  {
+    cancelTimer(BRAKE7_Timer);
+  }
+  else
+  {
+    setTimer(BRAKE7_Timer,BRAKE7_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE8_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE))
+  {
+    cancelTimer(BRAKE8_Timer);
+  }
+  else
+  {
+    setTimer(BRAKE8_Timer,BRAKE8_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE9_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE))
+  {
+    cancelTimer(BRAKE9_Timer);
+  }
+  else
+  {
+    output(BRAKE9_msg);
+    setTimer(BRAKE9_Timer,BRAKE9_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE13_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BRAKE13_ACTIVE))
+  {
+    cancelTimer(BRAKE13_Timer);
+  }
+  else
+  {
+    output(BRAKE13_msg);
+    setTimer(BRAKE13_Timer,BRAKE13_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSM_YRS_DATA_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_ACTIVE))
+  {
+    cancelTimer(BSM_YRS_DATA_Timer);
+  }
+  else
+  {
+    output(BSM_YRS_DATA_msg);
+    setTimer(BSM_YRS_DATA_Timer,BSM_YRS_DATA_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_EPB_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE))
+  {
+    cancelTimer(STATUS_EPB_Timer);
+  }
+  else
+  {
+    output(STATUS_EPB_msg);
+    setTimer(STATUS_EPB_Timer,STATUS_EPB_Cycle);
+  }
+}
+
+// DLC
+
+on sysvar sysvar::RoadMap::BRAKE1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE1_DLC) == 8)
+  {
+    BRAKE1_msg.dlc = BRAKE1.dlc;
+  }
+  else
+  {
+    BRAKE1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BRAKE1_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE4_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE4_DLC) == 5)
+  {
+    BRAKE4_msg.dlc = BRAKE4.dlc;
+  }
+  else
+  {
+    BRAKE4_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BRAKE4_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE7_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE7_DLC) == 4)
+  {
+    BRAKE7_msg.dlc = BRAKE7.dlc;
+  }
+  else
+  {
+    BRAKE7_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BRAKE7_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE8_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_DLC) == 8)
+  {
+    BRAKE8_msg.dlc = BRAKE8.dlc;
+  }
+  else
+  {
+    BRAKE8_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BRAKE8_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE9_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_DLC) == 8)
+  {
+    BRAKE9_msg.dlc = BRAKE9.dlc;
+  }
+  else
+  {
+    BRAKE9_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BRAKE9_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::BRAKE13_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE13_DLC) == 7)
+  {
+    BRAKE13_msg.dlc = BRAKE13.dlc;
+  }
+  else
+  {
+    BRAKE13_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BRAKE9_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_EPB_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_DLC) == 8)
+  {
+    STATUS_EPB_msg.dlc = STATUS_EPB.dlc;
+  }
+  else
+  {
+    STATUS_EPB_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSM_YRS_DATA_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_DLC) == 8)
+  {
+    BSM_YRS_DATA_msg.dlc = BSM_YRS_DATA.dlc;
+  }
+  else
+  {
+    BSM_YRS_DATA_msg.dlc = sysGetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::VehicleSpeedVSOSig
+{
+  if(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) == 511)
+  {
+    BRAKE1_msg.VehicleSpeedVSOSig = 8191;
+  }  
+  else
+  {
+    BRAKE1_msg.VehicleSpeedVSOSig = sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)/0.0625;
+  } 
+  if( (sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 1) && 
+      (sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) != 0)  && 
+      (sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) == 8))
+  {
+    t_ramp = ((1/(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)/3.6))*1000);
+    if(t_ramp > 0)
+    {
+      settimercyclic(ramp1,t_ramp);
+    }
+  }
+  else if(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) == 0)
+  {
+    canceltimer(ramp1);
+  }
+
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE1_ACTIVE) == 1)
+  {
+    output(BRAKE1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::VehicleSpeedVSOSigFailSts
+{
+  BRAKE1_msg.VehicleSpeedVSOSigFailSts = sysGetVariableInt(sysvar::RoadMap::VehicleSpeedVSOSigFailSts); 
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE1_ACTIVE) == 1)
+    {
+      output(BRAKE1_msg);
+    }
+}
+
+on sysvar sysvar::RoadMap::VehicleSpeedSNA
+{
+  float actualspeed;
+  if(sysGetVariableInt(sysvar::RoadMap::VehicleSpeedSNA) == 0)
+  {
+    sysSetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig,actualspeed);
+  }
+  if(sysGetVariableInt(sysvar::RoadMap::VehicleSpeedSNA) == 1)
+  {
+    actualspeed = sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig);
+    sysSetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig,511.9375);
+  }
+}
+
+on sysvar sysvar::RoadMap::VehicleStandStillSts
+{
+  BRAKE4_msg.VehicleStandStillSts = sysGetVariableInt(sysvar::RoadMap::VehicleStandStillSts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE4_ACTIVE) == 1)
+  {
+    output(BRAKE4_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TravelDistance
+{
+  BRAKE7_msg.TravelDistance = sysGetVariableInt(sysvar::RoadMap::TravelDistance);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE7_ACTIVE) == 1)
+  {
+    output(BRAKE7_msg);
+  }
+  
+}
+
+on sysvar sysvar::RoadMap::TravelDistanceSNA
+{
+  int actualTravelDistance;
+
+  if (sysGetVariableInt(sysvar::RoadMap::TravelDistanceSNA) == 0)
+  {
+    sysSetVariableInt(sysvar::RoadMap::TravelDistance,actualTravelDistance);
+    settimercyclic(ramp1,t_ramp);
+  }
+  if (sysGetVariableInt(sysvar::RoadMap::TravelDistanceSNA) == 1)
+  {
+    canceltimer(ramp1);
+    actualTravelDistance = sysGetVariableInt(sysvar::RoadMap::TravelDistance);
+    sysSetVariableInt(sysvar::RoadMap::TravelDistance,0xff);
+  }
+}
+
+
+//----------------------------------
+//REMOVED FUNCTION
+//----------------------------------
+//on sysvar sysvar::RoadMap::EnableTravelDistance
+//{
+//  if( (sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 1) && 
+//      (sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) != 0)  && 
+//      (sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) == 8))
+//  {
+//    t_ramp = ((1/(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)/3.6))*1000);
+//    if(t_ramp > 0)
+//    {
+//      settimercyclic(ramp1,t_ramp);
+//    }
+//  }
+//  else if((sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) == 0) || 
+//          (sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 0)||
+//          (sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) != 8))
+//  {
+//    canceltimer(ramp1);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::OperationalModeSts
+ {
+  if( (sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 1) && 
+      (sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) != 0)  && 
+      (sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) == 8))
+  {
+    t_ramp = ((1/(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)/3.6))*1000);
+    if(t_ramp > 0)
+    {
+      settimercyclic(ramp1,t_ramp);
+    }
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) != 8)
+  {
+    canceltimer(ramp1);
+  }
+ }
+
+
+on sysvar sysvar::RoadMap::EnableTravelDistance
+{
+  if( (sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 1) && 
+      (sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig) != 0)  && 
+      (sysGetVariableInt(sysvar::RoadMap::OperationalModeSts) == 8))
+  {
+      t_ramp = ((1/(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)/3.6))*1000);
+    if(t_ramp > 0)
+    {
+      settimercyclic(ramp1,t_ramp);
+    }
+  }
+  else if(sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 0)
+  {
+    canceltimer(ramp1);
+  }
+}
+
+on timer ramp1
+{	
+  int i;
+  
+  if((sysGetVariableInt(sysvar::RoadMap::FastOdometer) == 1))
+  {
+	  settimercyclic(ramp1,4);
+  }
+  else
+  {
+		if ((sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)>0))
+		{
+		  t_ramp = ((1/(sysGetVariableFloat(sysvar::RoadMap::VehicleSpeedVSOSig)/3.6))*1000);
+		}
+		if(t_ramp > 0)
+		{
+			settimercyclic(ramp1,t_ramp);
+		}
+  }
+  if (i < 254)
+  {
+    i++;
+    sysSetVariableInt(sysvar::RoadMap::TravelDistance,i);
+  }
+  else
+  {
+    i=0;
+  }
+}
+
+on sysvar sysvar::RoadMap::ABSFailSts
+{
+	ABSFailSts = sysGetVariableInt(sysvar::RoadMap::ABSFailSts);
+  
+  if (ABSFailSts == 0)
+  {
+    BRAKE8_msg.ABSFailSts = 0;
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+  }
+  if (ABSFailSts == 1)
+  {
+    BRAKE8_msg.ABSFailSts = 1;
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+  }
+}
+
+on sysvar sysvar::RoadMap::EBDFailSts
+{
+	EBDFail = sysGetVariableInt(sysvar::RoadMap::EBDFailSts);
+  
+  if (EBDFail == 0)
+  {
+    BRAKE8_msg.EBDFailSts = 0;
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+  }
+  if (EBDFail == 1)
+  {
+    BRAKE8_msg.EBDFailSts = 1;
+    if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+  }
+}
+
+on sysvar sysvar::RoadMap::ESCFailSts
+{
+  BRAKE8_msg.ESCFailSts = sysGetVariableInt(sysvar::RoadMap::ESCFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+}
+
+on sysvar sysvar::RoadMap::LatAccelerationFailSts_BSM
+{
+  BSM_YRS_DATA_msg.LatAccelerationFailSts_BSM = sysGetVariableInt(sysvar::RoadMap::LatAccelerationFailSts_BSM);
+  if(sysGetVariableInt(sysvar::RoadMap::LatAccelerationFailSts_BSM) == 1)
+  {
+    output(BSM_YRS_DATA_msg);
+  }
+  else
+  {
+    output(BSM_YRS_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::LongAccelerationFailSts_BSM
+{
+  BSM_YRS_DATA_msg.LongAccelerationFailSts_BSM = sysGetVariableInt(sysvar::RoadMap::LongAccelerationFailSts_BSM);
+  if(sysGetVariableInt(sysvar::RoadMap::LongAccelerationFailSts_BSM) == 1)
+  {
+    output(BSM_YRS_DATA_msg);
+  }
+  else
+  {
+    output(BSM_YRS_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ESCIntervention
+{
+  BRAKE8_msg.ESCIntervention = sysGetVariableInt(sysvar::RoadMap::ESCIntervention); 
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+}
+
+
+on sysvar sysvar::RoadMap::LatAcceleration_BSM
+{
+ float actual_latacc;
+ actual_latacc = sysGetVariableFloat(sysvar::RoadMap::LatAcceleration_BSM);
+ BSM_YRS_DATA_msg.LatAcceleration_BSM = ((actual_latacc)/0.02)+2048;
+ output(BSM_YRS_DATA_msg);
+}
+
+on sysvar sysvar::RoadMap::LongAcceleration_BSM
+{
+ float actual_longacc;
+ actual_longacc = sysGetVariableFloat(sysvar::RoadMap::LongAcceleration_BSM);
+ BSM_YRS_DATA_msg.LongAcceleration_BSM = ((actual_longacc)/0.02)+2048;
+ output(BSM_YRS_DATA_msg);  
+}
+
+on timer BRAKE1_Timer
+{
+  output(BRAKE1_msg);
+  setTimer(BRAKE1_Timer, BRAKE1_Cycle);
+}
+
+on timer BRAKE4_Timer
+{
+  output(BRAKE4_msg);
+  setTimer(BRAKE4_Timer, BRAKE4_Cycle);
+}
+
+on timer BRAKE7_Timer
+{
+  output(BRAKE7_msg);
+  setTimer(BRAKE7_Timer,BRAKE7_Cycle);   
+}
+
+on timer BRAKE8_Timer
+{
+  output(BRAKE8_msg);
+  setTimer(BRAKE8_Timer, BRAKE8_Cycle);
+}
+
+on timer BRAKE9_Timer
+{
+  output(BRAKE9_msg);
+  setTimer(BRAKE9_Timer, BRAKE9_Cycle);
+}
+
+on timer BRAKE13_Timer
+{
+  output(BRAKE13_msg);
+  setTimer(BRAKE13_Timer, BRAKE13_Cycle);
+}
+
+on timer STATUS_EPB_Timer
+{
+  output(STATUS_EPB_msg);
+  setTimer(STATUS_EPB_Timer, STATUS_EPB_Cycle);
+}
+
+on timer BSM_YRS_DATA_Timer
+{
+  output(BSM_YRS_DATA_msg);
+  setTimer(BSM_YRS_DATA_Timer, BSM_YRS_DATA_Cycle);
+}
+
+//on timer ramp1
+//{
+//  int i;
+//  if (i < 254)
+//  {
+//    i++;
+//    sysSetVariableInt(sysvar::RoadMap::TravelDistance,i);
+//  }
+//  else
+//  {
+//    i=0;
+//  }
+//  if(sysGetVariableFloat(sysvar::RoadMap::ExternalTemperatureC) == 0)
+//    {
+//      canceltimer(ramp1);
+//    }
+//}
+
+on sysvar sysvar::RoadMap::FastOdometer
+{
+  if((sysGetVariableInt(sysvar::RoadMap::FastOdometer) == 1)  && (sysGetVariableInt(sysvar::RoadMap::EnableTravelDistance) == 1) )
+    {
+      settimercyclic(ramp1,4);
+    }
+  else if(sysGetVariableInt(sysvar::RoadMap::FastOdometer) == 0)
+    {
+      canceltimer(ramp1);
+    }    
+}
+
+
+
+
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0; 
+      cancelTimer(BRAKE1_Timer);
+      cancelTimer(BRAKE4_Timer);
+      cancelTimer(BRAKE7_Timer);
+      cancelTimer(BRAKE8_Timer);
+      cancelTimer(BRAKE9_Timer);
+      cancelTimer(BRAKE13_Timer);
+      cancelTimer(BSM_YRS_DATA_Timer);
+      cancelTimer(STATUS_EPB_Timer);
+      cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::BSM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::BSM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::BRAKE1_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE4_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE7_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE13_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::BRAKE1_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE4_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE7_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::BRAKE13_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_ACTIVE,0);
+  }
+}
+
+on start
+{
+  BRAKE4_msg.VehicleStandStillSts = 1;
+  BRAKE9_msg.HDCAutoDisabled = 1;
+  BRAKE9_msg.HDCAutoDisabledBrakes = 1;
+  BRAKE9_msg.HDCDisabled = 1;
+  BRAKE9_msg.HDCEnabled = 1;
+  BRAKE9_msg.HDCIntervention = 1;
+  BRAKE9_msg.HDCUnavailable4WDlow = 1;
+  BRAKE9_msg.HDCUserFdBck = 1;
+  STATUS_EPB_msg.EPBAutoAppSts = 1;
+////  sysSetVariableInt(sysvar::RoadMap::VehicleStandStillSts,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCAutoDisabled,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCAutoDisabledBrakes,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCDisabled,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCEnabled,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCIntervention,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCUnavailable4WDlow,1);
+////  sysSetVariableInt(sysvar::RoadMap::HDCUserFdBck,1);
+////  sysSetVariableInt(sysvar::RoadMap::EPBAutoAppSts,1);
+  
+//configura o tempo de ciclo normal da msg STATUS_EPB
+  STATUS_EPB_Cycle = 250;
+}
+
+on sysvar sysvar::RoadMap::FunctionSts
+{
+  BRAKE8_msg.FunctionSts = sysGetVariableInt(sysvar::RoadMap::FunctionSts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+}
+
+on sysvar sysvar::RoadMap::HDCAutoDisabled
+{
+  BRAKE9_msg.HDCAutoDisabled = sysGetVariableInt(sysvar::RoadMap::HDCAutoDisabled);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::Function2Sts
+{
+  BRAKE8_msg.Function2Sts = sysGetVariableInt(sysvar::RoadMap::Function2Sts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+  {
+    output(BRAKE8_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::HDCDisabled
+{
+  BRAKE9_msg.HDCDisabled = sysGetVariableInt(sysvar::RoadMap::HDCDisabled);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::HDCEnabled
+{
+  BRAKE9_msg.HDCEnabled = sysGetVariableInt(sysvar::RoadMap::HDCEnabled);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::HDCAutoDisabledBrakes
+{
+  BRAKE9_msg.HDCAutoDisabledBrakes = sysGetVariableInt(sysvar::RoadMap::HDCAutoDisabledBrakes);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::HDCIntervention
+{
+  BRAKE9_msg.HDCIntervention = sysGetVariableInt(sysvar::RoadMap::HDCIntervention);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::DSTFailSts
+//{
+//  BRAKE8_msg.DSTFailSts = sysGetVariableInt(sysvar::RoadMap::DSTFailSts);
+//  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+//    {
+//      output(BRAKE8_msg);
+//    }
+//}
+
+
+
+on sysvar sysvar::RoadMap::FunctionFailSts
+{
+  BRAKE8_msg.FunctionFailSts = sysGetVariableInt(sysvar::RoadMap::FunctionFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+}
+
+on sysvar sysvar::RoadMap::FunctionIntervention
+{
+  BRAKE8_msg.FunctionIntervention = sysGetVariableInt(sysvar::RoadMap::FunctionIntervention);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+}
+
+
+on sysvar sysvar::RoadMap::HillHolderFailSts
+{
+  BRAKE8_msg.HillHolderFailSts = sysGetVariableInt(sysvar::RoadMap::HillHolderFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE8_ACTIVE) == 1)
+    {
+      output(BRAKE8_msg);
+    }
+}
+
+on sysvar sysvar::RoadMap::HDCUnavailable4WDlow
+{
+  BRAKE9_msg.HDCUnavailable4WDlow = sysGetVariableInt(sysvar::RoadMap::HDCUnavailable4WDlow);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::HDCUserFdBck
+{
+  BRAKE9_msg.HDCUserFdBck = sysGetVariableInt(sysvar::RoadMap::HDCUserFdBck);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE9_ACTIVE) == 1)
+  {
+    output(BRAKE9_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AutoVehHoldSts
+{
+  BRAKE13_msg.AutoVehHoldSts = sysGetVariableInt(sysvar::RoadMap::AutoVehHoldSts);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE13_ACTIVE) == 1)
+  {
+    output(BRAKE13_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::AVHTextDispaly
+{
+  BRAKE13_msg.AVHTextDispaly = sysGetVariableInt(sysvar::RoadMap::AVHTextDispaly);
+  if(sysGetVariableInt(sysvar::RoadMap::BRAKE13_ACTIVE) == 1)
+  {
+    output(BRAKE13_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::CRC_BYD
+{
+  BSM_YRS_DATA_msg.CRC_BYD = sysGetVariableInt(sysvar::RoadMap::CRC_BYD);
+  if(sysGetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_ACTIVE) == 1)
+  {
+    output(BSM_YRS_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::MessageCounter_BYD
+{
+  BSM_YRS_DATA_msg.MessageCounter_BYD = sysGetVariableInt(sysvar::RoadMap::MessageCounter_BYD);
+  if(sysGetVariableInt(sysvar::RoadMap::BSM_YRS_DATA_ACTIVE) == 1)
+  {
+    output(BSM_YRS_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EPB_HMI_Management
+{
+  STATUS_EPB_msg.EPB_HMI_Management = sysGetVariableInt(sysvar::RoadMap::EPB_HMI_Management);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+  {
+    output(STATUS_EPB_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EPBAutoAppSts
+{
+  STATUS_EPB_msg.EPBAutoAppSts = sysGetVariableInt(sysvar::RoadMap::EPBAutoAppSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+  {
+    output(STATUS_EPB_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EPBFailureLampReq
+{
+  STATUS_EPB_msg.EPBFailureLampReq = sysGetVariableInt(sysvar::RoadMap::EPBFailureLampReq);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+  {
+    output(STATUS_EPB_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EPBMaintenanceSts
+{
+  STATUS_EPB_msg.EPBMaintenanceSts = sysGetVariableInt(sysvar::RoadMap::EPBMaintenanceSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+  {
+    output(STATUS_EPB_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::EPBSts
+{
+  STATUS_EPB_msg.EPBSts = sysGetVariableInt(sysvar::RoadMap::EPBSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+  {
+    output(STATUS_EPB_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::FastTransmission_SE
+{
+  STATUS_EPB_msg.FastTransmission_SE = sysGetVariableInt(sysvar::RoadMap::FastTransmission_SE);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_EPB_ACTIVE) == 1)
+  {
+    output(STATUS_EPB_msg);
+    if (sysGetVariableInt(sysvar::RoadMap::FastTransmission_SE) == 1)
+    {
+      STATUS_EPB_Cycle = 20;
+    }
+    else STATUS_EPB_Cycle = 250;
+  }
+}

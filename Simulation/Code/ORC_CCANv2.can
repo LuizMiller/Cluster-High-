@@ -1,0 +1,329 @@
+/*@!Encoding:1252*/
+variables
+{
+  message AIRBAG1 AIRBAG1_msg;
+  
+  msTimer AIRBAG1_Timer;
+  mstimer sleep;
+  
+  const   AIRBAG1_Cycle = 100;
+}
+
+on timer AIRBAG1_Timer
+{
+ output(AIRBAG1_msg);
+ setTimer(AIRBAG1_Timer, AIRBAG1_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+       cancelTimer(AIRBAG1_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on start
+{
+  AIRBAG1_msg.AirBagFailSts = @RoadMap::AirBagFailSts;  
+  AIRBAG1_msg.PsngrBagChargeSts = @RoadMap::PsngrBagChargeSts;
+  AIRBAG1_msg.SBR1RowCentralSeatBuckleFailSts = @RoadMap::SBR1RowCentralSeatBuckleFailSts;
+  AIRBAG1_msg.SBR1RowCentralSeatPPDFailSts = @RoadMap::SBR1RowCentralSeatPPDFailSts;
+  AIRBAG1_msg.SBR1RowCentralSeatSts = @RoadMap::SBR1RowCentralSeatSts;
+  AIRBAG1_msg.SBR1RowDriverSeatFailSts = @RoadMap::SBR1RowDriverSeatFailSts;
+  AIRBAG1_msg.SBR1RowDriverSeatSts = @RoadMap::SBR1RowDriverSeatSts;
+  AIRBAG1_msg.SBR1RowPsngrSeatBuckleFailSts = @RoadMap::SBR1RowPsngrSeatBuckleFailSts;
+  AIRBAG1_msg.SBR1RowPsngrSeatPPDFailSts = @RoadMap::SBR1RowPsngrSeatPPDFailSts;
+  AIRBAG1_msg.SBR1RowPsngrSeatSts = @RoadMap::SBR1RowPsngrSeatSts;
+  AIRBAG1_msg.SBR2RowCentralSeatSts = @RoadMap::SBR2RowCentralSeatSts;
+  AIRBAG1_msg.SBR2RowLeftSeatSts = @RoadMap::SBR2RowLeftSeatSts;
+  AIRBAG1_msg.SBR2RowRightSeatSts = @RoadMap::SBR2RowRightSeatSts;
+  
+//  sysSetVariableInt(sysvar::RoadMap::AirBagFailSts,2);
+//  sysSetVariableInt(sysvar::RoadMap::PsngrBagChargeSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatBuckleFailSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatConfigSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatPPDFailSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatSts,7);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowDriverSeatConfigSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowDriverSeatFailSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowDriverSeatSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatBuckleFailSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatConfigSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatPPDFailSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatSts,7);
+//  sysSetVariableInt(sysvar::RoadMap::SBR2RowCentralSeatConfigSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::SBR2RowCentralSeatSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR2RowLeftSeatConfigSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::SBR2RowLeftSeatSts,3);
+//  sysSetVariableInt(sysvar::RoadMap::SBR2RowRightSeatConfigSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::SBR2RowRightSeatSts,3);
+
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+    {
+      setTimer(AIRBAG1_Timer, AIRBAG1_Cycle);
+    }
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::AirBagFailSts
+{
+  AIRBAG1_msg.AirBagFailSts = sysGetVariableInt(sysvar::RoadMap::AirBagFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PsngrBagChargeSts
+{
+  if(sysGetVariableInt(sysvar::RoadMap::psgnr_test) == 0)
+   write("psgnr_test=0");
+  
+    AIRBAG1_msg.PsngrBagChargeSts = sysGetVariableInt(sysvar::RoadMap::PsngrBagChargeSts);
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+      {
+        output(AIRBAG1_msg);
+      }
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowDriverSeatConfigSts
+{
+  AIRBAG1_msg.SBR1RowDriverSeatConfigSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowDriverSeatConfigSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowDriverSeatSts
+{
+  AIRBAG1_msg.SBR1RowDriverSeatSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowDriverSeatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowDriverSeatFailSts
+{
+  AIRBAG1_msg.SBR1RowDriverSeatFailSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowDriverSeatFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowCentralSeatConfigSts
+{
+  AIRBAG1_msg.SBR1RowCentralSeatConfigSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatConfigSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowCentralSeatSts
+{
+  AIRBAG1_msg.SBR1RowCentralSeatSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowCentralSeatBuckleFailSts
+{
+  AIRBAG1_msg.SBR1RowCentralSeatBuckleFailSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatBuckleFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowCentralSeatPPDFailSts
+{
+  AIRBAG1_msg.SBR1RowCentralSeatPPDFailSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowCentralSeatPPDFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowPsngrSeatConfigSts
+{
+  AIRBAG1_msg.SBR1RowPsngrSeatConfigSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatConfigSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowPsngrSeatSts
+{
+  AIRBAG1_msg.SBR1RowPsngrSeatSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowPsngrSeatBuckleFailSts
+{
+  AIRBAG1_msg.SBR1RowPsngrSeatBuckleFailSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatBuckleFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR1RowPsngrSeatPPDFailSts
+{
+  AIRBAG1_msg.SBR1RowPsngrSeatPPDFailSts = sysGetVariableInt(sysvar::RoadMap::SBR1RowPsngrSeatPPDFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR2RowLeftSeatConfigSts
+{
+  AIRBAG1_msg.SBR2RowLeftSeatConfigSts = sysGetVariableInt(sysvar::RoadMap::SBR2RowLeftSeatConfigSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR2RowLeftSeatSts
+{
+  AIRBAG1_msg.SBR2RowLeftSeatSts = sysGetVariableInt(sysvar::RoadMap::SBR2RowLeftSeatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR2RowCentralSeatConfigSts
+{
+  AIRBAG1_msg.SBR2RowCentralSeatConfigSts = sysGetVariableInt(sysvar::RoadMap::SBR2RowCentralSeatConfigSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR2RowCentralSeatSts
+{
+  AIRBAG1_msg.SBR2RowCentralSeatSts = sysGetVariableInt(sysvar::RoadMap::SBR2RowCentralSeatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR2RowRightSeatConfigSts
+{
+  AIRBAG1_msg.SBR2RowRightSeatConfigSts = sysGetVariableInt(sysvar::RoadMap::SBR2RowRightSeatConfigSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::SBR2RowRightSeatSts
+{
+  AIRBAG1_msg.SBR2RowRightSeatSts = sysGetVariableInt(sysvar::RoadMap::SBR2RowRightSeatSts);
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE) == 1)
+  {
+    output(AIRBAG1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ORC_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::ORC_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE,0);
+  }	
+}
+
+on sysvar sysvar::RoadMap::AIRBAG1_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::AIRBAG1_ACTIVE))
+  {
+    cancelTimer(AIRBAG1_Timer);
+  }
+  else
+  {
+    setTimer(AIRBAG1_Timer, AIRBAG1_Cycle);
+  }
+}
+
+on message CLUSTER2
+{
+  if(this.PsngrBagRequestSts == 2)
+  {
+     sysSetVariableInt(sysvar::RoadMap::PsngrBagChargeSts,1);
+  } 
+  else if(this.PsngrBagRequestSts == 1)
+  {
+     sysSetVariableInt(sysvar::RoadMap::PsngrBagChargeSts,0);
+  }
+}
+
+on sysvar sysvar::RoadMap::AIRBAG1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::AIRBAG1_DLC) == 8)
+  {
+    AIRBAG1_msg.dlc = AIRBAG1.dlc;
+  }
+  else
+  {
+    AIRBAG1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::AIRBAG1_DLC);
+  }
+}

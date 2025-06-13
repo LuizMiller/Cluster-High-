@@ -1,0 +1,166 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  linFrame CRVMM_1 CRVMM_1_msg;
+}
+
+on sysvar sysvar::RoadMap::CRVMM_1
+{
+  if(sysGetVariableInt(sysvar::RoadMap::CRVMM_1) == 0)
+  {
+    linDeactivateResps();
+  }
+  else
+  {
+    linActivateResps();
+  }
+}
+
+on sysvar sysvar::RoadMap::AHB_ACT_CRV
+{
+ CRVMM_1_msg.AHB_ACT_CRV = sysGetVariableInt(sysvar::RoadMap::AHB_ACT_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::AHB_Aim_Flt_CRV
+{
+ CRVMM_1_msg.AHB_Aim_Flt_CRV = sysGetVariableInt(sysvar::RoadMap::AHB_Aim_Flt_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::AHB_Aim_Stat_CRV
+{
+ CRVMM_1_msg.AHB_Aim_Stat_CRV = sysGetVariableInt(sysvar::RoadMap::AHB_Aim_Stat_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::AHB_Blkd_CRV
+{
+ CRVMM_1_msg.AHB_Blkd_CRV = sysGetVariableInt(sysvar::RoadMap::AHB_Blkd_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::AHB_Int_Flt_CRV
+{
+ CRVMM_1_msg.AHB_Int_Flt_CRV = sysGetVariableInt(sysvar::RoadMap::AHB_Int_Flt_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::AHB_SAE_Md_CRV
+{
+ CRVMM_1_msg.AHB_SAE_Md_CRV = sysGetVariableInt(sysvar::RoadMap::AHB_SAE_Md_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::CAL_FAULT_CRV
+{
+ CRVMM_1_msg.CAL_FAULT_CRV = sysGetVariableInt(sysvar::RoadMap::CAL_FAULT_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::CAL_REQD_CRV
+{
+ CRVMM_1_msg.CAL_REQD_CRV = sysGetVariableInt(sysvar::RoadMap::CAL_REQD_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::CMP_DIR_CRV
+{
+ CRVMM_1_msg.CMP_DIR_CRV = sysGetVariableInt(sysvar::RoadMap::CMP_DIR_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::CMP_DIR_RAW_CRV
+{
+ CRVMM_1_msg.CMP_DIR_RAW_CRV = sysGetVariableInt(sysvar::RoadMap::CMP_DIR_RAW_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::DeGauss_CRV
+{
+ CRVMM_1_msg.DeGauss_CRV = sysGetVariableInt(sysvar::RoadMap::DeGauss_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::DISTOR_DETECTED_CRV
+{
+ CRVMM_1_msg.DISTOR_DETECTED_CRV = sysGetVariableInt(sysvar::RoadMap::DISTOR_DETECTED_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::E_CALL_BtnStat
+{
+ CRVMM_1_msg.E_CALL_BtnStat = sysGetVariableInt(sysvar::RoadMap::E_CALL_BtnStat);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::EC_MirrStat_CRV
+{
+ CRVMM_1_msg.EC_MirrStat_CRV = sysGetVariableInt(sysvar::RoadMap::EC_MirrStat_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::ECU_FAULT_CRV
+{
+ CRVMM_1_msg.ECU_FAULT_CRV = sysGetVariableInt(sysvar::RoadMap::ECU_FAULT_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::HB_DUTY_CYC_CRV
+{
+ CRVMM_1_msg.HB_DUTY_CYC_CRV = sysGetVariableInt(sysvar::RoadMap::HB_DUTY_CYC_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::IN_CAL_MD_CRV
+{
+ CRVMM_1_msg.IN_CAL_MD_CRV = sysGetVariableInt(sysvar::RoadMap::IN_CAL_MD_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::NVM_FAULT_CRV
+{
+ CRVMM_1_msg.NVM_FAULT_CRV = sysGetVariableInt(sysvar::RoadMap::NVM_FAULT_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::OEC_PWM_CRV
+{
+ CRVMM_1_msg.OEC_PWM_CRV = sysGetVariableInt(sysvar::RoadMap::OEC_PWM_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::RsErr_CRV
+{
+ CRVMM_1_msg.RsErr_CRV = sysGetVariableInt(sysvar::RoadMap::RsErr_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::SENSOR_FAULT_CRV
+{
+ CRVMM_1_msg.SENSOR_FAULT_CRV = sysGetVariableInt(sysvar::RoadMap::SENSOR_FAULT_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::U_CALL_BtnStat
+{
+ CRVMM_1_msg.U_CALL_BtnStat = sysGetVariableInt(sysvar::RoadMap::U_CALL_BtnStat);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::VAR_VAL_CRV
+{
+ CRVMM_1_msg.VAR_VAL_CRV = sysGetVariableInt(sysvar::RoadMap::VAR_VAL_CRV);
+ output(CRVMM_1_msg);
+}
+
+on sysvar sysvar::RoadMap::WakeupSTAT_CRV
+{
+ CRVMM_1_msg.WakeupSTAT_CRV = sysGetVariableInt(sysvar::RoadMap::WakeupSTAT_CRV);
+ output(CRVMM_1_msg);
+}

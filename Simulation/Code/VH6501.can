@@ -1,0 +1,64 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  
+}
+
+on start
+{
+  //device number
+  sysSetVariableInt(sysvar::Test::deviceID, @sysvar::CANDisturbanceInterface2::DeviceNo);
+  //validityMask
+  sysSetVariableInt(sysvar::Test::IDBase, @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDBase );
+  sysSetVariableInt(sysvar::Test::IDExtended, @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDExtended );
+  sysSetVariableInt(sysvar::Test::IDE, @sysvar::CanDisturbance::Enums::ValidityMaskFlags::IDE );
+  sysSetVariableInt(sysvar::Test::FDF, @sysvar::CanDisturbance::Enums::ValidityMaskFlags::FDF );
+  //trigger position is the CRC delimiter
+  sysSetVariableInt(sysvar::Test::CRCDel, @sysvar::CanDisturbance::Enums::FieldType::CRCDel);
+}
+
+on sysvar sysvar::Test::Capacitors_CANh_CANl_Value
+{
+  SysSetVariableInt(sysvar::Test::Capacitors_CANh_CANl_Value, @sysvar::CANDisturbanceInterface2::Capacitors::CANh_CANl::Value);
+}
+
+on sysvar sysvar::Test::Resistors_CANh_CANl_Value
+{
+  SysSetVariableInt(sysvar::Test::Resistors_CANh_CANl_Value, @sysvar::CANDisturbanceInterface2::Resistors::CANh_CANl::Value);
+}
+
+on sysvar sysvar::Test::Resistors_CANh_S_Value
+{
+  SysSetVariableInt(sysvar::Test::Resistors_CANh_S_Value, @sysvar::CANDisturbanceInterface2::Resistors::CANh_S::Value);
+}
+
+on sysvar sysvar::Test::Resistors_CANh_S_Mode
+{
+  SysSetVariableInt(sysvar::Test::Resistors_CANh_S_Mode, @sysvar::CANDisturbanceInterface2::Resistors::CANh_S::Mode);
+}
+
+on sysvar sysvar::Test::Resistors_CANl_S_Value
+{
+  SysSetVariableInt(sysvar::Test::Resistors_CANl_S_Value, @sysvar::CANDisturbanceInterface2::Resistors::CANl_S::Value);
+}
+
+on sysvar sysvar::Test::Resistors_CANl_S_Mode
+{
+  SysSetVariableInt(sysvar::Test::Resistors_CANl_S_Mode, @sysvar::CANDisturbanceInterface2::Resistors::CANl_S::Mode);
+}
+
+on sysvar sysvar::Test::Switches_CANh_CANl_Swap
+{
+  SysSetVariableInt(sysvar::Test::Switches_CANh_CANl_Swap, @sysvar::CANDisturbanceInterface2::Switches::CANh_CANl_Swap::Value);
+}
+
+on sysvar sysvar::Test::Switches_Vbat
+{
+  SysSetVariableInt(sysvar::Test::Switches_Vbat, @sysvar::CANDisturbanceInterface2::Switches::VBat::Value);
+}
+

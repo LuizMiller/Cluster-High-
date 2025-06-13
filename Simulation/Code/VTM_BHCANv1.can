@@ -1,0 +1,107 @@
+/*@!Encoding:1252*/
+variables
+{
+  message STATUS_VTM STATUS_VTM_msg;
+  message NWM_VTM NM_VTM_msg;
+  msTimer STATUS_VTM_Timer;
+  msTimer NM_VTM_Timer;
+  msTimer sleep;
+  const   STATUS_VTM_Cycle = 250;
+  const   NM_VTM_Cycle = 1000;
+}
+
+on timer STATUS_VTM_Timer
+{
+  output(STATUS_VTM_msg);
+  setTimer(STATUS_VTM_Timer, STATUS_VTM_Cycle);
+}
+
+on timer NM_VTM_Timer
+{
+  output(NM_VTM_msg);
+  setTimer(NM_VTM_Timer, NM_VTM_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;
+  if(i == 8 && sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 0)  
+    {
+       i=0; 
+       cancelTimer(STATUS_VTM_Timer);
+    }  
+  if((sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 1)||(sysGetVariableInt(sysvar::RoadMap::OperationalModeStsMANUAL) >= 4)
+      || sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+       i=0;
+       cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_VTM_ACTIVE) == 1)
+    {
+      setTimer(STATUS_VTM_Timer, STATUS_VTM_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::NM_VTM_ACTIVE) == 1)
+    {
+      setTimer(NM_VTM_Timer, NM_VTM_Cycle);
+    }
+  }
+  else
+  {
+    cancelTimer(NM_VTM_Timer);
+    setTimerCyclic(sleep,1000);
+  }
+}
+
+on sysvar sysvar::RoadMap::WC_ignON
+{
+  if(sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 1)
+  {
+    cancelTimer(sleep);  
+  }
+}
+
+on sysvar sysvar::RoadMap::VTM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::VTM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_VTM_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::NM_VTM_ACTIVE,0);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_VTM_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::NM_VTM_ACTIVE,1);
+  }	
+}
+
+on sysvar sysvar::RoadMap::STATUS_VTM_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_VTM_ACTIVE))
+  {
+    cancelTimer(STATUS_VTM_Timer);
+  }
+  else
+  {
+    setTimer(STATUS_VTM_Timer, STATUS_VTM_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::NM_VTM_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::NM_VTM_ACTIVE))
+  {
+    cancelTimer(NM_VTM_Timer);
+  }
+  else
+  {
+    output(NM_VTM_msg);
+    setTimer(NM_VTM_Timer, NM_VTM_Cycle);
+  }
+}

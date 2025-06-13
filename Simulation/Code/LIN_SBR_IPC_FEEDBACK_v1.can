@@ -1,0 +1,46 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  linframe SBR_IPC_FEEDBACK SBR_IPC_FEEDBACK_msg;
+}
+
+on sysvar sysvar::RoadMap::KeepAliveSBR
+{
+ SBR_IPC_FEEDBACK_msg.KeepAliveSBR = sysGetVariableInt(sysvar::RoadMap::KeepAliveSBR);
+ output(SBR_IPC_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::CurrentFailStsSBR
+{
+ SBR_IPC_FEEDBACK_msg.CurrentFailStsSBR = sysGetVariableInt(sysvar::RoadMap::CurrentFailStsSBR);
+ output(SBR_IPC_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::GenericFailStsSBR
+{
+ SBR_IPC_FEEDBACK_msg.GenericFailStsSBR = sysGetVariableInt(sysvar::RoadMap::GenericFailStsSBR);
+ output(SBR_IPC_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::ResponseErrorStsSBR
+{
+ SBR_IPC_FEEDBACK_msg.ResponseErrorStsSBR = sysGetVariableInt(sysvar::RoadMap::ResponseErrorStsSBR);
+ output(SBR_IPC_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::PsngrBagLightFaultSts
+{
+ SBR_IPC_FEEDBACK_msg.PsngrBagLightFaultSts = sysGetVariableInt(sysvar::RoadMap::PsngrBagLightFaultSts);
+ output(SBR_IPC_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::PsngrBagONLightFaultSts
+{
+ SBR_IPC_FEEDBACK_msg.PsngrBagONLightFaultSts = sysGetVariableInt(sysvar::RoadMap::PsngrBagONLightFaultSts);
+ output(SBR_IPC_FEEDBACK_msg);
+}

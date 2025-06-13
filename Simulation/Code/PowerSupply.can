@@ -1,0 +1,104 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+ dword address_canoe;
+ dword address_power_supply;
+
+ dword port = 5024; // used port
+ char buffer_id[16] = "*idn?"; // Identification command
+ char buffer_send_volt[128];
+ char buffer_receive[128];
+
+ int output = 0; // output activate/deactivate
+
+ dword LXI_socket;
+}
+
+on preStart
+{
+  write ("prestart");
+  address_canoe = IpGetAddressAsNumber("169.254.216.29"); // IP address PC
+  address_power_supply = IpGetAddressAsNumber("169.254.120.205"); // IP address power supply
+}
+
+on start
+{
+  dword result;
+  write ("start");
+  LXI_socket = TcpOpen(address_canoe, port); // creation of an IP socket
+  result= TcpConnect(LXI_socket, address_power_supply, port); // connecting the IP socket  
+   write ("result %d",result);
+  result = IpGetLastSocketError(LXI_socket);
+  write ("result %d",result);
+  write ("LXI_socket %d",LXI_socket);
+}
+
+on stopMeasurement
+{
+ write ("stop");
+ TcpClose(LXI_socket);
+}
+
+on sysvar sysvar::LXI_Variables::var_ID // identification request
+{
+ if(1 == @this)
+ {
+ TcpSend(LXI_socket, buffer_id, strlen(buffer_id));
+ TcpReceive(LXI_socket, buffer_receive, strlen(buffer_receive));
+ // Function to receive data packets
+ }
+}
+
+on sysvar sysvar::LXI_Variables::var_Voltage // set voltage
+{
+ snprintf(buffer_send_volt, elcount(buffer_send_volt), "V1 %f", @this);
+ // creation of the command string
+ TcpSend(LXI_socket, buffer_send_volt, strlen(buffer_send_volt));
+ TcpReceive(LXI_socket, buffer_receive, 128);
+}
+
+on key 'v' // measured output voltage
+{
+ TcpSend(LXI_socket, "VSET?", strlen("VSET"));
+ TcpReceive(LXI_socket, buffer_receive, 128);
+}
+
+on key 'o' // activate/deactivate output
+{
+  write ("o");
+ if(0 == output)
+ {
+ TcpSend(LXI_socket,"OUT 1", strlen("OUT 1"));
+ output = 1;
+ }
+
+ else
+ {
+ TcpSend(LXI_socket,"OUT 0", strlen("OUT 0"));
+ output = 0;
+ }
+}
+
+void OnTcpReceive( dword socket, long result, dword address, dword port,
+char buffer[], dword size) // receive function
+{
+ write("Received: %s", buffer); // output of the received string
+ TcpReceive(LXI_socket, buffer_receive, 128);
+}
+
+void OnTcpConnect( dword socket, long result)
+{
+  if (result == 0)
+  {
+    // start receiving on socket using TcpReceive …
+  }
+  else
+  {
+    writeLineEx(1, 3, "OnTcpConnect error %d", result);
+  }
+}

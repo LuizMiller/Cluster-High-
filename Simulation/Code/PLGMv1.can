@@ -1,0 +1,104 @@
+/*@!Encoding:1252*/
+variables
+{
+  message POWER_LIFT POWER_LIFT_msg;
+  msTimer POWER_LIFT_Timer;
+  mstimer sleep;
+  const   POWER_LIFT_Cycle = 250;
+}
+
+on start
+{
+  sysSetVariableInt(sysvar::RoadMap::POWER_LIFT_ACTIVE,1);
+}
+
+on timer POWER_LIFT_Timer
+{
+  output(POWER_LIFT_msg);
+  setTimer(POWER_LIFT_Timer, POWER_LIFT_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+       cancelTimer(POWER_LIFT_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE) == 1)
+    {
+      setTimer(POWER_LIFT_Timer, POWER_LIFT_Cycle);
+    } 
+  }
+   else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+on sysvar sysvar::RoadMap::POWER_LIFT_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::POWER_LIFT_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE,0);   
+  }	
+}
+
+//  STATUS_POWER_LIFT
+
+on sysvar sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE))
+  {
+    cancelTimer(POWER_LIFT_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(POWER_LIFT_Timer,POWER_LIFT_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_POWER_LIFT_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_DLC) == 2)
+  {
+    POWER_LIFT_msg.dlc = POWER_LIFT.dlc;
+  }
+  else
+  {
+    POWER_LIFT_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_DLC);
+  }
+}
+
+//  STATUS_POWER_LIFT_Signal
+
+on sysvar sysvar::RoadMap::PLG_Stat
+{
+  POWER_LIFT_msg.PLG_Stat = sysGetVariableInt(sysvar::RoadMap::PLG_Stat);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_POWER_LIFT_ACTIVE) == 1)
+  {
+    output(POWER_LIFT_msg);
+  }
+}

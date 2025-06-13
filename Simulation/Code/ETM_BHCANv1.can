@@ -1,0 +1,227 @@
+/*@!Encoding:1252*/
+variables
+{
+  message NAV_DATA NAV_DATA_msg;
+  message RADIO_B9 RADIO_B9_msg;
+  msTimer NAV_DATA_Timer;
+  msTimer RADIO_B9_Timer;
+  mstimer sleep;
+  const   NAV_DATA_Cycle = 1000;
+  const   RADIO_B9_Cycle = 1000;
+}
+
+on start
+{
+  sysSetVariableInt(sysvar::RoadMap::ETM_ACTIVE,1);
+}
+
+on timer NAV_DATA_Timer
+{
+  output(NAV_DATA_msg);
+  setTimer(NAV_DATA_Timer, NAV_DATA_Cycle);
+}
+
+on timer RADIO_B9_Timer
+{
+  output(RADIO_B9_msg);
+  setTimer(RADIO_B9_Timer, RADIO_B9_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+      cancelTimer(NAV_DATA_Timer);
+      cancelTimer(RADIO_B9_Timer);      
+      cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) == 1)
+    {
+      setTimer(NAV_DATA_Timer, NAV_DATA_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+    {
+      setTimer(RADIO_B9_Timer, RADIO_B9_Cycle);
+    } 
+  }
+   else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+on sysvar sysvar::RoadMap::ETM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::ETM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::ETM_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::ETM_ACTIVE,0);   
+  }	
+}
+
+//  NAV_DATA
+
+on sysvar sysvar::RoadMap::NAV_DATA_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE))
+  {
+    cancelTimer(NAV_DATA_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(NAV_DATA_Timer,NAV_DATA_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_DATA_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_DLC) == 8)
+  {
+    NAV_DATA_msg.dlc = NAV_DATA.dlc;
+  }
+  else
+  {
+    NAV_DATA_msg.dlc = sysGetVariableInt(sysvar::RoadMap::NAV_DATA_DLC);
+  }
+}
+
+//  NAV_DATA_Signal
+
+on sysvar sysvar::RoadMap::NAV_GrpNum
+{
+  NAV_DATA_msg.NAV_GrpNum = sysGetVariableInt(sysvar::RoadMap::NAV_GrpNum);
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_GrpTyp
+{
+  NAV_DATA_msg.NAV_GrpTyp = sysGetVariableInt(sysvar::RoadMap::NAV_GrpTyp);
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_HiGrpMark
+{
+  NAV_DATA_msg.NAV_HiGrpMark = sysGetVariableInt(sysvar::RoadMap::NAV_HiGrpMark);
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_TEXT
+{
+  NAV_DATA_msg.NAV_TEXT = sysGetVariableString(sysvar::RoadMap::NAV_TEXT);
+  if(sysGetVariableInt(sysvar::RoadMap::NAV_DATA_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+//  RADIO_B9
+
+on sysvar sysvar::RoadMap::RADIO_B9_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE))
+  {
+    cancelTimer(RADIO_B9_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(RADIO_B9_Timer,RADIO_B9_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RADIO_B9_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_DLC) == 8)
+  {
+    RADIO_B9_msg.dlc = RADIO_B9.dlc;
+  }
+  else
+  {
+    RADIO_B9_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RADIO_B9_DLC);
+  }
+}
+
+//  RADIO_B9_Signal
+
+on sysvar sysvar::RoadMap::DIST_TO_TURN
+{
+  RADIO_B9_msg.DIST_TO_TURN = sysGetVariableInt(sysvar::RoadMap::DIST_TO_TURN);
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_ARROW
+{
+  RADIO_B9_msg.NAV_ARROW = sysGetVariableInt(sysvar::RoadMap::NAV_ARROW);
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAV_UNITS
+{
+  RADIO_B9_msg.NAV_UNITS = sysGetVariableInt(sysvar::RoadMap::NAV_UNITS);
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::NAVPrsnt
+{
+  RADIO_B9_msg.NAVPrsnt = sysGetVariableInt(sysvar::RoadMap::NAVPrsnt);
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::T_BY_T_ON
+{
+  RADIO_B9_msg.T_BY_T_ON = sysGetVariableInt(sysvar::RoadMap::T_BY_T_ON);
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TURN_COMP
+{
+  RADIO_B9_msg.TURN_COMP = sysGetVariableInt(sysvar::RoadMap::TURN_COMP);
+  if(sysGetVariableInt(sysvar::RoadMap::RADIO_B9_ACTIVE) == 1)
+  {
+    output(NAV_DATA_msg);
+  }
+}

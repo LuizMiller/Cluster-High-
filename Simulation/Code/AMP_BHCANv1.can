@@ -1,0 +1,113 @@
+/*@!Encoding:1252*/
+variables
+{
+  message STATUS_AMP STATUS_AMP_msg;
+  message NWM_AMP NWM_AMP_msg;
+  msTimer STATUS_AMP_Timer;
+  msTimer NWM_AMP_Timer;
+  mstimer sleep;
+  const   STATUS_AMP_Cycle = 1500;
+  const   NWM_AMP_Cycle = 1000;
+}
+
+on timer STATUS_AMP_Timer
+{
+  output(STATUS_AMP_msg);
+  setTimer(STATUS_AMP_Timer, STATUS_AMP_Cycle);
+}
+
+on timer NWM_AMP_Timer
+{
+  output(NWM_AMP_msg);
+  setTimer(NWM_AMP_Timer, NWM_AMP_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;
+  if(i == 8)  
+    {
+       i=0; 
+       cancelTimer(STATUS_AMP_Timer);
+       cancelTimer(NWM_AMP_Timer);
+       cancelTimer(sleep);
+    }  
+  if((sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 1)||(sysGetVariableInt(sysvar::RoadMap::OperationalModeStsMANUAL) >= 4)
+      || sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_AMP_ACTIVE) == 1)
+    {
+      setTimer(STATUS_AMP_Timer, STATUS_AMP_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+    {
+      setTimer(NWM_AMP_Timer, NWM_AMP_Cycle);
+    }    
+  }
+  else
+  {
+    setTimerCyclic(sleep,1000);
+  }
+}
+
+on sysvar sysvar::RoadMap::WC_ignON
+{
+  if(sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 1)
+  {
+    cancelTimer(sleep);
+  }
+  else
+  {
+    setTimerCyclic(sleep,1000);
+  }
+}
+
+on sysvar sysvar::RoadMap::AMP_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::AMP_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_AMP_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::NWM_AMP_ACTIVE,0);  
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_AMP_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::NWM_AMP_ACTIVE,1);  
+  }	
+}
+
+on sysvar sysvar::RoadMap::STATUS_AMP_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_AMP_ACTIVE))
+  {
+    cancelTimer(STATUS_AMP_Timer);
+  }
+  else
+  {
+    output(STATUS_AMP_msg);
+    setTimer(STATUS_AMP_Timer, STATUS_AMP_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::NWM_AMP_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::NWM_AMP_ACTIVE))
+  {
+    cancelTimer(NWM_AMP_Timer);
+  }
+  else
+  {
+     output(NWM_AMP_msg);
+     setTimer(NWM_AMP_Timer, NWM_AMP_Cycle);
+  }
+}

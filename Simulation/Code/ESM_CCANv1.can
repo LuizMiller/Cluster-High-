@@ -1,0 +1,129 @@
+/*@!Encoding:1252*/
+variables
+{
+  message SC SC_msg;
+  msTimer SC_Timer;
+  mstimer sleep;
+  const   SC_Cycle = 50;
+}
+
+on timer SC_Timer
+{
+  output(SC_msg);
+  setTimer(SC_Timer, SC_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+       cancelTimer(SC_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SC_ACTIVE) == 1)
+    {
+      setTimer(SC_Timer, SC_Cycle);
+    }
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::AGSM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::AGSM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::SC_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::SC_ACTIVE,0);
+  }	
+}
+
+on sysvar sysvar::RoadMap::SC_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::SC_ACTIVE))
+  {
+    cancelTimer(SC_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::SC_ACTIVE) && 1 == sysGetVariableInt(sysvar::RoadMap::WC_ON))
+  {
+    setTimer(SC_Timer, SC_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::WarningMessages
+{
+  SC_msg.WarningMessages = sysGetVariableInt(sysvar::RoadMap::WarningMessages);
+  if(sysGetVariableInt(sysvar::RoadMap::SC_ACTIVE) == 1)
+  {
+    output(SC_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ShiftLeverPositionReq
+{
+  SC_msg.ShiftLeverPositionReq = sysGetVariableInt(sysvar::RoadMap::ShiftLeverPositionReq);
+  if(sysGetVariableInt(sysvar::RoadMap::SC_ACTIVE) == 1)
+  {
+    output(SC_msg);
+  }
+}
+
+//REMOVED ON V00.25
+//on sysvar sysvar::RoadMap::GatedPark
+//{
+//  SC_msg.GatedPark = sysGetVariableInt(sysvar::RoadMap::GatedPark);
+//  if(sysGetVariableInt(sysvar::RoadMap::SC_ACTIVE) == 1)
+//  {
+//    output(SC_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::SC_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::SC_DLC) == 8)
+  {
+    SC_msg.dlc = SC.dlc;
+  }
+  else
+  {
+    SC_msg.dlc = sysGetVariableInt(sysvar::RoadMap::SC_DLC);
+  }
+}

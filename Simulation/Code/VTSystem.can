@@ -1,0 +1,67 @@
+/*@!Encoding:1252*/
+
+/*@!Encoding:1252*/
+/*
+includes
+{
+  
+}
+
+variables
+{
+   msTimer Trigger_Timer;
+}
+
+on Start
+{
+  sysSetVariableInt(sysvar::RoadMap::ShutOff,3); //Volts
+  sysSetVariableFloat(sysvar::RoadMap::VSET,13.5); //Volts
+  sysSetVariableFloat(sysvar::RoadMap::ISET,10); //Amperes
+  sysSetVariableInt(sysvar::RoadMap::Trigger_Temp,10); //mSeg
+}
+
+on sysvar sysvar::RoadMap::KL30
+{
+  SysSetVariableInt(sysvar::VTS::Power_Out1::Active,sysGetVariableInt(sysvar::RoadMap::KL30));
+}
+
+on sysvar sysvar::RoadMap::KL15
+{
+  if (sysGetVariableInt(sysvar::RoadMap::Automatic_KL15) == 1)
+  SysSetVariableInt(sysvar::VTS::Power_Out2::Active,sysGetVariableInt(sysvar::RoadMap::KL15));
+}
+
+on sysvar sysvar::RoadMap::AuxiliaryFuelTank
+{
+  SysSetVariableInt(sysvar::VTS::Stimulus_1_Ch1::RelayBusBar1A,sysGetVariableInt(sysvar::RoadMap::AuxiliaryFuelTank));
+}
+
+on sysvar sysvar::RoadMap::VSET
+{
+  sysSetVariableFloat(sysvar::VTS::Power_Sup1::RefVoltage,sysGetVariableFloat(sysvar::RoadMap::VSET));
+}
+
+on sysvar sysvar::RoadMap::ISET
+{
+  sysSetVariableFloat(sysvar::VTS::Power_Sup2::RefVoltage,sysGetVariableFloat(sysvar::RoadMap::ISET));
+}
+
+on sysvar sysvar::RoadMap::ShutOff
+{
+  sysSetVariableFloat(sysvar::VTS::Stimulus_1_Ch1::Voltage,sysGetVariableInt(sysvar::RoadMap::ShutOff));
+}
+
+on sysvar sysvar::RoadMap::TriggerCamera
+{
+  if (sysGetVariableInt(sysvar::RoadMap::TriggerCamera) == 1)
+  {
+    sysvar::VTS::Stimulus_1_Ch3.SetStimulationMode(1);
+    setTimer(Trigger_Timer, sysGetVariableInt(sysvar::RoadMap::Trigger_Temp));
+  }
+}
+
+on timer Trigger_Timer
+{
+  sysvar::VTS::Stimulus_1_Ch3.SetStimulationMode(0);
+}
+*/

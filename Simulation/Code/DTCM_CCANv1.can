@@ -1,0 +1,181 @@
+/*@!Encoding:1252*/
+variables
+{
+  message DRIVETRAIN1 DRIVETRAIN1_msg;
+  message DRIVETRAIN2 DRIVETRAIN2_msg;
+  
+  msTimer DRIVETRAIN1_Timer;
+  msTimer DRIVETRAIN2_Timer;
+  mstimer sleep;
+  
+  const   DRIVETRAIN1_Cycle = 20;
+  const   DRIVETRAIN2_Cycle = 1000;
+ }
+
+on timer DRIVETRAIN1_Timer
+{
+  output(DRIVETRAIN1_msg);
+  setTimer(DRIVETRAIN1_Timer, DRIVETRAIN1_Cycle);
+}
+
+on timer DRIVETRAIN2_Timer
+{
+  output(DRIVETRAIN2_msg);
+  setTimer(DRIVETRAIN2_Timer, DRIVETRAIN2_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0; 
+       cancelTimer(DRIVETRAIN1_Timer);
+       cancelTimer(DRIVETRAIN2_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+on start
+{
+
+  DRIVETRAIN1_msg.AWDSysStat = @RoadMap::AWDSysStat;
+//  DRIVETRAIN1_msg.AWDSysStat = 7;
+//  sysSetVariableInt(sysvar::RoadMap::CCMFailSts,0);
+//  sysSetVariableInt(sysvar::RoadMap::DTCM_HMI_Rq,0);
+//  sysSetVariableInt(sysvar::RoadMap::AWDSysStat,7);
+  
+}
+  
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN1_ACTIVE) == 1)
+    {
+      setTimer(DRIVETRAIN1_Timer, DRIVETRAIN1_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN2_ACTIVE) == 1)
+    {
+      setTimer(DRIVETRAIN2_Timer, DRIVETRAIN2_Cycle);
+    }      
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::DTCM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::DTCM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::DRIVETRAIN1_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::DRIVETRAIN2_ACTIVE,1);
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::DRIVETRAIN1_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::DRIVETRAIN2_ACTIVE,0);
+  }	
+}
+
+on sysvar sysvar::RoadMap::DRIVETRAIN1_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN1_ACTIVE))
+  {
+    cancelTimer(DRIVETRAIN1_Timer);
+  }
+  else
+  {
+    setTimer(DRIVETRAIN1_Timer, DRIVETRAIN1_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::DRIVETRAIN2_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN2_ACTIVE))
+  {
+    cancelTimer(DRIVETRAIN2_Timer);
+  }
+  else
+  {
+    output(DRIVETRAIN2_msg);
+    setTimer(DRIVETRAIN2_Timer, DRIVETRAIN2_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::AWDSysStat
+{
+  DRIVETRAIN1_msg.AWDSysStat = sysGetVariableInt(sysvar::RoadMap::AWDSysStat);
+  if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN1_ACTIVE) == 1)
+  {
+    output(DRIVETRAIN1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::CCMFailSts
+{
+  DRIVETRAIN1_msg.CCMFailSts = sysGetVariableInt(sysvar::RoadMap::CCMFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN1_ACTIVE) == 1)
+  {
+    output(DRIVETRAIN1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DTCM_HMI_Rq
+{
+  DRIVETRAIN2_msg.DTCM_HMI_Rq = sysGetVariableInt(sysvar::RoadMap::DTCM_HMI_Rq);
+  if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN2_ACTIVE) == 1)
+  {
+    output(DRIVETRAIN2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::DRIVETRAIN1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN1_DLC) == 8)
+  {
+    DRIVETRAIN1_msg.dlc = DRIVETRAIN1.dlc;
+  }
+  else
+  {
+    DRIVETRAIN1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN1_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::DRIVETRAIN2_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN2_DLC) == 8)
+  {
+    DRIVETRAIN2_msg.dlc = DRIVETRAIN2.dlc;
+  }
+  else
+  {
+    DRIVETRAIN2_msg.dlc = sysGetVariableInt(sysvar::RoadMap::DRIVETRAIN2_DLC);
+  }
+}

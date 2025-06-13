@@ -1,0 +1,298 @@
+/*@!Encoding:1252*/
+variables
+{
+  message TRANSM_MOT2 TRANSM_MOT2_msg;
+  message TRANSM2 TRANSM2_msg;
+  message TRANSM1 TRANSM1_msg; //added V0011
+  
+  msTimer TRANSM_MOT2_Timer;
+  msTimer TRANSM2_Timer;
+  msTimer TRANSM1_Timer; //added V0011
+  msTimer sleep;
+  
+  const   TRANSM_MOT2_Cycle = 20;
+  const   TRANSM1_Cycle = 10; //added V0011
+  const   TRANSM2_Cycle = 1000;
+}
+
+on timer TRANSM_MOT2_Timer
+{
+  output(TRANSM_MOT2_msg);
+  setTimer(TRANSM_MOT2_Timer, TRANSM_MOT2_Cycle);
+}
+
+on timer TRANSM2_Timer
+{
+  output(TRANSM2_msg);
+  setTimer(TRANSM2_Timer, TRANSM2_Cycle);
+}
+
+on timer TRANSM1_Timer //added V0011
+{
+  output(TRANSM1_msg);
+  setTimer(TRANSM1_Timer, TRANSM1_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+       cancelTimer(TRANSM_MOT2_Timer);
+       cancelTimer(TRANSM2_Timer);
+	   cancelTimer(TRANSM1_Timer); //added V0014
+        cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::TRANSM_MOT2_ACTIVE) == 1)
+    {
+      setTimer(TRANSM_MOT2_Timer, TRANSM_MOT2_Cycle);
+    }    
+    if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+    {
+      setTimer(TRANSM2_Timer, TRANSM2_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::TRANSM1_ACTIVE) == 1) // added V0011
+    {
+      setTimer(TRANSM1_Timer, TRANSM1_Cycle);
+    }
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+on start
+{
+   TRANSM2_msg.TargetGear = 15;
+//   TRANSM1_msg.TargetGear_2 = 15; //added V0011 but removed on V0025
+}
+
+on sysvar sysvar::RoadMap::TCM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::TCM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::TRANSM_MOT2_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::TRANSM1_ACTIVE,1); //added V0011
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::TRANSM_MOT2_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::TRANSM1_ACTIVE,0); //added V0011
+  }	
+}
+
+on sysvar sysvar::RoadMap::TRANSM_MOT2_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::TRANSM_MOT2_ACTIVE))
+  {
+    cancelTimer(TRANSM_MOT2_Timer);
+  }
+  else
+  {
+    setTimer(TRANSM_MOT2_Timer, TRANSM_MOT2_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::TRANSM2_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE))
+  {
+    cancelTimer(TRANSM2_Timer);
+  }
+  else
+  {
+    output(TRANSM2_msg);
+    setTimer(TRANSM2_Timer, TRANSM2_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::TRANSM1_ACTIVE //added V0011
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::TRANSM1_ACTIVE))
+  {
+    cancelTimer(TRANSM1_Timer);
+  }
+  else
+  {
+    output(TRANSM1_msg);
+    setTimer(TRANSM1_Timer, TRANSM1_Cycle);
+  }
+}
+//
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::GearIndicationSts
+{
+  TRANSM2_msg.GearIndicationSts = sysGetVariableInt(sysvar::RoadMap::GearIndicationSts);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ShiftModeSts
+{
+  TRANSM2_msg.ShiftModeSts = sysGetVariableInt(sysvar::RoadMap::ShiftModeSts);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::GearEngaged
+{
+  TRANSM2_msg.GearEngaged = sysGetVariableInt(sysvar::RoadMap::GearEngaged);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::BuzzerReqSts_T2
+{
+  TRANSM2_msg.BuzzerReqSts_T2 = sysGetVariableInt(sysvar::RoadMap::BuzzerReqSts_T2);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::OilTemperatureSts
+{
+  TRANSM2_msg.OilTemperatureSts = sysGetVariableInt(sysvar::RoadMap::OilTemperatureSts);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::ShiftLeverPosition
+{
+  TRANSM2_msg.ShiftLeverPosition = sysGetVariableInt(sysvar::RoadMap::ShiftLeverPosition);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TargetGear //added V0011
+{
+  TRANSM2_msg.TargetGear = sysGetVariableInt(sysvar::RoadMap::TargetGear);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::TargetGear_2
+//{
+//  TRANSM1_msg.TargetGear_2 = sysGetVariableInt(sysvar::RoadMap::TargetGear_2);
+//  if(sysGetVariableInt(sysvar::RoadMap::TRANSM1_ACTIVE) == 1)
+//  {
+//    output(TRANSM1_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::TransmissionFailSts
+{
+  TRANSM2_msg.TransmissionFailSts = sysGetVariableInt(sysvar::RoadMap::TransmissionFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TransmissionWarnings
+{
+  TRANSM2_msg.TransmissionWarnings = sysGetVariableInt(sysvar::RoadMap::TransmissionWarnings);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_ACTIVE) == 1)
+  {
+    output(TRANSM2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TransmissionTemperature
+{
+  TRANSM_MOT2_msg.TransmissionTemperature = (sysGetVariableInt(sysvar::RoadMap::TransmissionTemperature)+40)/3;
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM_MOT2_ACTIVE) == 1)
+  {
+    output(TRANSM_MOT2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TransmissionTemperatureFailSts
+{
+  TRANSM_MOT2_msg.TransmissionTemperatureFailSts = sysGetVariableInt(sysvar::RoadMap::TransmissionTemperatureFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM_MOT2_ACTIVE) == 1)
+  {
+    output(TRANSM_MOT2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TRANSM_MOT2_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM_MOT2_DLC) == 8)
+  {
+    TRANSM_MOT2_msg.dlc = TRANSM_MOT2.dlc;
+  }
+  else
+  {
+    TRANSM_MOT2_msg.dlc = sysGetVariableInt(sysvar::RoadMap::TRANSM_MOT2_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::TRANSM2_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM2_DLC) == 8)
+  {
+    TRANSM2_msg.dlc = TRANSM2.dlc;
+  }
+  else
+  {
+    TRANSM2_msg.dlc = sysGetVariableInt(sysvar::RoadMap::TRANSM2_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::TRANSM1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::TRANSM1_DLC) == 8)
+  {
+    TRANSM1_msg.dlc = TRANSM1.dlc;
+  }
+  else
+  {
+    TRANSM1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::TRANSM1_DLC);
+  }
+}

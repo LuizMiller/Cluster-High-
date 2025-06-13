@@ -1,0 +1,306 @@
+/*@!Encoding:1252*/
+variables
+{
+  message RFHUB2 RFHUB2_msg;
+  message STATUS_TPM1 STATUS_TPM1_msg;
+  
+  msTimer RFHUB2_Timer;
+  msTimer STATUS_TPM1_Timer;
+  mstimer sleep;
+  
+  const   RFHUB2_Cycle = 1000;
+  const   STATUS_TPM1_Cycle = 2000;
+}
+
+on timer RFHUB2_Timer
+{
+  output(RFHUB2_msg);
+  setTimer(RFHUB2_Timer, RFHUB2_Cycle);
+}
+
+on timer STATUS_TPM1_Timer
+{
+  output(STATUS_TPM1_msg);
+  setTimer(STATUS_TPM1_Timer, STATUS_TPM1_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;    
+  if(i == sysgetVariableInt(sysvar::RoadMap::SleepTime) && sysgetVariableInt(sysvar::RoadMap::WC_ON) == 0)
+    {
+      i=0;
+       cancelTimer(RFHUB2_Timer);
+       cancelTimer(STATUS_TPM1_Timer);
+       cancelTimer(sleep);
+    }  
+  else if (sysgetVariableInt(sysvar::RoadMap::WC_ON)==1 || sysgetVariableInt(sysvar::RoadMap::OperationalModeSts)>= 4 
+          || sysgetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status)==1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_CCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_CCAN_Status) == 1)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+    {
+      setTimer(RFHUB2_Timer, RFHUB2_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+    {
+      setTimer(STATUS_TPM1_Timer, STATUS_TPM1_Cycle);
+    }     
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+    {
+      setTimerCyclic(sleep,1000);
+    }
+  }
+}
+
+//on sysvar sysvar::RoadMap::WC_ON
+//{
+//  if(sysGetVariableInt(sysvar::RoadMap::WC_ON) == 1)
+//  {
+//    cancelTimer(sleep);
+//  }
+//  else
+//  {
+//    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 1)
+//    {
+//      setTimerCyclic(sleep,1000);
+//    }
+//  }
+//}
+
+on sysvar sysvar::RoadMap::TPMActivitySts
+{
+  STATUS_TPM1_msg.TPMActivitySts = sysGetVariableInt(sysvar::RoadMap::TPMActivitySts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TyrePressureSysProgrammedSts
+{
+  STATUS_TPM1_msg.TyrePressureSysProgrammedSts = sysGetVariableInt(sysvar::RoadMap::TyrePressureSysProgrammedSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::TyrePressureSystemFailSts
+{
+  STATUS_TPM1_msg.TyrePressureSystemFailSts = sysGetVariableInt(sysvar::RoadMap::TyrePressureSystemFailSts);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::InflationState_LHF_Tyre
+{
+  STATUS_TPM1_msg.InflationState_LHF_Tyre = sysGetVariableInt(sysvar::RoadMap::InflationState_LHF_Tyre);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PressureValue_LHF_Tyre
+{
+  STATUS_TPM1_msg.PressureValue_LHF_Tyre = (sysGetVariableFloat(sysvar::RoadMap::PressureValue_LHF_Tyre)*10)-7;
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_LHF_PSi,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_LHF_Tyre)*14.5));
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_LHF_KPa,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_LHF_Tyre)*100));
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::InflationState_LHR_Tyre
+{
+  STATUS_TPM1_msg.InflationState_LHR_Tyre = sysGetVariableInt(sysvar::RoadMap::InflationState_LHR_Tyre);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PressureValue_LHR_Tyre
+{
+  STATUS_TPM1_msg.PressureValue_LHR_Tyre = (sysGetVariableFloat(sysvar::RoadMap::PressureValue_LHR_Tyre)*10)-7;
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_LHR_PSi,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_LHR_Tyre)*14.5));
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_LHR_KPa,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_LHR_Tyre)*100));
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::InflationState_RHF_Tyre
+{
+  STATUS_TPM1_msg.InflationState_RHF_Tyre = sysGetVariableInt(sysvar::RoadMap::InflationState_RHF_Tyre);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PressureValue_RHF_Tyre
+{
+  STATUS_TPM1_msg.PressureValue_RHF_Tyre = (sysGetVariableFloat(sysvar::RoadMap::PressureValue_RHF_Tyre)*10)-7;
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_RHF_PSi,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_RHF_Tyre)*14.5));
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_RHF_KPa,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_RHF_Tyre)*100));
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::InflationState_RHR_Tyre
+{
+  STATUS_TPM1_msg.InflationState_RHR_Tyre = sysGetVariableInt(sysvar::RoadMap::InflationState_RHR_Tyre);
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::PressureValue_RHR_Tyre
+{
+  STATUS_TPM1_msg.PressureValue_RHR_Tyre = (sysGetVariableFloat(sysvar::RoadMap::PressureValue_RHR_Tyre)*10)-7;
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_RHR_PSi,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_RHR_Tyre)*14.5));
+  sysSetVariableFloat(sysvar::RoadMap::PressureValue_RHR_KPa,(sysGetVariableFloat(sysvar::RoadMap::PressureValue_RHR_Tyre)*100));
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE) == 1)
+  {
+    output(STATUS_TPM1_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::KeyProgramSts
+{
+  RFHUB2_msg.KeyProgramSts = sysGetVariableInt(sysvar::RoadMap::KeyProgramSts);
+  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+  {
+    output(RFHUB2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::MsgFOBLeftVeh
+{
+  RFHUB2_msg.MsgFOBLeftVeh = sysGetVariableInt(sysvar::RoadMap::MsgFOBLeftVeh);
+  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+  {
+    output(RFHUB2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::MsgFOBNotFnd
+{
+  RFHUB2_msg.MsgFOBNotFnd = sysGetVariableInt(sysvar::RoadMap::MsgFOBNotFnd);
+  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+  {
+    output(RFHUB2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::MsgNotInPark
+{
+  RFHUB2_msg.MsgNotInPark = sysGetVariableInt(sysvar::RoadMap::MsgNotInPark);
+  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+  {
+    output(RFHUB2_msg);
+  }
+}
+
+on sysvar sysvar::RoadMap::MsgPutInPark
+{
+  RFHUB2_msg.MsgPutInPark = sysGetVariableInt(sysvar::RoadMap::MsgPutInPark);
+  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+  {
+    output(RFHUB2_msg);
+  }
+}
+
+//on sysvar sysvar::RoadMap::MsgServPEKG
+//{
+//  RFHUB2_msg.MsgServPEKG = sysGetVariableInt(sysvar::RoadMap::MsgServPEKG);
+//  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE) == 1)
+//  {
+//    output(RFHUB2_msg);
+//  }
+//}
+
+on sysvar sysvar::RoadMap::RFHM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::RFHM_ACTIVE))
+  {
+    sysSetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE,1);  
+  }
+  else
+  {
+    sysSetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE,0);   
+  }	
+}
+
+on sysvar sysvar::RoadMap::RFHUB2_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::RFHUB2_ACTIVE))
+  {
+    cancelTimer(RFHUB2_Timer);
+  }
+  else
+  {
+    output(RFHUB2_msg);
+    setTimer(RFHUB2_Timer,RFHUB2_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_TPM1_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_ACTIVE))
+  {
+    cancelTimer(STATUS_TPM1_Timer);
+  }
+  else
+  {
+    output(STATUS_TPM1_msg);
+    setTimer(STATUS_TPM1_Timer,STATUS_TPM1_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::RFHUB2_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::RFHUB2_DLC) == 5)
+  {
+    RFHUB2_msg.dlc = RFHUB2.dlc;
+  }
+  else
+  {
+    RFHUB2_msg.dlc = sysGetVariableInt(sysvar::RoadMap::RFHUB2_DLC);
+  }
+}
+
+on sysvar sysvar::RoadMap::STATUS_TPM1_DLC
+{
+  if(sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_DLC) == 7)
+  {
+    STATUS_TPM1_msg.dlc = STATUS_TPM1.dlc;
+  }
+  else
+  {
+    STATUS_TPM1_msg.dlc = sysGetVariableInt(sysvar::RoadMap::STATUS_TPM1_DLC);
+  }
+}

@@ -1,0 +1,137 @@
+/*@!Encoding:1252*/
+variables
+{
+  message CLIMATE_REQ CLIMATE_REQ_msg;
+  message STATUS_CLIMATE STATUS_CLIMATE_msg;
+  message NWM_CLIMATE NWM_CLIMATE_msg;
+  msTimer STATUS_CLIMATE_Timer;
+  msTimer NWM_CLIMATE_Timer;
+  mstimer sleep;
+  const   STATUS_CLIMATE_Cycle = 500;
+  const   NWM_CLIMATE_Cycle = 1000;
+  const   ACM = 0;
+  const   MCM = 1;
+}
+
+on timer STATUS_CLIMATE_Timer
+{
+  output(STATUS_CLIMATE_msg);
+  setTimer(STATUS_CLIMATE_Timer, STATUS_CLIMATE_Cycle);
+}
+
+on timer NWM_CLIMATE_Timer
+{
+  output(NWM_CLIMATE_msg);
+  setTimer(NWM_CLIMATE_Timer, NWM_CLIMATE_Cycle);
+}
+
+on timer sleep
+{
+  int i = 0;
+  i = i+1;
+  if(i == sysGetVariableInt(sysvar::RoadMap::SleepTime) && sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 0)  
+    {
+       i=0; 
+       cancelTimer(STATUS_CLIMATE_Timer);
+       cancelTimer(NWM_CLIMATE_Timer);
+       cancelTimer(sleep);
+    }  
+  if((sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 1)||(sysGetVariableInt(sysvar::RoadMap::OperationalModeStsMANUAL) >= 4)
+      || sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+  {
+     i=0;
+     cancelTimer(sleep);
+  }
+}
+
+on sysvar sysvar::RoadMap::NETWORK_BHCAN_Status
+{
+  if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1 && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::STATUS_CLIMATE_ACTIVE) == 1)
+    {
+      setTimer(STATUS_CLIMATE_Timer, STATUS_CLIMATE_Cycle);
+    }
+    if(sysGetVariableInt(sysvar::RoadMap::NETWORK_BHCAN_Status) == 1)
+    {
+      setTimer(NWM_CLIMATE_Timer, NWM_CLIMATE_Cycle);
+    }   
+  }
+  else
+  {
+    if(sysGetVariableInt(sysvar::RoadMap::SleepEnabled) == 0)
+    {
+    setTimerCyclic(sleep,1000);
+  }
+  }
+}
+
+on sysvar sysvar::RoadMap::WC_ignON
+{
+  if(sysGetVariableInt(sysvar::RoadMap::WC_ignON) == 1)
+  {
+    cancelTimer(sleep);
+  }
+  else
+  {
+    setTimerCyclic(sleep,1000);
+  }
+}
+
+on sysvar sysvar::RoadMap::ClimateSource
+{
+  if(sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+      setTimer(STATUS_CLIMATE_Timer, STATUS_CLIMATE_Cycle);
+      setTimer(NWM_CLIMATE_Timer, NWM_CLIMATE_Cycle);
+  }
+  else 
+  {
+      cancelTimer(STATUS_CLIMATE_Timer);
+      cancelTimer(NWM_CLIMATE_Timer);
+  }
+}
+
+on sysvar sysvar::RoadMap::ACM_MCM_ACTIVE
+{
+  if(1 == sysGetVariableInt(sysvar::RoadMap::ACM_MCM_ACTIVE) && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_CLIMATE_ACTIVE,0);
+    sysSetVariableInt(sysvar::RoadMap::NWM_CLIMATE_ACTIVE,0);
+  }
+  else if(0 == sysGetVariableInt(sysvar::RoadMap::ACM_MCM_ACTIVE) && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    sysSetVariableInt(sysvar::RoadMap::STATUS_CLIMATE_ACTIVE,1);
+    sysSetVariableInt(sysvar::RoadMap::NWM_CLIMATE_ACTIVE,1);
+  }	
+}
+
+on sysvar sysvar::RoadMap::STATUS_CLIMATE_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::STATUS_CLIMATE_ACTIVE) && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    cancelTimer(STATUS_CLIMATE_Timer);
+  }
+  else if(1 == sysGetVariableInt(sysvar::RoadMap::STATUS_CLIMATE_ACTIVE) && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    setTimer(STATUS_CLIMATE_Timer, STATUS_CLIMATE_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::NWM_CLIMATE_ACTIVE
+{
+  if(0 == sysGetVariableInt(sysvar::RoadMap::NWM_CLIMATE_ACTIVE) && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    cancelTimer(NWM_CLIMATE_Timer);
+  }
+  else   if(1 == sysGetVariableInt(sysvar::RoadMap::NWM_CLIMATE_ACTIVE) && sysGetVariableInt(sysvar::RoadMap::ClimateSource) == ACM)
+  {
+    output(NWM_CLIMATE_msg);
+    setTimer(NWM_CLIMATE_Timer,NWM_CLIMATE_Cycle);
+  }
+}
+
+on sysvar sysvar::RoadMap::HVAC_Blowe_Speed
+{
+  STATUS_CLIMATE_msg.HVAC_Blower_Speed = sysGetVariableInt(sysvar::RoadMap::HVAC_Blowe_Speed);
+}

@@ -1,0 +1,76 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  linframe COM1 COM1_msg;
+}
+
+on sysvar sysvar::RoadMap::CMP_DIR
+{
+ COM1_msg.CMP_DIR = sysGetVariableInt(sysvar::RoadMap::CMP_DIR);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::RsErr_RCM
+{
+ COM1_msg.RsErr_RCM = sysGetVariableInt(sysvar::RoadMap::RsErr_RCM);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::CMP_DIR_RAW
+{
+ COM1_msg.CMP_DIR_RAW = sysGetVariableInt(sysvar::RoadMap::CMP_DIR_RAW);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::VAR_VAL
+{
+ COM1_msg.VAR_VAL = sysGetVariableInt(sysvar::RoadMap::VAR_VAL);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::DISTOR_DETECTED
+{
+ COM1_msg.DISTOR_DETECTED = sysGetVariableInt(sysvar::RoadMap::DISTOR_DETECTED);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::ECU_FAULT
+{
+ COM1_msg.ECU_FAULT = sysGetVariableInt(sysvar::RoadMap::ECU_FAULT);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::NVM_FAULT
+{
+ COM1_msg.NVM_FAULT = sysGetVariableInt(sysvar::RoadMap::NVM_FAULT);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::CAL_FAULT
+{
+ COM1_msg.CAL_FAULT = sysGetVariableInt(sysvar::RoadMap::CAL_FAULT);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::SENSOR_FAULT
+{
+ COM1_msg.SENSOR_FAULT = sysGetVariableInt(sysvar::RoadMap::SENSOR_FAULT);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::IN_CAL_MD
+{
+ COM1_msg.IN_CAL_MD = sysGetVariableInt(sysvar::RoadMap::IN_CAL_MD);
+ output(COM1_msg);
+}
+
+on sysvar sysvar::RoadMap::CAL_REQD
+{
+ COM1_msg.CAL_REQD = sysGetVariableInt(sysvar::RoadMap::CAL_REQD);
+ output(COM1_msg);
+}

@@ -1,0 +1,70 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  linframe ECSB_FEEDBACK ECSB_FEEDBACK_msg;
+}
+
+on sysvar sysvar::RoadMap::E_CALL_BtnStat
+{
+ ECSB_FEEDBACK_msg.E_CALL_BtnStat = sysGetVariableInt(sysvar::RoadMap::E_CALL_BtnStat);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::U_CALL_BtnStat
+{
+ ECSB_FEEDBACK_msg.U_CALL_BtnStat = sysGetVariableInt(sysvar::RoadMap::U_CALL_BtnStat);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::E_CALL_GREEN_LED_Failure
+{
+ ECSB_FEEDBACK_msg.E_CALL_GREEN_LED_Failure = sysGetVariableInt(sysvar::RoadMap::E_CALL_GREEN_LED_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::E_CALL_RED_LED_Failure
+{
+ ECSB_FEEDBACK_msg.E_CALL_RED_LED_Failure = sysGetVariableInt(sysvar::RoadMap::E_CALL_RED_LED_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::U_CALL_GREEN_LED_Failure
+{
+ ECSB_FEEDBACK_msg.U_CALL_GREEN_LED_Failure = sysGetVariableInt(sysvar::RoadMap::U_CALL_GREEN_LED_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::U_CALL_RED_LED_Failure
+{
+ ECSB_FEEDBACK_msg.U_CALL_RED_LED_Failure = sysGetVariableInt(sysvar::RoadMap::U_CALL_RED_LED_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::E_CALL_Switch_Failure
+{
+ ECSB_FEEDBACK_msg.E_CALL_Switch_Failure = sysGetVariableInt(sysvar::RoadMap::E_CALL_Switch_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::U_CALL_Switch_Failure
+{
+ ECSB_FEEDBACK_msg.U_CALL_Switch_Failure = sysGetVariableInt(sysvar::RoadMap::U_CALL_Switch_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::ECSB_Electric_Failure
+{
+ ECSB_FEEDBACK_msg.ECSB_Electric_Failure = sysGetVariableInt(sysvar::RoadMap::ECSB_Electric_Failure);
+ output(ECSB_FEEDBACK_msg);
+}
+
+on sysvar sysvar::RoadMap::ResponseErrorStsECSB
+{
+ ECSB_FEEDBACK_msg.ResponseErrorStsECSB = sysGetVariableInt(sysvar::RoadMap::ResponseErrorStsECSB);
+ output(ECSB_FEEDBACK_msg);
+}
