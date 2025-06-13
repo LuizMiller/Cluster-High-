@@ -1,0 +1,26 @@
+WARNING: This message originated outside of the Marelli network 
+BE CAREFUL before clicking any link or attachment. 
+
+
+variables
+{
+  msTimer tSend;
+}
+
+on start
+{
+  comOpen(1, "COM3", 9600, comParityNone, comStopBitsOne, comDataBits8); // abrir porta COM3
+  setTimer(tSend, 1000); // envia após 1s
+}
+
+on timer tSend
+{
+  char msg[] = "start_test\n";
+  comSendBuffer(1, msg, elcount(msg));
+}
+
+on stop
+{
+  comClose(1);
+}
+
