@@ -4,7 +4,7 @@
 //16.08.2021 - Upgraded AddInspectionImageToReport() (E.Baptistucci)
 //26.11.2021 - Changed in the RunInspection and LoadInspection functions, the time value "result = TestWaitForSysVar(sysvar::Test::iCommand, 10000)" to 60000
 //22.12.2021 - Added function (CheckStepResultCameraNegativeText) to test NEGATIVE CASES with text indications. works as previous function but with inverted output (E. Baptistucci/R. Lira)
-//06.04.2023 - Added CAPL function "ECU_time_stamps_RAM" for DiagnoseFunctional test. (R.JordÃ£o)
+//06.04.2023 - Added CAPL function "ECU_time_stamps_RAM" for DiagnoseFunctional test. (R.JordÃƒÂ£o)
 //07.06.2024  - Added case 5 to function Search_Menu. (DANTAS)
 includes
 {
@@ -96,11 +96,11 @@ export testfunction AutomationCrosstalkSide_2910()
 
 void CrosstalkSide_2910()
 {
-  //COMANDO PARA ENVIAR CÓDIGO DO BACKLIGHT
+  //COMANDO PARA ENVIAR CÃ“DIGO DO BACKLIGHT
   //lembrando que a mensagem tem 8 bytes, por isso precisa ser uma mensagem extended
   DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x; //ID do comando DIAGNOSTIC_REQUEST_IPC (ver no Trace Network)
   DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
-  DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x10; //código para categorizar como first frame
+  DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x10; //cÃ³digo para categorizar como first frame
   DIAGNOSTIC_REQUEST_IPC_msg.byte(1) = 0x08;
   DIAGNOSTIC_REQUEST_IPC_msg.byte(2) = 0x31;
   DIAGNOSTIC_REQUEST_IPC_msg.byte(3) = 0x01;
@@ -112,11 +112,11 @@ void CrosstalkSide_2910()
   testWaitForMessage(CCAN::IPC::DIAGNOSTIC_RESPONSE_IPC, 2000); 
   DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x; //ID do comando DIAGNOSTIC_REQUEST_IPC (ver no Trace Network)
   DIAGNOSTIC_REQUEST_IPC_msg.dlc = 1;
-  DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x20; // código para categorizar como consecutive frame
+  DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x20; // cÃ³digo para categorizar como consecutive frame
   output( DIAGNOSTIC_REQUEST_IPC_msg ); 
   DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x; //ID do comando DIAGNOSTIC_REQUEST_IPC (ver no Trace Network)
   DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
-  DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x21; // código para categorizar como consecutive frame
+  DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x21; // cÃ³digo para categorizar como consecutive frame
   DIAGNOSTIC_REQUEST_IPC_msg.byte(1) = 0xFF; 
   DIAGNOSTIC_REQUEST_IPC_msg.byte(2) = 0xFF;
   DIAGNOSTIC_REQUEST_IPC_msg.byte(3) = 0x00;
@@ -128,7 +128,7 @@ void CrosstalkSide_2910()
   testWaitForTimeout(2000);
  
 
-  //COMANDO PARA ENVIAR CÓDIGO DO CROSSTALK
+  //COMANDO PARA ENVIAR CÃ“DIGO DO CROSSTALK
   DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x; //ID do comando DIAGNOSTIC_REQUEST_IPC (ver no Trace Network)
   DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
   DIAGNOSTIC_REQUEST_IPC_msg.byte(0) = 0x07; 
@@ -558,7 +558,7 @@ export testfunction MENU_CONTROL (float Nexec, float direct)
 {
   testModuleTitle("MENU_CONTROL");
   write("MENU_CONTROL");
-  testcasecomment("Nexec=nÃºmero de execuÃ§Ãµes e direct= 1-UP 2-right 3-down 4-left 0 enter 5-VeryLongPressure 6-UptButtonStuck 7-DownButtonStuck");
+  testcasecomment("Nexec=nÃƒÂºmero de execuÃƒÂ§ÃƒÂµes e direct= 1-UP 2-right 3-down 4-left 0 enter 5-VeryLongPressure 6-UptButtonStuck 7-DownButtonStuck");
             if (direct == 1)
             {
               for (i=1; i<=Nexec; i++)
@@ -1076,7 +1076,7 @@ void Total_OdometerReset()
 
 export testfunction INIT_DONE_PRESENT () //Set INIT DONE parameter to "01" (exclusive for VF230)
   
-  //It’s necessary to check the Memory ID for INIT DONE in “EOL_CONFIGURATION_IPC_2910” document
+  //ItÂ’s necessary to check the Memory ID for INIT DONE in Â“EOL_CONFIGURATION_IPC_2910Â” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1468,7 +1468,7 @@ void SWCBACKUPODO()
  
  export testfunction EngineHours4km_HIGH() //Set Engine Hours value to 4km (exclusive for VF686)
   
-  //It’s necessary to check the Memory ID for ENHM_ENGINE_HOURS in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for ENHM_ENGINE_HOURS in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1496,7 +1496,7 @@ void SWCBACKUPODO()
 
 export testfunction TargetGearStrategy_HIGH() //Set Strategy Gear to "Target Gear" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1531,7 +1531,7 @@ export testfunction TargetGearStrategy_HIGH() //Set Strategy Gear to "Target Gea
 
 export testfunction TargetGearStrategy_BASE() //Set Strategy Gear to "Target Gear" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1566,7 +1566,7 @@ export testfunction TargetGearStrategy_BASE() //Set Strategy Gear to "Target Gea
 
 export testfunction CurrentGearStrategy_HIGH() //Set Strategy Gear to "Current Gear" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1601,7 +1601,7 @@ export testfunction CurrentGearStrategy_HIGH() //Set Strategy Gear to "Current G
 
 export testfunction CurrentGearStrategy_BASE() //Set Strategy Gear to "Current Gear" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1636,7 +1636,7 @@ export testfunction CurrentGearStrategy_BASE() //Set Strategy Gear to "Current G
 
 export testfunction MileageCounterReset_HIGH() //Reset VIN_ODOMETER counter (exclusive for VF607)
   
-  //It’s necessary to check the Memory ID for VIN_ODOMETER in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for VIN_ODOMETER in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -1671,7 +1671,7 @@ export testfunction MileageCounterReset_HIGH() //Reset VIN_ODOMETER counter (exc
 
 export testfunction MileageCounterReset_BASE() //Reset VIN_ODOMETER counter (exclusive for VF607)
   
-  //It’s necessary to check the Memory ID for VIN_ODOMETER in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for VIN_ODOMETER in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6078,7 +6078,7 @@ export testfunction Send_TimeDate_AND_Day()
 
 export testfunction ReleaseBrakePedalFlag_Not_Active_HIGH() //Set Strategy Gear to "RELEASE_BRAKE_PEDAL_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6113,7 +6113,7 @@ export testfunction ReleaseBrakePedalFlag_Not_Active_HIGH() //Set Strategy Gear 
 
 export testfunction ReleaseBrakePedalFlag_Active_HIGH() //Set Strategy Gear to "RELEASE_BRAKE_PEDAL_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6148,7 +6148,7 @@ export testfunction ReleaseBrakePedalFlag_Active_HIGH() //Set Strategy Gear to "
 
 export testfunction ReleaseBrakePedalFlag_Not_Active_BASE() //Set Strategy Gear to "RELEASE_BRAKE_PEDAL_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6183,7 +6183,7 @@ export testfunction ReleaseBrakePedalFlag_Not_Active_BASE() //Set Strategy Gear 
 
 export testfunction ReleaseBrakePedalFlag_Active_BASE() //Set Strategy Gear to "RELEASE_BRAKE_PEDAL_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6218,7 +6218,7 @@ export testfunction ReleaseBrakePedalFlag_Active_BASE() //Set Strategy Gear to "
 
 export testfunction CheckLeverPositionFlag_Not_Active_HIGH() //Set Strategy Gear to "CHECK_LEVER_POSITION_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6253,7 +6253,7 @@ export testfunction CheckLeverPositionFlag_Not_Active_HIGH() //Set Strategy Gear
 
 export testfunction CheckLeverPositionFlag_Active_HIGH() //Set Strategy Gear to "CHECK_LEVER_POSITION_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_HIGH” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_HIGHÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6288,7 +6288,7 @@ export testfunction CheckLeverPositionFlag_Active_HIGH() //Set Strategy Gear to 
 
 export testfunction CheckLeverPositionFlag_Not_Active_BASE() //Set Strategy Gear to "CHECK_LEVER_POSITION_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6323,7 +6323,7 @@ export testfunction CheckLeverPositionFlag_Not_Active_BASE() //Set Strategy Gear
 
 export testfunction CheckLeverPositionFlag_Active_BASE() //Set Strategy Gear to "CHECK_LEVER_POSITION_FLAG" (exclusive for VF200)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226_BASE” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226_BASEÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6358,7 +6358,7 @@ export testfunction CheckLeverPositionFlag_Active_BASE() //Set Strategy Gear to 
 
 export testfunction PULLOUT_Absent() //Set Strategy Gear to "PULLOUT" (exclusive for VF505)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226MCA” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226MCAÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
@@ -6393,7 +6393,7 @@ export testfunction PULLOUT_Absent() //Set Strategy Gear to "PULLOUT" (exclusive
 
 export testfunction PULLOUT_Present() //Set Strategy Gear to "PULLOUT" (exclusive for VF505)
   
-  //It’s necessary to check the Memory ID for STRATEGY_GEAR in “EOL_CONFIGURATION_IPC_226MCA” document
+  //ItÂ’s necessary to check the Memory ID for STRATEGY_GEAR in Â“EOL_CONFIGURATION_IPC_226MCAÂ” document
 {
 	DIAGNOSTIC_REQUEST_IPC_msg.id=0x18DA60F1x;
 	DIAGNOSTIC_REQUEST_IPC_msg.dlc = 8;
